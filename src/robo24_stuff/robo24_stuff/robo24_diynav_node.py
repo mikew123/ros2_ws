@@ -236,7 +236,7 @@ class Robo24DiynavNode(Node):
         if "run_state" in packet :
             run_state = packet["run_state"]
             if run_state == "toggle" :
-
+                pass
             if self.navRunMode == "running" :
                 self.navRunMode = "paused"
                 msg_str = "{\"state\": \"paused\"}"
