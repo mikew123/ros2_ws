@@ -16,3 +16,12 @@ The competions it will participate in are 6-can, 4-corner and Quick trip.
 There are two versions of each competition; Home and DPRG.
 Home is a smaller arena to fit in my office space, the DPRG arean is the competition full size design. For example the home 6-can is 7'x7.5' whereas the DPRG size is 7'x10'
 
+## JSON messages/topics
+The ESP-now messages to the watch controller are in JSON string format
+The /watch_json topic messages are JSON string formated
+The /robo24_json topic messages are JSON string formated
+It is recommended that the JSON messages are created using Python Dict constructs which are converted to/from String messages to send over topics and USB serial using json.dumps() and json.loads() routines from the json library (import json)
+
+### Watch topic JSON messages
+Topic messages to the watch are formated as msg_json={"send": {  JSON   }}. Use msg_json_str=json.dumps(msg_json) to covert to a JSON formated string.
+Topic messages from the watch are formated as {"rvc": {  JSON   }}. Use json.loads() to covert from a JSON formated string.
