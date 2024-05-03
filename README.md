@@ -11,3 +11,6 @@ https://www.dprg.org/
 
 The competions it will participate in are 6-can, 4-corner and Quick trip.
 
+There are two versions of each competition; Home and DPRG.
+Home is a smaller arena to fit in my office space, the DPRG arean is the competition full size design. For example the home 6-can is 7'x7.5' whereas the DPRG size is 7'x10'
+
