@@ -1,0 +1,211 @@
+[0.000000] (-) TimerEvent: {}
+[0.005509] (robo24_bringup) JobQueued: {'identifier': 'robo24_bringup', 'dependencies': OrderedDict()}
+[0.005803] (robo24_nav) JobQueued: {'identifier': 'robo24_nav', 'dependencies': OrderedDict()}
+[0.006508] (robo24_wheel_interface) JobQueued: {'identifier': 'robo24_wheel_interface', 'dependencies': OrderedDict()}
+[0.006716] (robo24_bringup) JobStarted: {'identifier': 'robo24_bringup'}
+[0.098826] (-) TimerEvent: {}
+[0.199843] (-) TimerEvent: {}
+[0.295318] (robo24_nav) JobStarted: {'identifier': 'robo24_nav'}
+[0.300083] (-) TimerEvent: {}
+[0.403006] (-) TimerEvent: {}
+[0.505026] (-) TimerEvent: {}
+[0.571120] (robo24_wheel_interface) JobStarted: {'identifier': 'robo24_wheel_interface'}
+[0.605323] (-) TimerEvent: {}
+[0.706217] (-) TimerEvent: {}
+[0.807436] (-) TimerEvent: {}
+[0.908688] (-) TimerEvent: {}
+[1.009416] (-) TimerEvent: {}
+[1.110146] (-) TimerEvent: {}
+[1.210924] (-) TimerEvent: {}
+[1.311687] (-) TimerEvent: {}
+[1.412385] (-) TimerEvent: {}
+[1.513069] (-) TimerEvent: {}
+[1.613767] (-) TimerEvent: {}
+[1.714482] (-) TimerEvent: {}
+[1.815337] (-) TimerEvent: {}
+[1.916189] (-) TimerEvent: {}
+[2.017341] (-) TimerEvent: {}
+[2.118036] (-) TimerEvent: {}
+[2.219094] (-) TimerEvent: {}
+[2.319911] (-) TimerEvent: {}
+[2.420864] (-) TimerEvent: {}
+[2.521583] (-) TimerEvent: {}
+[2.622683] (-) TimerEvent: {}
+[2.723357] (-) TimerEvent: {}
+[2.824094] (-) TimerEvent: {}
+[2.924878] (-) TimerEvent: {}
+[3.025583] (-) TimerEvent: {}
+[3.126386] (-) TimerEvent: {}
+[3.227236] (-) TimerEvent: {}
+[3.328384] (-) TimerEvent: {}
+[3.429253] (-) TimerEvent: {}
+[3.530098] (-) TimerEvent: {}
+[3.630904] (-) TimerEvent: {}
+[3.731709] (-) TimerEvent: {}
+[3.832506] (-) TimerEvent: {}
+[3.933211] (-) TimerEvent: {}
+[4.033912] (-) TimerEvent: {}
+[4.134607] (-) TimerEvent: {}
+[4.235343] (-) TimerEvent: {}
+[4.336075] (-) TimerEvent: {}
+[4.436869] (-) TimerEvent: {}
+[4.537679] (-) TimerEvent: {}
+[4.638691] (-) TimerEvent: {}
+[4.739627] (-) TimerEvent: {}
+[4.846173] (-) TimerEvent: {}
+[4.947785] (-) TimerEvent: {}
+[5.050065] (-) TimerEvent: {}
+[5.152373] (-) TimerEvent: {}
+[5.255456] (-) TimerEvent: {}
+[5.357374] (-) TimerEvent: {}
+[5.459129] (-) TimerEvent: {}
+[5.561099] (-) TimerEvent: {}
+[5.662805] (-) TimerEvent: {}
+[5.765074] (-) TimerEvent: {}
+[5.866833] (-) TimerEvent: {}
+[5.968690] (-) TimerEvent: {}
+[6.070342] (-) TimerEvent: {}
+[6.172303] (-) TimerEvent: {}
+[6.274326] (-) TimerEvent: {}
+[6.375184] (-) TimerEvent: {}
+[6.475986] (-) TimerEvent: {}
+[6.577480] (-) TimerEvent: {}
+[6.680427] (-) TimerEvent: {}
+[6.782311] (-) TimerEvent: {}
+[6.880586] (robo24_nav) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'egg_info', '--egg-base', '../../build/robo24_nav', 'build', '--build-base', '/home/mike/ros2_ws/build/robo24_nav/build', 'install', '--record', '/home/mike/ros2_ws/build/robo24_nav/install.log', '--single-version-externally-managed'], 'cwd': '/home/mike/ros2_ws/src/robo24_nav', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'mike', 'SSH_CLIENT': '192.168.8.234 54128 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/mike', 'OLDPWD': '/home/mike/ros2_ws/src', 'SSH_TTY': '/dev/pts/0', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/mike/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'mike', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '1', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/mike/ros2_ws/install/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/mike/ros2_ws/build/robo24_nav', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.8.234 54128 192.168.8.180 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/mike/ros2_ws/build/robo24_nav/prefix_override:/home/mike/ros2_ws/install/robo24_nav/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_bringup:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[6.889832] (-) TimerEvent: {}
+[6.923880] (robo24_bringup) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'develop', '--uninstall', '--editable', '--build-directory', '/home/mike/ros2_ws/build/robo24_bringup/build'], 'cwd': '/home/mike/ros2_ws/build/robo24_bringup', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'mike', 'SSH_CLIENT': '192.168.8.234 54128 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/mike', 'OLDPWD': '/home/mike/ros2_ws/src', 'SSH_TTY': '/dev/pts/0', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/mike/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'mike', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '1', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/mike/ros2_ws/install/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/mike/ros2_ws/build/robo24_bringup', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.8.234 54128 192.168.8.180 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/mike/ros2_ws/build/robo24_bringup/prefix_override:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_bringup:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[6.969811] (robo24_wheel_interface) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'develop', '--uninstall', '--editable', '--build-directory', '/home/mike/ros2_ws/build/robo24_wheel_interface/build'], 'cwd': '/home/mike/ros2_ws/build/robo24_wheel_interface', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'mike', 'SSH_CLIENT': '192.168.8.234 54128 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/mike', 'OLDPWD': '/home/mike/ros2_ws/src', 'SSH_TTY': '/dev/pts/0', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/mike/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'mike', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '1', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/mike/ros2_ws/install/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/mike/ros2_ws/build/robo24_wheel_interface', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.8.234 54128 192.168.8.180 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/mike/ros2_ws/build/robo24_wheel_interface/prefix_override:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_bringup:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[6.989986] (-) TimerEvent: {}
+[7.091828] (-) TimerEvent: {}
+[7.193310] (-) TimerEvent: {}
+[7.294848] (-) TimerEvent: {}
+[7.395755] (-) TimerEvent: {}
+[7.496574] (-) TimerEvent: {}
+[7.598502] (-) TimerEvent: {}
+[7.699833] (-) TimerEvent: {}
+[7.801277] (-) TimerEvent: {}
+[7.902777] (-) TimerEvent: {}
+[8.003575] (-) TimerEvent: {}
+[8.104388] (-) TimerEvent: {}
+[8.207300] (-) TimerEvent: {}
+[8.306317] (robo24_nav) StdoutLine: {'line': b'running egg_info\n'}
+[8.307426] (-) TimerEvent: {}
+[8.312623] (robo24_nav) StdoutLine: {'line': b'writing ../../build/robo24_nav/robo24_nav.egg-info/PKG-INFO\n'}
+[8.317678] (robo24_nav) StdoutLine: {'line': b'writing dependency_links to ../../build/robo24_nav/robo24_nav.egg-info/dependency_links.txt\n'}
+[8.319982] (robo24_nav) StdoutLine: {'line': b'writing entry points to ../../build/robo24_nav/robo24_nav.egg-info/entry_points.txt\n'}
+[8.320810] (robo24_nav) StdoutLine: {'line': b'writing requirements to ../../build/robo24_nav/robo24_nav.egg-info/requires.txt\n'}
+[8.321484] (robo24_nav) StdoutLine: {'line': b'writing top-level names to ../../build/robo24_nav/robo24_nav.egg-info/top_level.txt\n'}
+[8.326658] (robo24_nav) StdoutLine: {'line': b"reading manifest file '../../build/robo24_nav/robo24_nav.egg-info/SOURCES.txt'\n"}
+[8.331719] (robo24_nav) StdoutLine: {'line': b"writing manifest file '../../build/robo24_nav/robo24_nav.egg-info/SOURCES.txt'\n"}
+[8.332833] (robo24_nav) StdoutLine: {'line': b'running build\n'}
+[8.334003] (robo24_nav) StdoutLine: {'line': b'running build_py\n'}
+[8.338807] (robo24_nav) StdoutLine: {'line': b'running install\n'}
+[8.340230] (robo24_nav) StdoutLine: {'line': b'running install_lib\n'}
+[8.349055] (robo24_nav) StdoutLine: {'line': b'running install_data\n'}
+[8.354053] (robo24_nav) StdoutLine: {'line': b'running install_egg_info\n'}
+[8.364759] (robo24_nav) StdoutLine: {'line': b"removing '/home/mike/ros2_ws/install/robo24_nav/lib/python3.10/site-packages/robo24_nav-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[8.368776] (robo24_nav) StdoutLine: {'line': b'Copying ../../build/robo24_nav/robo24_nav.egg-info to /home/mike/ros2_ws/install/robo24_nav/lib/python3.10/site-packages/robo24_nav-0.0.0-py3.10.egg-info\n'}
+[8.379994] (robo24_nav) StdoutLine: {'line': b'running install_scripts\n'}
+[8.407648] (-) TimerEvent: {}
+[8.427946] (robo24_wheel_interface) StdoutLine: {'line': b'running develop\n'}
+[8.481525] (robo24_nav) StdoutLine: {'line': b'Installing robo24_nav_simple_node script to /home/mike/ros2_ws/install/robo24_nav/lib/robo24_nav\n'}
+[8.483442] (robo24_nav) StdoutLine: {'line': b"writing list of installed files to '/home/mike/ros2_ws/build/robo24_nav/install.log'\n"}
+[8.507920] (-) TimerEvent: {}
+[8.540803] (robo24_bringup) StdoutLine: {'line': b'running develop\n'}
+[8.608161] (-) TimerEvent: {}
+[8.652695] (robo24_nav) CommandEnded: {'returncode': 0}
+[8.708350] (-) TimerEvent: {}
+[8.809445] (-) TimerEvent: {}
+[8.910374] (-) TimerEvent: {}
+[8.925830] (robo24_nav) JobEnded: {'identifier': 'robo24_nav', 'rc': 0}
+[9.010562] (-) TimerEvent: {}
+[9.111349] (-) TimerEvent: {}
+[9.212170] (-) TimerEvent: {}
+[9.242694] (robo24_wheel_interface) StdoutLine: {'line': b'Removing /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24-wheel-interface.egg-link (link to .)\n'}
+[9.312466] (-) TimerEvent: {}
+[9.395704] (robo24_wheel_interface) CommandEnded: {'returncode': 0}
+[9.404612] (robo24_wheel_interface) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'egg_info', '--egg-base', '../../build/robo24_wheel_interface', 'build', '--build-base', '/home/mike/ros2_ws/build/robo24_wheel_interface/build', 'install', '--record', '/home/mike/ros2_ws/build/robo24_wheel_interface/install.log', '--single-version-externally-managed'], 'cwd': '/home/mike/ros2_ws/src/robo24_wheel_interface', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'mike', 'SSH_CLIENT': '192.168.8.234 54128 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/mike', 'OLDPWD': '/home/mike/ros2_ws/src', 'SSH_TTY': '/dev/pts/0', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/mike/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'mike', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '1', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/mike/ros2_ws/install/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/mike/ros2_ws/build/robo24_wheel_interface', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.8.234 54128 192.168.8.180 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/mike/ros2_ws/build/robo24_wheel_interface/prefix_override:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_bringup:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[9.408249] (robo24_bringup) StdoutLine: {'line': b'Removing /home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages/robo24-bringup.egg-link (link to .)\n'}
+[9.412831] (-) TimerEvent: {}
+[9.514695] (-) TimerEvent: {}
+[9.562470] (robo24_bringup) CommandEnded: {'returncode': 0}
+[9.566336] (robo24_bringup) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'egg_info', '--egg-base', '../../build/robo24_bringup', 'build', '--build-base', '/home/mike/ros2_ws/build/robo24_bringup/build', 'install', '--record', '/home/mike/ros2_ws/build/robo24_bringup/install.log', '--single-version-externally-managed'], 'cwd': '/home/mike/ros2_ws/src/robo24_bringup', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'mike', 'SSH_CLIENT': '192.168.8.234 54128 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/mike', 'OLDPWD': '/home/mike/ros2_ws/src', 'SSH_TTY': '/dev/pts/0', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/mike/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'mike', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '1', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/mike/ros2_ws/install/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/mike/ros2_ws/build/robo24_bringup', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '192.168.8.234 54128 192.168.8.180 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/mike/ros2_ws/build/robo24_bringup/prefix_override:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_wheel_interface:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:/home/mike/ros2_ws/build/robo24_bringup:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[9.614901] (-) TimerEvent: {}
+[9.715781] (-) TimerEvent: {}
+[9.816816] (-) TimerEvent: {}
+[9.918426] (-) TimerEvent: {}
+[10.019896] (-) TimerEvent: {}
+[10.121135] (-) TimerEvent: {}
+[10.222425] (-) TimerEvent: {}
+[10.323308] (-) TimerEvent: {}
+[10.424128] (-) TimerEvent: {}
+[10.525029] (-) TimerEvent: {}
+[10.595278] (robo24_wheel_interface) StdoutLine: {'line': b'running egg_info\n'}
+[10.598151] (robo24_wheel_interface) StdoutLine: {'line': b'writing ../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/PKG-INFO\n'}
+[10.599925] (robo24_wheel_interface) StdoutLine: {'line': b'writing dependency_links to ../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/dependency_links.txt\n'}
+[10.601126] (robo24_wheel_interface) StdoutLine: {'line': b'writing entry points to ../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/entry_points.txt\n'}
+[10.602008] (robo24_wheel_interface) StdoutLine: {'line': b'writing requirements to ../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/requires.txt\n'}
+[10.602760] (robo24_wheel_interface) StdoutLine: {'line': b'writing top-level names to ../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/top_level.txt\n'}
+[10.610891] (robo24_wheel_interface) StdoutLine: {'line': b"reading manifest file '../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/SOURCES.txt'\n"}
+[10.616528] (robo24_wheel_interface) StdoutLine: {'line': b"writing manifest file '../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info/SOURCES.txt'\n"}
+[10.617254] (robo24_wheel_interface) StdoutLine: {'line': b'running build\n'}
+[10.617794] (robo24_wheel_interface) StdoutLine: {'line': b'running build_py\n'}
+[10.618909] (robo24_wheel_interface) StdoutLine: {'line': b'copying robo24_wheel_interface/robo24_diynav_node.py -> /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface\n'}
+[10.620437] (robo24_wheel_interface) StdoutLine: {'line': b'copying robo24_wheel_interface/robo24_wheel_controller_node.py -> /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface\n'}
+[10.622085] (robo24_wheel_interface) StdoutLine: {'line': b'running install\n'}
+[10.623409] (robo24_wheel_interface) StdoutLine: {'line': b'running install_lib\n'}
+[10.625211] (-) TimerEvent: {}
+[10.626932] (robo24_wheel_interface) StdoutLine: {'line': b'creating /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface\n'}
+[10.627640] (robo24_wheel_interface) StdoutLine: {'line': b'copying /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface/robo24_teleop_node.py -> /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface\n'}
+[10.628666] (robo24_wheel_interface) StdoutLine: {'line': b'copying /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface/gpt.py -> /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface\n'}
+[10.629508] (robo24_wheel_interface) StdoutLine: {'line': b'copying /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface/robo24_diynav_node.py -> /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface\n'}
+[10.630643] (robo24_wheel_interface) StdoutLine: {'line': b'copying /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface/__init__.py -> /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface\n'}
+[10.631538] (robo24_wheel_interface) StdoutLine: {'line': b'copying /home/mike/ros2_ws/build/robo24_wheel_interface/build/lib/robo24_wheel_interface/robo24_wheel_controller_node.py -> /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface\n'}
+[10.634736] (robo24_wheel_interface) StdoutLine: {'line': b'byte-compiling /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface/robo24_teleop_node.py to robo24_teleop_node.cpython-310.pyc\n'}
+[10.637853] (robo24_wheel_interface) StdoutLine: {'line': b'byte-compiling /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface/gpt.py to gpt.cpython-310.pyc\n'}
+[10.639322] (robo24_wheel_interface) StdoutLine: {'line': b'byte-compiling /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface/robo24_diynav_node.py to robo24_diynav_node.cpython-310.pyc\n'}
+[10.645864] (robo24_wheel_interface) StdoutLine: {'line': b'byte-compiling /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface/__init__.py to __init__.cpython-310.pyc\n'}
+[10.647389] (robo24_wheel_interface) StdoutLine: {'line': b'byte-compiling /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface/robo24_wheel_controller_node.py to robo24_wheel_controller_node.cpython-310.pyc\n'}
+[10.654292] (robo24_wheel_interface) StdoutLine: {'line': b'running install_data\n'}
+[10.657101] (robo24_wheel_interface) StdoutLine: {'line': b'running install_egg_info\n'}
+[10.664833] (robo24_wheel_interface) StdoutLine: {'line': b'Copying ../../build/robo24_wheel_interface/robo24_wheel_interface.egg-info to /home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages/robo24_wheel_interface-0.0.0-py3.10.egg-info\n'}
+[10.674174] (robo24_wheel_interface) StdoutLine: {'line': b'running install_scripts\n'}
+[10.725370] (-) TimerEvent: {}
+[10.730731] (robo24_bringup) StdoutLine: {'line': b'running egg_info\n'}
+[10.733388] (robo24_bringup) StdoutLine: {'line': b'writing ../../build/robo24_bringup/robo24_bringup.egg-info/PKG-INFO\n'}
+[10.734995] (robo24_bringup) StdoutLine: {'line': b'writing dependency_links to ../../build/robo24_bringup/robo24_bringup.egg-info/dependency_links.txt\n'}
+[10.736377] (robo24_bringup) StdoutLine: {'line': b'writing entry points to ../../build/robo24_bringup/robo24_bringup.egg-info/entry_points.txt\n'}
+[10.737674] (robo24_bringup) StdoutLine: {'line': b'writing requirements to ../../build/robo24_bringup/robo24_bringup.egg-info/requires.txt\n'}
+[10.738566] (robo24_bringup) StdoutLine: {'line': b'writing top-level names to ../../build/robo24_bringup/robo24_bringup.egg-info/top_level.txt\n'}
+[10.746390] (robo24_bringup) StdoutLine: {'line': b"reading manifest file '../../build/robo24_bringup/robo24_bringup.egg-info/SOURCES.txt'\n"}
+[10.748160] (robo24_bringup) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[10.750853] (robo24_bringup) StdoutLine: {'line': b"writing manifest file '../../build/robo24_bringup/robo24_bringup.egg-info/SOURCES.txt'\n"}
+[10.751798] (robo24_bringup) StdoutLine: {'line': b'running build\n'}
+[10.752690] (robo24_bringup) StdoutLine: {'line': b'running build_py\n'}
+[10.753609] (robo24_bringup) StdoutLine: {'line': b'running install\n'}
+[10.754636] (robo24_bringup) StdoutLine: {'line': b'running install_lib\n'}
+[10.756207] (robo24_wheel_interface) StdoutLine: {'line': b'Installing robo24_diynav_node script to /home/mike/ros2_ws/install/robo24_wheel_interface/lib/robo24_wheel_interface\n'}
+[10.758287] (robo24_wheel_interface) StdoutLine: {'line': b'Installing robo24_teleop_node script to /home/mike/ros2_ws/install/robo24_wheel_interface/lib/robo24_wheel_interface\n'}
+[10.761271] (robo24_bringup) StdoutLine: {'line': b'creating /home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages/robo24_bringup\n'}
+[10.762577] (robo24_wheel_interface) StdoutLine: {'line': b'Installing robo24_wheel_controller_node script to /home/mike/ros2_ws/install/robo24_wheel_interface/lib/robo24_wheel_interface\n'}
+[10.769132] (robo24_bringup) StdoutLine: {'line': b'copying /home/mike/ros2_ws/build/robo24_bringup/build/lib/robo24_bringup/__init__.py -> /home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages/robo24_bringup\n'}
+[10.770268] (robo24_wheel_interface) StdoutLine: {'line': b"writing list of installed files to '/home/mike/ros2_ws/build/robo24_wheel_interface/install.log'\n"}
+[10.771475] (robo24_bringup) StdoutLine: {'line': b'byte-compiling /home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages/robo24_bringup/__init__.py to __init__.cpython-310.pyc\n'}
+[10.772929] (robo24_bringup) StdoutLine: {'line': b'running install_data\n'}
+[10.778757] (robo24_bringup) StdoutLine: {'line': b'running install_egg_info\n'}
+[10.786407] (robo24_bringup) StdoutLine: {'line': b'Copying ../../build/robo24_bringup/robo24_bringup.egg-info to /home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages/robo24_bringup-0.0.0-py3.10.egg-info\n'}
+[10.797997] (robo24_bringup) StdoutLine: {'line': b'running install_scripts\n'}
+[10.825681] (-) TimerEvent: {}
+[10.899464] (robo24_wheel_interface) CommandEnded: {'returncode': 0}
+[10.909062] (robo24_bringup) StdoutLine: {'line': b"writing list of installed files to '/home/mike/ros2_ws/build/robo24_bringup/install.log'\n"}
+[10.926180] (-) TimerEvent: {}
+[11.027732] (-) TimerEvent: {}
+[11.128849] (-) TimerEvent: {}
+[11.232537] (-) TimerEvent: {}
+[11.247234] (robo24_wheel_interface) JobEnded: {'identifier': 'robo24_wheel_interface', 'rc': 0}
+[11.252193] (robo24_bringup) CommandEnded: {'returncode': 0}
+[11.332739] (-) TimerEvent: {}
+[11.433491] (-) TimerEvent: {}
+[11.510669] (robo24_bringup) JobEnded: {'identifier': 'robo24_bringup', 'rc': 0}
+[11.515794] (-) EventReactorShutdown: {}

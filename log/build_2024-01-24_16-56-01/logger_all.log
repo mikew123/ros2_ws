@@ -1,0 +1,298 @@
+[4.450s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[4.450s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0xffffb32aeb60>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0xffffb35c7190>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0xffffb35c7190>>)
+[4.660s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[4.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[4.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[4.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[4.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[4.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[4.662s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/mike/ros2_ws'
+[4.662s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[4.663s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[4.663s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[4.663s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[4.663s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[4.664s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[4.664s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[4.664s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[4.664s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[4.711s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[4.711s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[4.711s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[4.711s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[4.712s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[4.712s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[4.713s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[4.713s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[4.714s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[4.714s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[4.714s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[4.717s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[4.717s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[4.717s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[4.718s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[4.718s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[4.719s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[4.719s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[4.719s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[4.719s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[4.719s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[4.720s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[4.720s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[4.720s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[4.720s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[4.721s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[4.721s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[4.721s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[4.722s] Level 1:colcon.colcon_core.package_identification:_identify(src/log) by extensions ['ignore', 'ignore_ament_install']
+[4.722s] Level 1:colcon.colcon_core.package_identification:_identify(src/log) by extension 'ignore'
+[4.722s] Level 1:colcon.colcon_core.package_identification:_identify(src/log) ignored
+[4.723s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extensions ['ignore', 'ignore_ament_install']
+[4.724s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extension 'ignore'
+[4.724s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extension 'ignore_ament_install'
+[4.725s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extensions ['colcon_pkg']
+[4.725s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extension 'colcon_pkg'
+[4.725s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extensions ['colcon_meta']
+[4.725s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extension 'colcon_meta'
+[4.726s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extensions ['ros']
+[4.726s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_bringup) by extension 'ros'
+[4.736s] DEBUG:colcon.colcon_core.package_identification:Package 'src/robo24_bringup' with type 'ros.ament_python' and name 'robo24_bringup'
+[4.737s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extensions ['ignore', 'ignore_ament_install']
+[4.738s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extension 'ignore'
+[4.738s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extension 'ignore_ament_install'
+[4.738s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extensions ['colcon_pkg']
+[4.738s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extension 'colcon_pkg'
+[4.739s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extensions ['colcon_meta']
+[4.739s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extension 'colcon_meta'
+[4.739s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extensions ['ros']
+[4.739s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_localization) by extension 'ros'
+[4.741s] DEBUG:colcon.colcon_core.package_identification:Package 'src/robo24_localization' with type 'ros.ament_python' and name 'robo24_localization'
+[4.742s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extensions ['ignore', 'ignore_ament_install']
+[4.742s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extension 'ignore'
+[4.742s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extension 'ignore_ament_install'
+[4.743s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extensions ['colcon_pkg']
+[4.743s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extension 'colcon_pkg'
+[4.743s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extensions ['colcon_meta']
+[4.744s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extension 'colcon_meta'
+[4.744s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extensions ['ros']
+[4.744s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_nav) by extension 'ros'
+[4.746s] DEBUG:colcon.colcon_core.package_identification:Package 'src/robo24_nav' with type 'ros.ament_python' and name 'robo24_nav'
+[4.747s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extensions ['ignore', 'ignore_ament_install']
+[4.748s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extension 'ignore'
+[4.748s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extension 'ignore_ament_install'
+[4.749s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extensions ['colcon_pkg']
+[4.749s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extension 'colcon_pkg'
+[4.749s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extensions ['colcon_meta']
+[4.749s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extension 'colcon_meta'
+[4.750s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extensions ['ros']
+[4.750s] Level 1:colcon.colcon_core.package_identification:_identify(src/robo24_wheel_interface) by extension 'ros'
+[4.753s] DEBUG:colcon.colcon_core.package_identification:Package 'src/robo24_wheel_interface' with type 'ros.ament_python' and name 'robo24_wheel_interface'
+[4.753s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[4.754s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[4.754s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[4.754s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[4.754s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[5.139s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[5.139s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[5.274s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 4 installed packages in /home/mike/ros2_ws/install
+[5.340s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 253 installed packages in /opt/ros/humble
+[5.346s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[5.719s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'cmake_args' from command line to 'None'
+[5.719s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'cmake_target' from command line to 'None'
+[5.719s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[5.720s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'cmake_clean_cache' from command line to 'False'
+[5.720s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'cmake_clean_first' from command line to 'False'
+[5.720s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'cmake_force_configure' from command line to 'False'
+[5.720s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'ament_cmake_args' from command line to 'None'
+[5.720s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'catkin_cmake_args' from command line to 'None'
+[5.720s] Level 5:colcon.colcon_core.verb:set package 'robo24_bringup' build argument 'catkin_skip_building_tests' from command line to 'False'
+[5.720s] DEBUG:colcon.colcon_core.verb:Building package 'robo24_bringup' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mike/ros2_ws/build/robo24_bringup', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mike/ros2_ws/install/robo24_bringup', 'merge_install': False, 'path': '/home/mike/ros2_ws/src/robo24_bringup', 'symlink_install': True, 'test_result_base': None}
+[5.780s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'cmake_args' from command line to 'None'
+[5.780s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'cmake_target' from command line to 'None'
+[5.780s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[5.780s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'cmake_clean_cache' from command line to 'False'
+[5.781s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'cmake_clean_first' from command line to 'False'
+[5.781s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'cmake_force_configure' from command line to 'False'
+[5.781s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'ament_cmake_args' from command line to 'None'
+[5.781s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'catkin_cmake_args' from command line to 'None'
+[5.781s] Level 5:colcon.colcon_core.verb:set package 'robo24_localization' build argument 'catkin_skip_building_tests' from command line to 'False'
+[5.781s] DEBUG:colcon.colcon_core.verb:Building package 'robo24_localization' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mike/ros2_ws/build/robo24_localization', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mike/ros2_ws/install/robo24_localization', 'merge_install': False, 'path': '/home/mike/ros2_ws/src/robo24_localization', 'symlink_install': True, 'test_result_base': None}
+[5.839s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'cmake_args' from command line to 'None'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'cmake_target' from command line to 'None'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'cmake_clean_cache' from command line to 'False'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'cmake_clean_first' from command line to 'False'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'cmake_force_configure' from command line to 'False'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'ament_cmake_args' from command line to 'None'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'catkin_cmake_args' from command line to 'None'
+[5.840s] Level 5:colcon.colcon_core.verb:set package 'robo24_nav' build argument 'catkin_skip_building_tests' from command line to 'False'
+[5.841s] DEBUG:colcon.colcon_core.verb:Building package 'robo24_nav' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mike/ros2_ws/build/robo24_nav', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mike/ros2_ws/install/robo24_nav', 'merge_install': False, 'path': '/home/mike/ros2_ws/src/robo24_nav', 'symlink_install': True, 'test_result_base': None}
+[5.902s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'cmake_args' from command line to 'None'
+[5.903s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'cmake_target' from command line to 'None'
+[5.903s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[5.903s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'cmake_clean_cache' from command line to 'False'
+[5.903s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'cmake_clean_first' from command line to 'False'
+[5.904s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'cmake_force_configure' from command line to 'False'
+[5.904s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'ament_cmake_args' from command line to 'None'
+[5.904s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'catkin_cmake_args' from command line to 'None'
+[5.904s] Level 5:colcon.colcon_core.verb:set package 'robo24_wheel_interface' build argument 'catkin_skip_building_tests' from command line to 'False'
+[5.905s] DEBUG:colcon.colcon_core.verb:Building package 'robo24_wheel_interface' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mike/ros2_ws/build/robo24_wheel_interface', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mike/ros2_ws/install/robo24_wheel_interface', 'merge_install': False, 'path': '/home/mike/ros2_ws/src/robo24_wheel_interface', 'symlink_install': True, 'test_result_base': None}
+[5.962s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[6.024s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[6.025s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/mike/ros2_ws/src/robo24_bringup' with build type 'ament_python'
+[6.026s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_bringup', 'ament_prefix_path')
+[6.100s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[6.101s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/hook/ament_prefix_path.ps1'
+[6.104s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/hook/ament_prefix_path.dsv'
+[6.107s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/hook/ament_prefix_path.sh'
+[6.169s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.170s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.397s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/mike/ros2_ws/src/robo24_localization' with build type 'ament_python'
+[6.399s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_localization', 'ament_prefix_path')
+[6.469s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/hook/ament_prefix_path.ps1'
+[6.476s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/hook/ament_prefix_path.dsv'
+[6.479s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/hook/ament_prefix_path.sh'
+[6.547s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.547s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.748s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/mike/ros2_ws/src/robo24_nav' with build type 'ament_python'
+[6.749s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_nav', 'ament_prefix_path')
+[6.812s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/hook/ament_prefix_path.ps1'
+[6.814s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/hook/ament_prefix_path.dsv'
+[6.816s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/hook/ament_prefix_path.sh'
+[6.882s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.882s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[7.088s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/mike/ros2_ws/src/robo24_wheel_interface' with build type 'ament_python'
+[7.088s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_wheel_interface', 'ament_prefix_path')
+[7.154s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/hook/ament_prefix_path.ps1'
+[7.157s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/hook/ament_prefix_path.dsv'
+[7.159s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/hook/ament_prefix_path.sh'
+[7.221s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[7.221s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[8.714s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/mike/ros2_ws/src/robo24_bringup'
+[8.784s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[8.785s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[10.302s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/mike/ros2_ws/src/robo24_localization'
+[10.380s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[10.381s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[11.849s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/mike/ros2_ws/src/robo24_nav'
+[11.912s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[11.912s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[13.430s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/mike/ros2_ws/src/robo24_wheel_interface'
+[13.500s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[13.500s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[16.431s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mike/ros2_ws/build/robo24_nav': PYTHONPATH=/home/mike/ros2_ws/build/robo24_nav/prefix_override:/home/mike/ros2_ws/install/robo24_nav/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_nav/build --no-deps install_data
+[16.972s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mike/ros2_ws/build/robo24_localization': PYTHONPATH=/home/mike/ros2_ws/build/robo24_localization/prefix_override:/home/mike/ros2_ws/install/robo24_localization/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_localization/build --no-deps install_data
+[17.370s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mike/ros2_ws/build/robo24_wheel_interface': PYTHONPATH=/home/mike/ros2_ws/build/robo24_wheel_interface/prefix_override:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_wheel_interface/build --no-deps install_data
+[17.479s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mike/ros2_ws/build/robo24_bringup': PYTHONPATH=/home/mike/ros2_ws/build/robo24_bringup/prefix_override:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_bringup/build --no-deps install_data
+[20.867s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_nav', 'pythonpath_develop')
+[20.875s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mike/ros2_ws/build/robo24_nav' returned '0': PYTHONPATH=/home/mike/ros2_ws/build/robo24_nav/prefix_override:/home/mike/ros2_ws/install/robo24_nav/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_nav/build --no-deps install_data
+[21.116s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_nav/share/robo24_nav/hook/pythonpath_develop.ps1'
+[21.121s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/build/robo24_nav/share/robo24_nav/hook/pythonpath_develop.dsv'
+[21.128s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_nav/share/robo24_nav/hook/pythonpath_develop.sh'
+[21.371s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav' for CMake module files
+[21.381s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav' for CMake config files
+[21.394s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav/lib'
+[21.397s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav/bin'
+[21.399s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav/lib/pkgconfig/robo24_nav.pc'
+[21.402s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav/lib/python3.10/site-packages'
+[21.404s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_nav', 'pythonpath')
+[21.621s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/hook/pythonpath.ps1'
+[21.632s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/hook/pythonpath.dsv'
+[21.634s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/hook/pythonpath.sh'
+[21.638s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_nav/bin'
+[21.638s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robo24_nav)
+[21.703s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/package.ps1'
+[21.707s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/package.dsv'
+[21.710s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/package.sh'
+[21.714s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/package.bash'
+[21.717s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_nav/share/robo24_nav/package.zsh'
+[21.720s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mike/ros2_ws/install/robo24_nav/share/colcon-core/packages/robo24_nav)
+[21.726s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_bringup', 'pythonpath_develop')
+[21.729s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mike/ros2_ws/build/robo24_bringup' returned '0': PYTHONPATH=/home/mike/ros2_ws/build/robo24_bringup/prefix_override:/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_bringup/build --no-deps install_data
+[21.795s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_bringup/share/robo24_bringup/hook/pythonpath_develop.ps1'
+[21.797s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/build/robo24_bringup/share/robo24_bringup/hook/pythonpath_develop.dsv'
+[21.799s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_bringup/share/robo24_bringup/hook/pythonpath_develop.sh'
+[21.861s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup' for CMake module files
+[21.863s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup' for CMake config files
+[21.866s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup/lib'
+[21.867s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup/bin'
+[21.867s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup/lib/pkgconfig/robo24_bringup.pc'
+[21.868s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup/lib/python3.10/site-packages'
+[21.869s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_bringup', 'pythonpath')
+[21.931s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/hook/pythonpath.ps1'
+[21.933s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/hook/pythonpath.dsv'
+[21.935s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/hook/pythonpath.sh'
+[21.938s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_bringup/bin'
+[21.938s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robo24_bringup)
+[22.006s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/package.ps1'
+[22.009s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/package.dsv'
+[22.012s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/package.sh'
+[22.015s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/package.bash'
+[22.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_bringup/share/robo24_bringup/package.zsh'
+[22.020s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mike/ros2_ws/install/robo24_bringup/share/colcon-core/packages/robo24_bringup)
+[22.021s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_wheel_interface', 'pythonpath_develop')
+[22.026s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mike/ros2_ws/build/robo24_wheel_interface' returned '0': PYTHONPATH=/home/mike/ros2_ws/build/robo24_wheel_interface/prefix_override:/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_wheel_interface/build --no-deps install_data
+[22.088s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_wheel_interface/share/robo24_wheel_interface/hook/pythonpath_develop.ps1'
+[22.090s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/build/robo24_wheel_interface/share/robo24_wheel_interface/hook/pythonpath_develop.dsv'
+[22.092s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_wheel_interface/share/robo24_wheel_interface/hook/pythonpath_develop.sh'
+[22.155s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface' for CMake module files
+[22.158s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface' for CMake config files
+[22.161s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface/lib'
+[22.161s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface/bin'
+[22.162s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface/lib/pkgconfig/robo24_wheel_interface.pc'
+[22.163s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface/lib/python3.10/site-packages'
+[22.164s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_wheel_interface', 'pythonpath')
+[22.230s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/hook/pythonpath.ps1'
+[22.232s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/hook/pythonpath.dsv'
+[22.234s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/hook/pythonpath.sh'
+[22.238s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_wheel_interface/bin'
+[22.238s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robo24_wheel_interface)
+[22.296s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/package.ps1'
+[22.298s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/package.dsv'
+[22.301s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/package.sh'
+[22.304s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/package.bash'
+[22.306s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_wheel_interface/share/robo24_wheel_interface/package.zsh'
+[22.308s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mike/ros2_ws/install/robo24_wheel_interface/share/colcon-core/packages/robo24_wheel_interface)
+[22.310s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_localization', 'pythonpath_develop')
+[22.314s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mike/ros2_ws/build/robo24_localization' returned '0': PYTHONPATH=/home/mike/ros2_ws/build/robo24_localization/prefix_override:/home/mike/ros2_ws/install/robo24_localization/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/mike/ros2_ws/build/robo24_localization/build --no-deps install_data
+[22.379s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_localization/share/robo24_localization/hook/pythonpath_develop.ps1'
+[22.381s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/build/robo24_localization/share/robo24_localization/hook/pythonpath_develop.dsv'
+[22.383s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/build/robo24_localization/share/robo24_localization/hook/pythonpath_develop.sh'
+[22.469s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization' for CMake module files
+[22.471s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization' for CMake config files
+[22.474s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization/lib'
+[22.475s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization/bin'
+[22.475s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization/lib/pkgconfig/robo24_localization.pc'
+[22.476s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization/lib/python3.10/site-packages'
+[22.476s] Level 1:colcon.colcon_core.shell:create_environment_hook('robo24_localization', 'pythonpath')
+[22.543s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/hook/pythonpath.ps1'
+[22.545s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/hook/pythonpath.dsv'
+[22.547s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/hook/pythonpath.sh'
+[22.550s] Level 1:colcon.colcon_core.environment:checking '/home/mike/ros2_ws/install/robo24_localization/bin'
+[22.551s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robo24_localization)
+[22.618s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/package.ps1'
+[22.621s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/package.dsv'
+[22.624s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/package.sh'
+[22.626s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/package.bash'
+[22.628s] INFO:colcon.colcon_core.shell:Creating package script '/home/mike/ros2_ws/install/robo24_localization/share/robo24_localization/package.zsh'
+[22.630s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mike/ros2_ws/install/robo24_localization/share/colcon-core/packages/robo24_localization)
+[22.631s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[22.634s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[22.634s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[22.635s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[22.717s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[22.717s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[22.718s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[22.718s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[22.721s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[22.722s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[22.784s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mike/ros2_ws/install/local_setup.ps1'
+[22.788s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mike/ros2_ws/install/_local_setup_util_ps1.py'
+[22.794s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mike/ros2_ws/install/setup.ps1'
+[22.863s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mike/ros2_ws/install/local_setup.sh'
+[22.866s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mike/ros2_ws/install/_local_setup_util_sh.py'
+[22.869s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mike/ros2_ws/install/setup.sh'
+[22.933s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mike/ros2_ws/install/local_setup.bash'
+[22.935s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mike/ros2_ws/install/setup.bash'
+[22.995s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mike/ros2_ws/install/local_setup.zsh'
+[22.998s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mike/ros2_ws/install/setup.zsh'

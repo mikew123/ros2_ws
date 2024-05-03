@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_cmake/srv/Claw_Response.msg

@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_generator_cpp/robo24_interfaces/srv/detail/claw__traits.hpp

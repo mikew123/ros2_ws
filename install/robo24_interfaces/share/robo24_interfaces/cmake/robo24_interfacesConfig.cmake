@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/ament_cmake_core/robo24_interfacesConfig.cmake

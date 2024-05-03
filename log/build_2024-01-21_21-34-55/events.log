@@ -1,0 +1,65 @@
+[0.000000] (-) TimerEvent: {}
+[0.000953] (robo24_bringup) JobQueued: {'identifier': 'robo24_bringup', 'dependencies': OrderedDict()}
+[0.001931] (robo24_localization) JobQueued: {'identifier': 'robo24_localization', 'dependencies': OrderedDict()}
+[0.002527] (robo24_nav) JobQueued: {'identifier': 'robo24_nav', 'dependencies': OrderedDict()}
+[0.002815] (robo24_wheel_interface) JobQueued: {'identifier': 'robo24_wheel_interface', 'dependencies': OrderedDict()}
+[0.002987] (robo24_bringup) JobStarted: {'identifier': 'robo24_bringup'}
+[0.099063] (-) TimerEvent: {}
+[0.200287] (-) TimerEvent: {}
+[0.301040] (-) TimerEvent: {}
+[0.305341] (robo24_localization) JobStarted: {'identifier': 'robo24_localization'}
+[0.401204] (-) TimerEvent: {}
+[0.502025] (-) TimerEvent: {}
+[0.598080] (robo24_nav) JobStarted: {'identifier': 'robo24_nav'}
+[0.602205] (-) TimerEvent: {}
+[0.703536] (-) TimerEvent: {}
+[0.804490] (-) TimerEvent: {}
+[0.890573] (robo24_wheel_interface) JobStarted: {'identifier': 'robo24_wheel_interface'}
+[0.904805] (-) TimerEvent: {}
+[1.008709] (-) TimerEvent: {}
+[1.109991] (-) TimerEvent: {}
+[1.211186] (-) TimerEvent: {}
+[1.312014] (-) TimerEvent: {}
+[1.412925] (-) TimerEvent: {}
+[1.513698] (-) TimerEvent: {}
+[1.614486] (-) TimerEvent: {}
+[1.715233] (-) TimerEvent: {}
+[1.816008] (-) TimerEvent: {}
+[1.916738] (-) TimerEvent: {}
+[2.017488] (-) TimerEvent: {}
+[2.118212] (-) TimerEvent: {}
+[2.218913] (-) TimerEvent: {}
+[2.319961] (-) TimerEvent: {}
+[2.420831] (-) TimerEvent: {}
+[2.522467] (-) TimerEvent: {}
+[2.623340] (-) TimerEvent: {}
+[2.724329] (-) TimerEvent: {}
+[2.825150] (-) TimerEvent: {}
+[2.925950] (-) TimerEvent: {}
+[3.026737] (-) TimerEvent: {}
+[3.127426] (-) TimerEvent: {}
+[3.228188] (-) TimerEvent: {}
+[3.328900] (-) TimerEvent: {}
+[3.429687] (-) TimerEvent: {}
+[3.530497] (-) TimerEvent: {}
+[3.631378] (-) TimerEvent: {}
+[3.689381] (robo24_localization) StderrLine: {'line': b'Traceback (most recent call last):\n  File "/usr/lib/python3/dist-packages/colcon_core/executor/__init__.py", line 91, in __call__\n    rc = await self.task(*args, **kwargs)\n  File "/usr/lib/python3/dist-packages/colcon_core/task/__init__.py", line 93, in __call__\n    return await task_method(*args, **kwargs)\n  File "/usr/lib/python3/dist-packages/colcon_ros/task/ament_python/build.py", line 51, in build\n    setup_py_data = get_setup_data(self.context.pkg, env)\n  File "/usr/lib/python3/dist-packages/colcon_core/task/python/__init__.py", line 20, in get_setup_data\n    return dict(pkg.metadata[key](env))\n  File "/usr/lib/python3/dist-packages/colcon_ros/package_augmentation/ros_ament_python.py", line 57, in getter\n    return get_setup_information(\n  File "/usr/lib/python3/dist-packages/colcon_python_setup_py/package_identification/python_setup_py.py", line 241, in get_setup_information\n    _setup_information_cache[hashable_env] = _get_setup_information(\n  File "/usr/lib/python3/dist-packages/colcon_python_setup_py/package_identification/python_setup_py.py", line 288, in _get_setup_information\n    result = subprocess.run(\n  File "/usr/lib/python3.10/subprocess.py", line 526, in run\n    raise CalledProcessError(retcode, process.args,\nsubprocess.CalledProcessError: Command \'[\'/usr/bin/python3\', \'-c\', \'import sys;from contextlib import suppress;exec("with suppress(ImportError):    from setuptools.extern.packaging.specifiers    import SpecifierSet");exec("with suppress(ImportError):    from packaging.specifiers import SpecifierSet");from distutils.core import run_setup;dist = run_setup(    \\\'setup.py\\\', script_args=(\\\'--dry-run\\\',), stop_after=\\\'config\\\');skip_keys = (\\\'cmdclass\\\', \\\'distclass\\\', \\\'ext_modules\\\', \\\'metadata\\\');data = {    key: value for key, value in dist.__dict__.items()     if (        not key.startswith(\\\'_\\\') and         not callable(value) and         key not in skip_keys and         key not in dist.display_option_names    )};data[\\\'metadata\\\'] = {    k: v for k, v in dist.metadata.__dict__.items()     if k not in (\\\'license_files\\\', \\\'provides_extras\\\')};sys.stdout.buffer.write(repr(data).encode(\\\'utf-8\\\'))\']\' returned non-zero exit status 1.\n'}
+[3.694623] (robo24_localization) JobEnded: {'identifier': 'robo24_localization', 'rc': 1}
+[3.731522] (-) TimerEvent: {}
+[3.832363] (-) TimerEvent: {}
+[3.933138] (-) TimerEvent: {}
+[4.033905] (-) TimerEvent: {}
+[4.134704] (-) TimerEvent: {}
+[4.235412] (-) TimerEvent: {}
+[4.336175] (-) TimerEvent: {}
+[4.436872] (-) TimerEvent: {}
+[4.537604] (-) TimerEvent: {}
+[4.638376] (-) TimerEvent: {}
+[4.739215] (-) TimerEvent: {}
+[4.840505] (-) TimerEvent: {}
+[4.941347] (-) TimerEvent: {}
+[5.042698] (-) TimerEvent: {}
+[5.061330] (robo24_bringup) JobEnded: {'identifier': 'robo24_bringup', 'rc': 'SIGINT'}
+[5.066397] (robo24_nav) JobEnded: {'identifier': 'robo24_nav', 'rc': 'SIGINT'}
+[5.067896] (robo24_wheel_interface) JobEnded: {'identifier': 'robo24_wheel_interface', 'rc': 'SIGINT'}
+[5.077922] (-) EventReactorShutdown: {}

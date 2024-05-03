@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/ament_cmake_export_targets/ament_cmake_export_targets-extras.cmake

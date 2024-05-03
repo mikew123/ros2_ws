@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_generator_c/robo24_interfaces/msg/rosidl_generator_c__visibility_control.h

@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_typesupport_fastrtps_cpp/robo24_interfaces/srv/detail/claw__rosidl_typesupport_fastrtps_cpp.hpp

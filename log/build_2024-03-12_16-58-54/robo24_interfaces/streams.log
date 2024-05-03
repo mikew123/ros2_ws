@@ -1,0 +1,36 @@
+[2.279s] Invoking command in '/home/mike/ros2_ws/build/robo24_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mike/ros2_ws/install/robo24_stuff:/home/mike/ros2_ws/install/robo24_nav:/home/mike/ros2_ws/install/robo24_localization:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble /usr/bin/cmake /home/mike/ros2_ws/src/robo24_interfaces -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/mike/ros2_ws/install/robo24_interfaces
+[3.995s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[4.000s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[4.001s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[4.001s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[4.001s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[4.002s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[4.002s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[5.200s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[6.365s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[8.257s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[8.387s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[8.547s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[8.548s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[8.548s] -- Using PYTHON_LIBRARIES: /usr/lib/aarch64-linux-gnu/libpython3.10.so
+[8.639s] -- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[8.898s] -- Added test 'lint_cmake' to check CMake code style
+[8.941s] -- Added test 'xmllint' to check XML markup files
+[9.034s] -- Configuring done
+[9.806s] -- Generating done
+[9.880s] -- Build files have been written to: /home/mike/ros2_ws/build/robo24_interfaces
+[9.976s] Invoked command in '/home/mike/ros2_ws/build/robo24_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mike/ros2_ws/install/robo24_stuff:/home/mike/ros2_ws/install/robo24_nav:/home/mike/ros2_ws/install/robo24_localization:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble /usr/bin/cmake /home/mike/ros2_ws/src/robo24_interfaces -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/mike/ros2_ws/install/robo24_interfaces
+[9.978s] Invoking command in '/home/mike/ros2_ws/build/robo24_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mike/ros2_ws/install/robo24_stuff:/home/mike/ros2_ws/install/robo24_nav:/home/mike/ros2_ws/install/robo24_localization:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble /usr/bin/cmake --build /home/mike/ros2_ws/build/robo24_interfaces -- -j4 -l4
+[10.369s] [  3%] [34m[1mGenerating C code for ROS interfaces[0m
+[10.491s] failed to create symbolic link '/home/mike/ros2_ws/build/robo24_interfaces/ament_cmake_python/robo24_interfaces/robo24_interfaces' because existing path cannot be removed: Is a directory
+[10.500s] gmake[2]: *** [CMakeFiles/ament_cmake_python_symlink_robo24_interfaces.dir/build.make:70: CMakeFiles/ament_cmake_python_symlink_robo24_interfaces] Error 1
+[10.504s] gmake[1]: *** [CMakeFiles/Makefile2:421: CMakeFiles/ament_cmake_python_symlink_robo24_interfaces.dir/all] Error 2
+[10.504s] gmake[1]: *** Waiting for unfinished jobs....
+[10.556s] [  6%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[12.648s] [  6%] Built target robo24_interfaces__cpp
+[12.768s] [35m[1mConsolidate compiler generated dependencies of target robo24_interfaces__rosidl_generator_c[0m
+[12.932s] [  9%] [32mBuilding C object CMakeFiles/robo24_interfaces__rosidl_generator_c.dir/rosidl_generator_c/robo24_interfaces/srv/detail/claw__functions.c.o[0m
+[13.922s] [ 12%] [32m[1mLinking C shared library librobo24_interfaces__rosidl_generator_c.so[0m
+[14.182s] gmake: *** [Makefile:146: all] Error 2
+[14.184s] [ 12%] Built target robo24_interfaces__rosidl_generator_c
+[15.173s] Invoked command in '/home/mike/ros2_ws/build/robo24_interfaces' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mike/ros2_ws/install/robo24_stuff:/home/mike/ros2_ws/install/robo24_nav:/home/mike/ros2_ws/install/robo24_localization:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble /usr/bin/cmake --build /home/mike/ros2_ws/build/robo24_interfaces -- -j4 -l4

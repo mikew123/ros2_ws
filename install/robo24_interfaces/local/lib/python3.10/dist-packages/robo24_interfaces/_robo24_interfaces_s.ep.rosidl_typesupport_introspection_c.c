@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_generator_py/robo24_interfaces/_robo24_interfaces_s.ep.rosidl_typesupport_introspection_c.c

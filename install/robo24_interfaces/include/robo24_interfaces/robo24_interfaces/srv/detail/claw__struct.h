@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_generator_c/robo24_interfaces/srv/detail/claw__struct.h

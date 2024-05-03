@@ -1,0 +1,63 @@
+[0.259s] Invoking command in '/home/mike/ros2_ws/build/robo24_interfaces': CMAKE_PREFIX_PATH=/home/mike/ros2_ws/install/robo24_stuff:/home/mike/ros2_ws/install/robo24_nav:/home/mike/ros2_ws/install/robo24_localization:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble /usr/bin/cmake /home/mike/ros2_ws/src/robo24_interfaces -DCMAKE_INSTALL_PREFIX=/home/mike/ros2_ws/install/robo24_interfaces
+[1.262s] -- The C compiler identification is GNU 11.4.0
+[1.996s] -- The CXX compiler identification is GNU 11.4.0
+[2.043s] -- Detecting C compiler ABI info
+[2.395s] -- Detecting C compiler ABI info - done
+[2.424s] -- Check for working C compiler: /usr/bin/cc - skipped
+[2.426s] -- Detecting C compile features
+[2.429s] -- Detecting C compile features - done
+[2.443s] -- Detecting CXX compiler ABI info
+[2.806s] -- Detecting CXX compiler ABI info - done
+[2.836s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[2.838s] -- Detecting CXX compile features
+[2.839s] -- Detecting CXX compile features - done
+[2.882s] -- Found ament_cmake: 1.3.6 (/opt/ros/humble/share/ament_cmake/cmake)
+[3.802s] -- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+[4.508s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[4.547s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[4.635s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[5.050s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[6.106s] [31mCMake Error at /opt/ros/humble/share/rosidl_adapter/cmake/rosidl_adapt_interfaces.cmake:59 (message):
+[6.107s]   execute_process(/usr/bin/python3.10 -m rosidl_adapter --package-name
+[6.107s]   robo24_interfaces --arguments-file
+[6.107s]   /home/mike/ros2_ws/build/robo24_interfaces/rosidl_adapter__arguments__robo24_interfaces.json
+[6.108s]   --output-dir
+[6.108s]   /home/mike/ros2_ws/build/robo24_interfaces/rosidl_adapter/robo24_interfaces
+[6.108s]   --output-file
+[6.109s]   /home/mike/ros2_ws/build/robo24_interfaces/rosidl_adapter/robo24_interfaces.idls)
+[6.109s]   returned error code 1:
+[6.109s] 
+[6.110s]   Traceback (most recent call last):
+[6.110s] 
+[6.111s]     File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+[6.111s]       return _run_code(code, main_globals, None,
+[6.112s]     File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+[6.112s]       exec(code, run_globals)
+[6.113s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/__main__.py", line 19, in <module>
+[6.113s]       sys.exit(main())
+[6.114s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/main.py", line 53, in main
+[6.114s]       abs_idl_file = convert_to_idl(
+[6.115s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/__init__.py", line 24, in convert_to_idl
+[6.115s]       return convert_srv_to_idl(
+[6.116s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/srv/__init__.py", line 28, in convert_srv_to_idl
+[6.117s]       srv = parse_service_string(package_name, input_file.stem, content)
+[6.119s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/parser.py", line 859, in parse_service_string
+[6.120s]       request_message = parse_message_string(
+[6.122s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/parser.py", line 544, in parse_message_string
+[6.123s]       msg = MessageSpecification(pkg_name, msg_name, fields, constants)
+[6.124s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/parser.py", line 388, in __init__
+[6.124s]       self.base_type = BaseType(
+[6.125s]     File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_adapter/parser.py", line 205, in __init__
+[6.126s]       raise InvalidResourceName(
+[6.127s] 
+[6.127s]   rosidl_adapter.parser.InvalidResourceName: 'claw_Request' is an invalid
+[6.127s]   message name.  It should have the pattern '^[A-Z][A-Za-z0-9]*$'
+[6.128s] 
+[6.128s] Call Stack (most recent call first):
+[6.128s]   /opt/ros/humble/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:130 (rosidl_adapt_interfaces)
+[6.129s]   CMakeLists.txt:17 (rosidl_generate_interfaces)
+[6.129s] 
+[6.130s] [0m
+[6.130s] -- Configuring incomplete, errors occurred!
+[6.131s] See also "/home/mike/ros2_ws/build/robo24_interfaces/CMakeFiles/CMakeOutput.log".
+[6.134s] Invoked command in '/home/mike/ros2_ws/build/robo24_interfaces' returned '1': CMAKE_PREFIX_PATH=/home/mike/ros2_ws/install/robo24_stuff:/home/mike/ros2_ws/install/robo24_nav:/home/mike/ros2_ws/install/robo24_localization:/home/mike/ros2_ws/install/robo24_bringup:/opt/ros/humble /usr/bin/cmake /home/mike/ros2_ws/src/robo24_interfaces -DCMAKE_INSTALL_PREFIX=/home/mike/ros2_ws/install/robo24_interfaces

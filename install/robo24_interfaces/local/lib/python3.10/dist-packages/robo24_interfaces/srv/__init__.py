@@ -1,0 +1,1 @@
+/home/mike/ros2_ws/build/robo24_interfaces/rosidl_generator_py/robo24_interfaces/srv/__init__.py
