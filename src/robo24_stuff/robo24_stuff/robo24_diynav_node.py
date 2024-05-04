@@ -29,6 +29,8 @@ from datetime import datetime, timedelta
 from rclpy.parameter import Parameter
 import os
 
+import json
+
 #import sensor_msgs.msg as sensor_msgs
 #import std_msgs.msg as std_msgs
 
@@ -148,9 +150,10 @@ class Robo24DiynavNode(Node):
         self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.tof8x8x3_subscription = self.create_subscription(String, 'tof8x8x3_msg', self.tof8x8x3_callback, 10)
         self.robo24_modes_json_subscription = self.create_subscription(String, 'robo24_modes', self.robo24_modes_callback, 10)
+        self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
 
-        self.claw_cmd_publisher = self.create_publisher(String, 'claw_cmd_msg',10)
         self.robo24_modes_publisher = self.create_publisher(String, 'robo24_modes',10)
+        self.robo24_json_publisher = self.create_publisher(String, 'robo24_json',10)
 
         # Calc new movement 10 times per second
         self.goto_timer = self.create_timer(1.0/self.calc_waypoint_hz, self.on_goto_timer)
@@ -220,10 +223,14 @@ class Robo24DiynavNode(Node):
 
         self.get_logger().info("Robo24 DIY Navigation Started")
 
+    def robo24_json_callback(self, msg:String) -> None :
+        pass
+
     def robo24_modes_callback(self, msg:String) ->None :
         self.get_logger().info(f"{msg = }")
 
         data = msg.data
+        packet = None
 
         try :
             packet = json.loads(data)
@@ -233,16 +240,17 @@ class Robo24DiynavNode(Node):
 
         msg_str:str = None
         # send nav run state to nav publish
-        if "run_state" in packet :
-            run_state = packet["run_state"]
-            if run_state == "toggle" :
-                pass
-            if self.navRunMode == "running" :
-                self.navRunMode = "paused"
-                msg_str = "{\"state\": \"paused\"}"
-            if self.navRunMode == "paused" :
-                self.navRunMode = "running"
-                msg_str = "{\"state\": \"running\"}"
+        if packet!=None :
+            if "run_state" in packet :
+                run_state = packet["run_state"]
+                if run_state == "toggle" :
+                    pass
+                if self.navRunMode == "running" :
+                    self.navRunMode = "paused"
+                    msg_str = "{\"state\": \"paused\"}"
+                if self.navRunMode == "paused" :
+                    self.navRunMode = "running"
+                    msg_str = "{\"state\": \"running\"}"
 
         if msg_str != None :
             self.robo24_modes_data_publish(msg_str)
@@ -290,6 +298,11 @@ class Robo24DiynavNode(Node):
         msg = String()
         msg.data = data
         self.robo24_modes_publisher.publish(msg)
+
+    def robo24_json_data_publish(self, data:str) -> None :
+        msg = String()
+        msg.data = data
+        self.robo24_json_publisher.publish(msg)
 
     def diy_slam_enable(self, slam_enable:bool=True) ->None:
         """
@@ -703,9 +716,10 @@ class Robo24DiynavNode(Node):
         pct is percent claw closed (0 = 100%o pen)
         msec is how long the claw moves to the new position
         """
-        msg = String()
-        msg.data = "%d %d"%(pct, msec)
-        self.claw_cmd_publisher.publish(msg)
+        cmd_json = {"claw": {"open": 0, "time": 1000}}
+        cmd_str = json.dumps(cmd_json)+"\0"
+        self.robo24_json_data_publish(cmd_str)
+
         # blocking wait for the expected claw movement time
         # blocking is OK since the robot should be stopped
         time.sleep(msec/1000.0)

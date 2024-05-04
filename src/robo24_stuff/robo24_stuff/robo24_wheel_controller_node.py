@@ -85,6 +85,7 @@ class Robo24WheelControllerNode(Node):
         self.joy_subscription = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
         
         self.watch_json_subscription = self.create_subscription(String, 'watch_json', self.watch_json_callback, 10)
+        self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
 
         self.encoders_msg_publisher = self.create_publisher(String, 'encoders_msg', 10)
         self.odometry_publisher = self.create_publisher(Odometry, 'wheel_odom', 10)
@@ -92,8 +93,6 @@ class Robo24WheelControllerNode(Node):
 
         self.tf_broadcaster = TransformBroadcaster(self)
 
-        #self.claw_srv = self.create_service(Claw, 'claw_srv', self.claw_srv_callback)
-        self.claw_cmd_subscription = self.create_subscription(String, 'claw_cmd_msg', self.claw_cmd_msg_callback, 10)
 
         self.timer = self.create_timer((1.0/self.timerRateHz), self.timer_callback)
 
@@ -331,26 +330,31 @@ class Robo24WheelControllerNode(Node):
         packet_bytes = msg.data
         try :
             packet = json.loads(packet_bytes)
-            if (("motor" in packet) and ("action" in packet)):
-                motor = packet['motor']
-                action = packet['action']
-                if ((motor == 'claw') and (action == 'open')):
-                    # open claw 100% in 1 sec
-                    self.wheel_serial_port.write(f"CP 0 1000\n".encode())
-                if ((motor == 'claw') and (action == 'close')):
-                    # close claw 0% in 1 sec
-                    self.wheel_serial_port.write(f"CP 100 1000\n".encode())
+            # if (("motor" in packet) and ("action" in packet)):
+                # motor = packet['motor']
 
         except Exception as ex:
             self.get_logger().error(f"wheel controller watch_json_callback exception {ex}")        
 
 
     CPmsg = ""
-    def claw_cmd_msg_callback(self, msg):
-        [pct, msec] = msg.data.split(" ")
-        self.get_logger().info(f"Claw Command: {pct = } {msec = }".encode())
-        self.wheel_serial_port.write(f"CP {pct} {msec}\n".encode())
 
+    def robo24_json_callback(self, msg) :
+        self.get_logger().info(f"{msg}")
+
+        try :
+            packet = json.loads(msg.data)
+            self.get_logger().info(f"{packet}")
+            if "claw" in packet :
+                claw_cmd = packet["claw"]
+                if "open" in claw_cmd :
+                    pct = claw_cmd["open"]
+                if "time" in claw_cmd :
+                    msec = claw_cmd["time"]
+                self.wheel_serial_port.write(f"CP {pct} {msec}\n".encode())
+
+        except Exception as ex:
+            self.get_logger().error(f"wheel controller robo24_json_callback exception {ex}")        
 
     # check serial port at timerRateHz and parse out messages to publish
     # TODO: actually parse the messages (currently only OD encoder messages)

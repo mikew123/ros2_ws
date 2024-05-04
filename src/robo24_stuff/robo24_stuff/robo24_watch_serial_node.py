@@ -36,10 +36,10 @@ class WatchSerialNode(Node):
         self.watch_serial_port = serial.Serial(self.serial_port, 115200)
 
         self.watch_json_publisher = self.create_publisher(String, 'watch_json', 10)
-        self.robo24_modes_json_publisher = self.create_publisher(String, 'robo24_modes',10)
+        self.robo24_json_publisher = self.create_publisher(String, 'robo24_json',10)
 
         self.battery_subscription = self.create_subscription(BatteryState, 'battery_status', self.battery_callback, 10)
-        self.robo24_modes_json_subscription = self.create_subscription(String, 'robo24_modes', self.robo24_modes_callback, 10)
+        self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
         self.watch_json_subscription = self.create_subscription(String, 'watch_json', self.watch_json_callback, 10)
 
         self.timer = self.create_timer((1.0/self.timerRateHz), self.timer_callback)
@@ -50,10 +50,10 @@ class WatchSerialNode(Node):
 
         self.get_logger().info(f"WatchSerialNode Started")
 
-    def robo24_modes_json_publish(self, data:str) -> None :
+    def robo24_json_publish(self, data:str) -> None :
         msg = String()
         msg.data = data
-        self.robo24_modes_json_publisher.publish(msg)
+        self.robo24_json_publisher.publish(msg)
 
     def watch_json_publish(self, data:str) -> None :
         msg = String()
@@ -72,9 +72,10 @@ class WatchSerialNode(Node):
             self.get_logger().info(f"watch msg rx json {data=}")
             self.watch_json_publish(data)
             
+        # Send battery voltage and current to watch via serial and ESp32 board esp-now
         if self.batteryReady == True :
             #send status information in JSON
-            jsonObj:dict = {"rv": self.batteryVolt}
+            jsonObj:dict = {"rv": self.batteryVolt, "ra": self.batteryCurr}
             #self.get_logger().info(f"watch msg tx {jsonObj=}")
             jsonStr:str = json.dumps(jsonObj)
             self.watch_serial_port.write((jsonStr+"\n").encode())
@@ -82,11 +83,11 @@ class WatchSerialNode(Node):
 
         # Navigator state info to watch
         if self.nav_modeReady == True :
-            self.watch_serial_port.write((nav_mode+"\n").encode())
+            self.watch_serial_port.write((self.nav_mode+"\n").encode())
             self.nav_modeReady = False
 
     # modes encoded as JSON strings
-    def robo24_modes_callback(self, msg:String) -> None :
+    def robo24_json_callback(self, msg:String) -> None :
         # send nav modes to watch serial
         packet_bytes = msg.data
 
@@ -98,7 +99,7 @@ class WatchSerialNode(Node):
                     self.nav_modeReady = True
                 
         except Exception as ex:
-            self.get_logger().error(f"watch serial robo24_modes_callback exception {ex}")        
+            self.get_logger().error(f"watch serial robo24_json_callback exception {ex}")        
 
     def watch_json_callback(self, msg:String) -> None :
         
@@ -106,9 +107,12 @@ class WatchSerialNode(Node):
 
         try :
             packet = json.loads(data)
+            self.get_logger().error(f"{packet=}")
             # send nav run state to nav publish
             if "run_state" in packet :
-                self.robo24_modes_json_publish(data)
+                self.robo24_json_publish(data)
+            if "claw" in packet :
+                self.robo24_json_publish(data)
 
         except Exception as ex:
             self.get_logger().error(f"watch serial watch_json_callback exception {ex}")        

@@ -53,7 +53,7 @@ The { JSON } part of the message is sent from the watch controller over ESP-now<
 Command topic messages {"cmd": { JSON }}<br
 Status topic messages {"status": { JSON }}<br>
 
-- {"claw": {"open": pct, "time": msec}
+- {"claw": {"open": pct, "time": msec}}<br>
   Example: {"claw": {"open": 100, "time": 1000}} Claw opens all the way in 1 second
 
 
