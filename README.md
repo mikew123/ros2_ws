@@ -57,5 +57,9 @@ Status topic messages {"status": { JSON }}<br>
   Example: {"claw": {"open": 100, "time": 1000}} Claw opens all the way in 1 second
 
 
+nav_ctrl = {"mode":"none",  # none, 6-can, 4-corner, Quick-trip, Waypoints
+            "arena":"home", # home, dprg
+            "state": "done" # init, running, paused, done
+            }
 
 

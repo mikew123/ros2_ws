@@ -30,6 +30,7 @@ from rclpy.parameter import Parameter
 import os
 
 import json
+from copy import copy, deepcopy
 
 #import sensor_msgs.msg as sensor_msgs
 #import std_msgs.msg as std_msgs
@@ -53,6 +54,12 @@ class Robo24DiynavNode(Node):
 
     goto4CornerWaypoints = 0
     goto4CornerWaypoints_last = 0
+
+    nav_ctrl = {"mode":"none",  # none, 6-can, 4-corner, Quick-trip, Waypoints
+                "arena":"home", # home, dprg
+                "state": "done" # init, running, paused, done
+                }
+    nav_ctrl_last = deepcopy(nav_ctrl)
 
     XYLatched = False
     calc_waypoint_hz = 20
@@ -101,7 +108,6 @@ class Robo24DiynavNode(Node):
     # forward straight 5 Meters 
     #waypoints = [[5.0, 0.0, 0.0]]
     # 6 can arena 7x7.5 at home
-    can6_waypoints = [can6_leftScanWaypoint, can6_goalAlignWaypoint, can6_rightScanWaypoint, can6_startWaypoint]
 
     # initial waypoint
     waypoint_num = 0
@@ -220,14 +226,41 @@ class Robo24DiynavNode(Node):
 
         self.navTimerStart = time.time()
 
-
         self.get_logger().info("Robo24 DIY Navigation Started")
+    #end init
+
+    def process_nav_cmd(self, cmd) :
+        msg_str = None
+        if "state" in cmd :
+            state = cmd["state"]
+            if state=="toggle" :
+                if self.navRunMode=="running" :
+                    self.navRunMode = "paused"
+                if self.navRunMode=="init" :
+                    self.navRunMode = "running"
+                if self.navRunMode=="paused" :
+                    self.navRunMode = "running"
+                    
+                msg_json = {"nav_stat": {"state": self.navRunMode}}
+                msg_str = json.dumps(msg_json)
+                    
+        if msg_str != None :
+            self.robo24_modes_data_publish(msg_str)
 
     def robo24_json_callback(self, msg:String) -> None :
-        pass
+        self.get_logger().info(f"diynav robo24_json_callback {msg=}")
+        try :
+            packet = json.loads(data)
+        except Exception as ex:
+            self.get_logger().error(f"watch serial watch_json_callback exception {ex}")
+            return
+
+        if "nav_cmd" in packet :
+            nav_cmd = packet["nav_cmd"]
+            process_nav_cmd(nav_cmd)
 
     def robo24_modes_callback(self, msg:String) ->None :
-        self.get_logger().info(f"{msg = }")
+        self.get_logger().info(f"diynav robo24_modes_callback {msg=}")
 
         data = msg.data
         packet = None
@@ -329,45 +362,60 @@ class Robo24DiynavNode(Node):
         #now = self.get_clock().now()
         now = rclpy.time.Time() # Gets time=0 (I think simulation time)
         
-        # Create waypoint id string
-        if self.gotoWaypoints == 1: # Y button on controller
-            waypoint = "waypoint" + str(self.waypoint_num)
-        elif self.gotoCan == 1: # X button on controller
-            waypoint = "can"
-        elif self.gotoQtWaypoints == 1: # B button 1 on controller
-            waypoint = self.qt_waypoints[self.waypoint_num]
-        elif self.goto4CornerWaypoints == 1: # A button 0 on controller
-            waypoint = self.cor4_waypoints[self.waypoint_num]
+        # # Create waypoint id string
+        # if self.gotoWaypoints == 1: # Y button on controller
+        #     waypoint = "waypoint" + str(self.waypoint_num)
+        # elif self.gotoCan == 1: # X button on controller
+        #     waypoint = "can"
+        # elif self.gotoQtWaypoints == 1: # B button 1 on controller
+        #     waypoint = self.qt_waypoints[self.waypoint_num]
+        # elif self.goto4CornerWaypoints == 1: # A button 0 on controller
+        #     waypoint = self.cor4_waypoints[self.waypoint_num]
+
+        nav_ctrl_mode = self.nav_ctrl["mode"]
+        nav_ctrl_mode_last = self.nav_ctrl_last["mode"]
+
+        if   nav_ctrl_mode == "Waypoints" :  waypoint = "waypoint" + str(self.waypoint_num)
+        elif nav_ctrl_mode == "6-can" :      waypoint = "can"
+        elif nav_ctrl_mode == "Quick-trip" : waypoint = self.qt_waypoints[self.waypoint_num]
+        elif nav_ctrl_mode == "4-corner" :   waypoint = self.cor4_waypoints[self.waypoint_num]
 
         # disable diy slam - takes a few seconds
-        if (self.gotoQtWaypoints==1 and self.gotoQtWaypoints_last==0) :
-            self.diy_slam_enable(False)
-            self.robo24_modes_data_publish("mode QTrip started")
+        if nav_ctrl_mode!="none" and nav_ctrl_mode!=nav_ctrl_mode_last :
+            self.robo24_modes_data_publish(f"Started {nav_ctrl_mode=}")
+            if nav_ctrl_mode=="6-can" or nav_ctrl_mode=="none" : self.diy_slam_enable(True)
+            else : self.diy_slam_enable(False)
 
-        if (self.goto4CornerWaypoints==1 and self.goto4CornerWaypoints_last==0) :
-            self.diy_slam_enable(False)
-            self.robo24_modes_data_publish("mode 4Corner started")
+        # # disable diy slam - takes a few seconds
+        # if (self.gotoQtWaypoints==1 and self.gotoQtWaypoints_last==0) :
+        #     self.diy_slam_enable(False)
+        #     self.robo24_modes_data_publish("mode QTrip started")
+
+        # if (self.goto4CornerWaypoints==1 and self.goto4CornerWaypoints_last==0) :
+        #     self.diy_slam_enable(False)
+        #     self.robo24_modes_data_publish("mode 4Corner started")
             
-        if (self.gotoCan==1 and self.gotoCan_last==0) :
-            self.diy_slam_enable(True)
-            self.robo24_modes_data_publish("mode 6Can started")
+        # if (self.gotoCan==1 and self.gotoCan_last==0) :
+        #     self.diy_slam_enable(True)
+        #     self.robo24_modes_data_publish("mode 6Can started")
 
-        if (self.gotoWaypoints==1 and self.gotoWaypoints_last==0) :
-            self.diy_slam_enable(True)
-            self.robo24_modes_data_publish("mode Waypoints started")
+        # if (self.gotoWaypoints==1 and self.gotoWaypoints_last==0) :
+        #     self.diy_slam_enable(True)
+        #     self.robo24_modes_data_publish("mode Waypoints started")
 
         # autonomous drive robot to waypoint or can
         # create /cmd_vel message 
         msg = Twist()
         
-        if     self.gotoWaypoints==1     \
-            or self.gotoCan==1           \
-            or self.gotoQtWaypoints==1   \
-            or self.goto4CornerWaypoints==1 :
+        # if     self.gotoWaypoints==1     \
+        #     or self.gotoCan==1           \
+        #     or self.gotoQtWaypoints==1   \
+        #     or self.goto4CornerWaypoints==1 :
+        if nav_ctrl_mode!=None :
 
             ############## GOTO WAYPOINTS STATES ############
-            if self.gotoWaypoints==1 :
-
+            # if self.gotoWaypoints==1 :
+            if nav_ctrl_mode=="Waypoints" :
                 retVal = self.gotoWaypointStates(now, waypoint, msg)
                 if retVal != 0 : 
                     # start goto next Waypoint 
@@ -377,8 +425,8 @@ class Robo24DiynavNode(Node):
                     self.get_logger().info(f'Arrived at {waypoint}, next num = {self.waypoint_num} '.encode())
                 
             ############### GOTO Quick Trip WAYPOINTS #################
-            elif self.gotoQtWaypoints==1:
-
+            # elif self.gotoQtWaypoints==1:
+            elif nav_ctrl_mode=="Quick-trip" :
                 retVal = self.gotoWaypointStates(now, waypoint, msg)
                 if retVal != 0 :
                     # start goto next Waypoint - only 2 waypoints 0,1 stop at #1
@@ -387,7 +435,8 @@ class Robo24DiynavNode(Node):
                     self.get_logger().info(f'Arrived at QT {waypoint}, next num = {self.waypoint_num} '.encode())
                 
             ############### GOTO 4 Corner WAYPOINTS #################
-            elif self.goto4CornerWaypoints==1:
+            #elif self.goto4CornerWaypoints==1:
+            elif nav_ctrl_mode=="4-corner" :
 
                 match self.state :
 
@@ -420,7 +469,8 @@ class Robo24DiynavNode(Node):
 
 
             ############### GOTO CAN STATES ###################
-            elif self.gotoCan==1:
+            # elif self.gotoCan==1:
+            elif nav_ctrl_mode=="6-can" :
 
                 # process TOF from L->R first sequential valid distances used
                 # 3 states 0=no valid yet, 1=valid current, 2=past valid
@@ -509,7 +559,8 @@ class Robo24DiynavNode(Node):
 
 
                 # reset can scan time out when started
-                if self.gotoCan_last!=self.gotoCan :
+                # if self.gotoCan_last!=self.gotoCan :
+                if nav_ctrl_mode!=nav_ctrl_mode_last :
                     self.wpstate0StartTime = self.get_clock().now()
                     self.findCanStartTime = self.get_clock().now()
 
@@ -691,10 +742,11 @@ class Robo24DiynavNode(Node):
             #msg.linear.x = 0.0
             self.cmd_vel_publisher.publish(msg)
 
-        if     self.gotoWaypoints_last        != self.gotoWaypoints       \
-            or self.gotoCan_last              != self.gotoCan             \
-            or self.gotoQtWaypoints_last      != self.gotoQtWaypoints     \
-            or self.goto4CornerWaypoints_last != self.goto4CornerWaypoints:
+        # if     self.gotoWaypoints_last        != self.gotoWaypoints       \
+        #     or self.gotoCan_last              != self.gotoCan             \
+        #     or self.gotoQtWaypoints_last      != self.gotoQtWaypoints     \
+        #     or self.goto4CornerWaypoints_last != self.goto4CornerWaypoints:
+        if nav_ctrl_mode!=nav_ctrl_mode_last :
             # stop motion when button released
             # single twist /cmd_vel published so that joy can be used
             # without the fancy twist mux node
@@ -702,10 +754,13 @@ class Robo24DiynavNode(Node):
             self.cmd_vel_publisher.publish(msg)
 
 
+        self.nav_ctrl_last = deepcopy(self.nav_ctrl)
+
         self.gotoWaypoints_last = self.gotoWaypoints
         self.gotoCan_last = self.gotoCan
         self.gotoQtWaypoints_last = self.gotoQtWaypoints
         self.goto4CornerWaypoints_last = self.goto4CornerWaypoints
+
         self.state_last = state
 
     # send a message to claw to open/close
@@ -716,7 +771,7 @@ class Robo24DiynavNode(Node):
         pct is percent claw closed (0 = 100%o pen)
         msec is how long the claw moves to the new position
         """
-        cmd_json = {"claw": {"open": 0, "time": 1000}}
+        cmd_json = {"claw": {"open": pct, "time": 1000}}
         cmd_str = json.dumps(cmd_json)+"\0"
         self.robo24_json_data_publish(cmd_str)
 
@@ -790,7 +845,8 @@ class Robo24DiynavNode(Node):
                 
         # Get XY for can relative to map, compare to goal entrance location to disqualify can in goal
         if tf_OK==True and waypoint=="can" :
-            if self.gotoCan == 1:
+            # if self.gotoCan == 1:
+            if self.nav_ctrl["mode"]=="6-can" :
                 try:
                     t2 = self.tf_buffer.lookup_transform (
                         'map',
@@ -1030,6 +1086,12 @@ class Robo24DiynavNode(Node):
             self.gotoCan              = msg.buttons[2] # 1 = X button pushed
             self.gotoQtWaypoints      = msg.buttons[1] # 1 = B button pushed
             self.goto4CornerWaypoints = msg.buttons[0] # 1 = A button pushed
+
+            if   msg.buttons[3] : self.nav_ctrl["mode"] = "Waypoints"
+            elif msg.buttons[2] : self.nav_ctrl["mode"] = "6-can"
+            elif msg.buttons[1] : self.nav_ctrl["mode"] = "Quick-trip"
+            elif msg.buttons[0] : self.nav_ctrl["mode"] = "4-corner"
+            else : self.nav_ctrl["mode"] = "none"
 
         resetAxes = msg.buttons[6] # 1 = select button pushed
         latchButton = msg.buttons[5] # 1 = select button pushed

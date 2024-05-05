@@ -109,7 +109,7 @@ class WatchSerialNode(Node):
             packet = json.loads(data)
             self.get_logger().error(f"{packet=}")
             # send nav run state to nav publish
-            if "run_state" in packet :
+            if "nav_cmd" in packet :
                 self.robo24_json_publish(data)
             if "claw" in packet :
                 self.robo24_json_publish(data)

@@ -84,7 +84,7 @@ class Robo24WheelControllerNode(Node):
         self.encoders_msg_subscription = self.create_subscription(String, 'encoders_msg', self.encoders_msg_callback, 10)
         self.joy_subscription = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
         
-        self.watch_json_subscription = self.create_subscription(String, 'watch_json', self.watch_json_callback, 10)
+        #self.watch_json_subscription = self.create_subscription(String, 'watch_json', self.watch_json_callback, 10)
         self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
 
         self.encoders_msg_publisher = self.create_publisher(String, 'encoders_msg', 10)
@@ -325,26 +325,26 @@ class Robo24WheelControllerNode(Node):
         cv[5*(6+1)] = rz
         return cv
 
-    def watch_json_callback(self, msg) ->None :
-        #self.get_logger().info(f"wheel watch msg {msg}")
-        packet_bytes = msg.data
-        try :
-            packet = json.loads(packet_bytes)
-            # if (("motor" in packet) and ("action" in packet)):
-                # motor = packet['motor']
+    # def watch_json_callback(self, msg) ->None :
+    #     #self.get_logger().info(f"wheel watch_json_callback {msg=}")
+    #     packet_bytes = msg.data
+    #     try :
+    #         packet = json.loads(packet_bytes)
+    #         # if (("motor" in packet) and ("action" in packet)):
+    #             # motor = packet['motor']
 
-        except Exception as ex:
-            self.get_logger().error(f"wheel controller watch_json_callback exception {ex}")        
+    #     except Exception as ex:
+    #         self.get_logger().error(f"wheel controller watch_json_callback exception {ex}")        
 
 
     CPmsg = ""
 
     def robo24_json_callback(self, msg) :
-        self.get_logger().info(f"{msg}")
+        #self.get_logger().info(f"{msg}")
 
         try :
             packet = json.loads(msg.data)
-            self.get_logger().info(f"{packet}")
+            #self.get_logger().info(f"{packet}")
             if "claw" in packet :
                 claw_cmd = packet["claw"]
                 if "open" in claw_cmd :
@@ -352,6 +352,7 @@ class Robo24WheelControllerNode(Node):
                 if "time" in claw_cmd :
                     msec = claw_cmd["time"]
                 self.wheel_serial_port.write(f"CP {pct} {msec}\n".encode())
+                self.get_logger().info(f"{packet}")
 
         except Exception as ex:
             self.get_logger().error(f"wheel controller robo24_json_callback exception {ex}")        
