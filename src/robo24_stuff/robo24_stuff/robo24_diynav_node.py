@@ -352,16 +352,6 @@ class Robo24DiynavNode(Node):
         #now = self.get_clock().now()
         now = rclpy.time.Time() # Gets time=0 (I think simulation time)
         
-        # # Create waypoint id string
-        # if self.gotoWaypoints == 1: # Y button on controller
-        #     waypoint = "waypoint" + str(self.waypoint_num)
-        # elif self.gotoCan == 1: # X button on controller
-        #     waypoint = "can"
-        # elif self.gotoQtWaypoints == 1: # B button 1 on controller
-        #     waypoint = self.qt_waypoints[self.waypoint_num]
-        # elif self.goto4CornerWaypoints == 1: # A button 0 on controller
-        #     waypoint = self.cor4_waypoints[self.waypoint_num]
-
         nav_ctrl_mode = self.nav_ctrl["mode"]
         nav_ctrl_mode_last = self.nav_ctrl_last["mode"]
 
@@ -376,31 +366,11 @@ class Robo24DiynavNode(Node):
             if nav_ctrl_mode=="6-can" or nav_ctrl_mode=="none" : self.diy_slam_enable(True)
             else : self.diy_slam_enable(False)
 
-        # # disable diy slam - takes a few seconds
-        # if (self.gotoQtWaypoints==1 and self.gotoQtWaypoints_last==0) :
-        #     self.diy_slam_enable(False)
-        #     self.robo24_modes_data_publish("mode QTrip started")
-
-        # if (self.goto4CornerWaypoints==1 and self.goto4CornerWaypoints_last==0) :
-        #     self.diy_slam_enable(False)
-        #     self.robo24_modes_data_publish("mode 4Corner started")
-            
-        # if (self.gotoCan==1 and self.gotoCan_last==0) :
-        #     self.diy_slam_enable(True)
-        #     self.robo24_modes_data_publish("mode 6Can started")
-
-        # if (self.gotoWaypoints==1 and self.gotoWaypoints_last==0) :
-        #     self.diy_slam_enable(True)
-        #     self.robo24_modes_data_publish("mode Waypoints started")
 
         # autonomous drive robot to waypoint or can
         # create /cmd_vel message 
         msg = Twist()
         
-        # if     self.gotoWaypoints==1     \
-        #     or self.gotoCan==1           \
-        #     or self.gotoQtWaypoints==1   \
-        #     or self.goto4CornerWaypoints==1 :
         if nav_ctrl_mode!=None :
 
             ############## GOTO WAYPOINTS STATES ############
@@ -417,19 +387,37 @@ class Robo24DiynavNode(Node):
             ############### GOTO Quick Trip WAYPOINTS #################
             # elif self.gotoQtWaypoints==1:
             elif nav_ctrl_mode=="Quick-trip" :
-                retVal = self.gotoWaypointStates(now, waypoint, msg)
-                if retVal != 0 :
-                    # start goto next Waypoint - only 2 waypoints 0,1 stop at #1
-                    if self.waypoint_num<1 :
-                        self.waypoint_num += 1
-                    self.get_logger().info(f'Arrived at QT {waypoint}, next num = {self.waypoint_num} '.encode())
+                match self.state :
+                  case 0:
+                    retVal = self.gotoWaypointStates(now, waypoint, msg)
+                    if retVal != 0 :
+                        # start goto next Waypoint - only 2 waypoints 0,1 stop at #1
+                        if self.waypoint_num<1 :
+                            self.waypoint_num += 1
+                        else :
+                            self.state = 1
+                            self.cor4Angle = -math.pi # 180 degree
+                            self.cor4AngleTime = 0.0
+                        self.get_logger().info(f'Arrived at QT {waypoint}, next num = {self.waypoint_num} '.encode())
+                  case 1 :
+                    # rotate to starting angle pose
+                    dt = 1.0/self.calc_waypoint_hz # time interval sec
+                    av = 0.5 #rad/sec
+                    dr = av*dt # rad/interval
+                    self.cor4Angle += dr #new angle
+                    msg.angular.z = -av / (2*math.pi) # NOTE: units are wrong!!!!
+                    if self.cor4Angle >= 0.0 :
+                        self.state = 2
+
+                  case 2 :
+                    # end
+                    msg.angular.z = 0.0
                 
             ############### GOTO 4 Corner WAYPOINTS #################
             #elif self.goto4CornerWaypoints==1:
             elif nav_ctrl_mode=="4-corner" :
 
                 match self.state :
-
                   case 0:
                     # goto waypoint
                     retVal = self.gotoWaypointStates(now, waypoint, msg)
@@ -440,7 +428,7 @@ class Robo24DiynavNode(Node):
                         else :
                             self.state = 1
                         self.get_logger().info(f'Arrived at 4 CORNER {waypoint}, next num = {self.waypoint_num} '.encode())
-                        self.cor4Angle = -(math.pi/2)
+                        self.cor4Angle = -(math.pi/2) # 90 degree
                         self.cor4AngleTime = 0.0
 
                   case 1 :
