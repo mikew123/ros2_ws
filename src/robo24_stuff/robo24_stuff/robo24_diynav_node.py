@@ -230,34 +230,24 @@ class Robo24DiynavNode(Node):
     #end init
 
     def process_nav_cmd(self, cmd) :
-        msg_str = None
-        if "state" in cmd :
-            state = cmd["state"]
-            if state=="toggle" :
-                if self.navRunMode=="running" :
-                    self.navRunMode = "paused"
-                if self.navRunMode=="init" :
-                    self.navRunMode = "running"
-                if self.navRunMode=="paused" :
-                    self.navRunMode = "running"
-                    
-                msg_json = {"nav_stat": {"state": self.navRunMode}}
-                msg_str = json.dumps(msg_json)
-                    
-        if msg_str != None :
-            self.robo24_modes_data_publish(msg_str)
+        self.get_logger().info(f"process_nav_cmd {cmd=}")
+        if "mode" in cmd :
+            mode = cmd["mode"]
+            self.nav_ctrl["mode"] = mode
+            self.get_logger().info(f"process_nav_cmd {self.nav_ctrl['mode']=}")
+
 
     def robo24_json_callback(self, msg:String) -> None :
         self.get_logger().info(f"diynav robo24_json_callback {msg=}")
         try :
-            packet = json.loads(data)
+            packet = json.loads(msg.data)
         except Exception as ex:
-            self.get_logger().error(f"watch serial watch_json_callback exception {ex}")
+            self.get_logger().error(f"diynav robo24_json_callback exception {ex}")
             return
 
         if "nav_cmd" in packet :
             nav_cmd = packet["nav_cmd"]
-            process_nav_cmd(nav_cmd)
+            self.process_nav_cmd(nav_cmd)
 
     def robo24_modes_callback(self, msg:String) ->None :
         self.get_logger().info(f"diynav robo24_modes_callback {msg=}")
