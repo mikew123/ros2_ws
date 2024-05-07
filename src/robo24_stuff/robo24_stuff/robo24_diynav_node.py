@@ -87,8 +87,8 @@ class Robo24DiynavNode(Node):
     can6_goalDropWaypoint  = [8.0*ft2m,0.0,0.0] # inside goal area
     can6_leftScanWaypoint  = [6.75/2*ft2m, 1.75*ft2m, 0.0]
     can6_rightScanWaypoint = [6.75/2*ft2m, -1.75*ft2m, 0.0]
-    can6_waypoints = [can6_leftScanWaypoint, can6_goalAlignWaypoint, can6_rightScanWaypoint, can6_startWaypoint]
-
+    # can6_waypoints = [can6_leftScanWaypoint, can6_goalAlignWaypoint, can6_goalAlignWaypoint, can6_startWaypoint]
+    can6_waypoints = ["can6_leftScanWaypoint","can6_goalAlignWaypoint","can6_goalAlignWaypoint","can6_startWaypoint"]
     # 4 corner waypoints - home arena
     cor4_Waypoint0 = [0.0,0.0,0.0] # starting location (location it ends)
     cor4_Waypoint1 = [6*ft2m,0.0,0.0] 
@@ -101,6 +101,10 @@ class Robo24DiynavNode(Node):
     qt_turnWaypoint = [8.0*ft2m, 0.0, 0.0]
     qt_waypoints = ["qt_turnWaypoint", "qt_startWaypoint"]
 
+    # Waypoints to continually travel to within arena
+    # use can waypoints - home arean
+    wp_waypoints = ["can6_leftScanWaypoint","can6_goalAlignWaypoint","can6_goalAlignWaypoint","can6_startWaypoint"]
+    
     # 1M x 1M square route
     #waypoints = [[1.0, 0.0, 0.0],[1.0,1.0,pi/2],[0.0, 1.0, pi],[0.0,0.0,-pi/2]]
     # CCW rotation 
@@ -188,11 +192,11 @@ class Robo24DiynavNode(Node):
         #self.make_static_tf("odom", "base_link", [0.0,0.0,0.0])
 
         # set fixed waypoints frames relative to map transform
-        for n in range(len(self.can6_waypoints)) :
-            wp = "waypoint" + str(n)
-            self.tf_static_broadcaster = StaticTransformBroadcaster(self)
-            self.make_static_tf(self.tf_static_broadcaster,"map", wp, self.can6_waypoints[n])
-            #time.sleep(1.0)
+        # for n in range(len(self.can6_waypoints)) :
+        #     wp = "waypoint" + str(n)
+        #     self.tf_static_broadcaster = StaticTransformBroadcaster(self)
+        #     self.make_static_tf(self.tf_static_broadcaster,"map", wp, self.can6_waypoints[n])
+        #     #time.sleep(1.0)
 
         # Goal waypoint to bring CAN to after grabbing it
         self.tf_static_broadcasterGoalDrop = StaticTransformBroadcaster(self)
@@ -355,7 +359,8 @@ class Robo24DiynavNode(Node):
         nav_ctrl_mode = self.nav_ctrl["mode"]
         nav_ctrl_mode_last = self.nav_ctrl_last["mode"]
 
-        if   nav_ctrl_mode == "Waypoints" :  waypoint = "waypoint" + str(self.waypoint_num)
+        # if   nav_ctrl_mode == "Waypoints" :  waypoint = "waypoint" + str(self.waypoint_num)
+        if   nav_ctrl_mode == "Waypoints" :  waypoint = wp_waypoints[self.waypoint_num]
         elif nav_ctrl_mode == "6-can" :      waypoint = "can"
         elif nav_ctrl_mode == "Quick-trip" : waypoint = self.qt_waypoints[self.waypoint_num]
         elif nav_ctrl_mode == "4-corner" :   waypoint = self.cor4_waypoints[self.waypoint_num]
@@ -380,7 +385,7 @@ class Robo24DiynavNode(Node):
                 if retVal != 0 : 
                     # start goto next Waypoint 
                     self.waypoint_num += 1
-                    if self.waypoint_num >= len(self.can6_waypoints) :
+                    if self.waypoint_num >= len(self.wp_waypoints) :
                         self.waypoint_num = 0
                     self.get_logger().info(f'Arrived at {waypoint}, next num = {self.waypoint_num} '.encode())
                 
@@ -548,7 +553,8 @@ class Robo24DiynavNode(Node):
                     # timeout finding can  goto a new waypoint
                     l:int = len(self.can6_waypoints)
                     n:int = random.randint(0,l-1)
-                    self.newWaypoint = "waypoint" + str(n)
+                    # self.newWaypoint = "waypoint" + str(n)
+                    self.newWaypoint = self.can6_waypoints[n]
                     self.state = 1
                     self.get_logger().info(f'Timeout finding can goto new {self.newWaypoint=}')
             
@@ -561,7 +567,8 @@ class Robo24DiynavNode(Node):
                             # timeout scanning  goto a new waypoint
                             l:int = len(self.can6_waypoints)
                             n:int = random.randint(0,l-1)
-                            self.newWaypoint = "waypoint" + str(n)
+                            # self.newWaypoint = "waypoint" + str(n)
+                            self.newWaypoint = self.can6_waypoints[n]
                             self.state = 1
                             self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.newWaypoint=}]')
                         else :
