@@ -20,10 +20,11 @@ from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 
 from numpy.polynomial import Polynomial
+import json
 
 class Robo24DiySlamNode(Node):
     """
-    Creates the 6-can arena map - rviz2 can display it
+    Creates the 6-can arena maps for home and dprg - rviz2 can display it
     Creates a point cloud from TOF sensors
     Rviz2 can display the map and point cloud
     """
@@ -48,15 +49,53 @@ class Robo24DiySlamNode(Node):
     mapOdomPcdReq = False
     mapOdomPcdRdy = False
 
-    ft2m:float = 0.3048
+    ft2m:float = 0.3048 # feet to meters
+
     mapResolution:float = 0.1 # pixels = 10 cm sq
-    can6Width:int = int(((7.0+(7/12.0)) * ft2m)/mapResolution) # 6-can walls
-    can6Height:int = int(((6.0+(10/12.0)) * ft2m)/mapResolution)
-    can6GoalArea:int = int((2 * ft2m)/mapResolution) # goal area outside walls
-    can6GoalOpening:int = int((3 * ft2m)/mapResolution) #width of goal openin
-    mapWidth:int = can6Width + can6GoalArea
-    mapHeight:int = can6Height
-    startWpX0:int = (8/12.0*ft2m) # offset from back wall, inches to meters
+    
+    home_can6Width:int = int(((7.0+(7/12.0)) * ft2m)/mapResolution) # 6-can walls
+    home_can6Height:int = int(((6.0+(10/12.0)) * ft2m)/mapResolution)
+    home_can6GoalArea:int = int((2 * ft2m)/mapResolution) # goal area outside walls
+    home_can6GoalOpening:int = int((3 * ft2m)/mapResolution) #width of goal openin
+    home_mapWidth:int = home_can6Width + home_can6GoalArea
+    home_mapHeight:int = home_can6Height
+    home_startWpX0:int = (8/12.0*ft2m) # offset from back wall, inches to meters
+
+    home_arena: dict = {
+        "can6Width"       : home_can6Width,
+        "can6Height"      : home_can6Height,
+        "can6GoalArea"    : home_can6GoalArea,
+        "can6GoalOpening" : home_can6GoalOpening,
+        "mapWidth"        : home_mapWidth,
+        "mapHeight"       : home_mapHeight,
+        "startWpX0"       : home_startWpX0
+    }
+
+    dprg_can6Width:int = int((10.0 * ft2m)/mapResolution) # 6-can walls
+    dprg_can6Height:int = int((7.0 * ft2m)/mapResolution)
+    dprg_can6GoalArea:int = int((2 * ft2m)/mapResolution) # goal area outside walls
+    dprg_can6GoalOpening:int = int((3 * ft2m)/mapResolution) #width of goal openin
+    dprg_mapWidth:int = dprg_can6Width + dprg_can6GoalArea
+    dprg_mapHeight:int = dprg_can6Height
+    dprg_startWpX0:int = (8/12.0*ft2m) # offset from back wall, inches to meters
+
+    dprg_arena: dict = {
+        "can6Width"       : dprg_can6Width,
+        "can6Height"      : dprg_can6Height,
+        "can6GoalArea"    : dprg_can6GoalArea,
+        "can6GoalOpening" : dprg_can6GoalOpening,
+        "mapWidth"        : dprg_mapWidth,
+        "mapHeight"       : dprg_mapHeight,
+        "startWpX0"       : dprg_startWpX0
+    }
+
+    arenas = {
+        "home" : home_arena,
+        "dprg" : dprg_arena
+    }
+
+
+    nav_arena:str = "home"
 
     diyslamEnabled = True
 
@@ -81,6 +120,7 @@ class Robo24DiySlamNode(Node):
         self.wheel_odom_subscription = self.create_subscription(Odometry, 'wheel_odom', self.wheel_odom_callback, 10)
 
         self.robo24_modes_subscription = self.create_subscription(String, 'robo24_modes', self.robo24_modes_callback, 10)
+        self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
 
         self.tf_buffer = Buffer(Duration(seconds=0,nanoseconds=0))
         self.tf_listener = TransformListener(self.tf_buffer, self)
@@ -96,6 +136,12 @@ class Robo24DiySlamNode(Node):
         self.make_static_tf(self.tf_static_broadcasterOdom, "map", "odom", [0.0,0.0,0.0])
 
         self.get_logger().info("Robo24 DIY Slam Started")
+
+    def robo24_json_callback(self, msg) :
+        cmd = json.loads(msg.data)
+        self.get_logger().info(f"process_nav_cmd {cmd=}")
+        if "arena" in cmd :
+            self.nav_arena = cmd["arena"]
 
 
     # robo24_modes topic to control diyslamEnabled
@@ -165,12 +211,20 @@ class Robo24DiySlamNode(Node):
             if (self.mapOdomPcdReq==False and self.mapOdomPcdRdy==False) : 
                 self.mapOdomPcdReq = True
 
+        arena = self.nav_arena
+        if not arena in self.arenas : return
+
+        mapResolution   = self.mapResolution
+        can6Height      = self.arenas[arena]["can6Height"]
+        can6Width       = self.arenas[arena]["can6Width"]
+        startWpX0       = self.arenas[arena]["startWpX0"]
+
 
         if self.mapOdomPcdRdy == True :
             self.mapOdomPcdRdy = False
             # create seperate X Y lists for Mean calc and Poloynomial.fit()
-            can6Y:float = self.can6Height*self.mapResolution
-            can6X:float = self.can6Width*self.mapResolution
+            can6Y:float = can6Height*mapResolution
+            can6X:float = can6Width*mapResolution
             if robotNotMoving :
                 # gather points in PCD (x,y,z) that align with the walls
                 # Left wall Y = +1.04 Right wall Y= -1.04
@@ -190,11 +244,11 @@ class Robo24DiySlamNode(Node):
                         wallPointsRx.append(x)
                         wallPointsRy.append(y)
                     # points on front goal wall
-                    if (math.fabs((can6X - self.startWpX0) -x)<0.2) and (y > -(can6Y/2-0.2)) and (y < (can6Y/2-0.2)) :
+                    if (math.fabs((can6X - startWpX0) -x)<0.2) and (y > -(can6Y/2-0.2)) and (y < (can6Y/2-0.2)) :
                         wallPointsFx.append(x)
                         wallPointsFy.append(y)
                     # points on back non-goal wall
-                    if (math.fabs(-self.startWpX0 -x)<0.2) and (y > -(can6Y/2-0.2)) and (y < (can6Y/2-0.2)) :
+                    if (math.fabs(-startWpX0 -x)<0.2) and (y > -(can6Y/2-0.2)) and (y < (can6Y/2-0.2)) :
                         wallPointsBx.append(x)
                         wallPointsBy.append(y)
 
@@ -204,10 +258,10 @@ class Robo24DiySlamNode(Node):
                 wallPos = can6Y/2
                 (linOffsetRy, angleOffsetR) = self.slamOffsets(wallPointsRx, wallPointsRy, wallPos, +1)
 
-                wallPos = can6X - self.startWpX0
+                wallPos = can6X - startWpX0
                 (linOffsetFx, angleOffsetF) = self.slamOffsets(wallPointsFy, wallPointsFx, wallPos, -1)
 
-                wallPos = -self.startWpX0
+                wallPos = -startWpX0
                 (linOffsetBx, angleOffsetB) = self.slamOffsets(wallPointsBy, wallPointsBx, wallPos, -1)
 
                 self.mapOdomX += (linOffsetFx+linOffsetFx)/8
@@ -512,35 +566,47 @@ class Robo24DiySlamNode(Node):
         msg.header.frame_id = "map"
 
         # leave info map_load_TIME 0
-        msg.info.resolution = self.mapResolution
-        msg.info.width  = self.mapWidth
-        msg.info.height = self.mapHeight
+        arena = self.nav_arena
+        if not arena in self.arenas : return
+
+        mapResolution   = self.mapResolution
+        mapWidth        = self.arenas[arena]["mapWidth"]
+        mapHeight       = self.arenas[arena]["mapHeight"]
+        can6Height      = self.arenas[arena]["can6Height"]
+        can6Width       = self.arenas[arena]["can6Width"]
+        can6GoalOpening = self.arenas[arena]["can6GoalOpening"]
+        startWpX0       = self.arenas[arena]["startWpX0"]
+
+        msg.info.resolution = mapResolution
+        msg.info.width  = mapWidth
+        msg.info.height = mapHeight
+
         msg.info.origin.orientation.w = 1.0
         msg.info.origin.orientation.x = 0.0
         msg.info.origin.orientation.y = 0.0
         msg.info.origin.orientation.z = 0.0
 
-        msg.info.origin.position.x = -self.startWpX0
-        msg.info.origin.position.y = -(self.mapHeight*self.mapResolution) /2
+        msg.info.origin.position.x = -startWpX0
+        msg.info.origin.position.y = -(mapHeight*mapResolution) /2
         msg.info.origin.position.z = 0.0
 
         # create 6 can course map of empty cells
         msg.data = []
-        for i in range(0,self.mapHeight*self.mapWidth) : msg.data.append(0)
+        for i in range(0,mapHeight*mapWidth) : msg.data.append(0)
 
         # add side walls at height edges
-        for i in range(0,self.can6Width) : 
+        for i in range(0,can6Width) : 
             msg.data[i] = 100
-            msg.data[i+(self.mapWidth*(self.mapHeight-1))] = 100
+            msg.data[i+(mapWidth*(mapHeight-1))] = 100
 
         # add wall segments next to goal opening, wall=100
-        g = int((self.can6Height - self.can6GoalOpening)/2)
+        g = int((can6Height - can6GoalOpening)/2)
         for i in range(0,g) :
-            msg.data[i*self.mapWidth] = 100
-            msg.data[i*self.mapWidth + self.can6Width-1] = 100
-        for i in range(self.can6Height-g,self.can6Height) :
-            msg.data[i*self.mapWidth] = 100
-            msg.data[i*self.mapWidth + self.can6Width-1] = 100
+            msg.data[i*mapWidth] = 100
+            msg.data[i*mapWidth + can6Width-1] = 100
+        for i in range(can6Height-g, can6Height) :
+            msg.data[i*mapWidth] = 100
+            msg.data[i*mapWidth + can6Width-1] = 100
 
         self.map_msg_publisher.publish(msg)
 

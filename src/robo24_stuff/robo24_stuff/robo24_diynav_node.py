@@ -32,13 +32,8 @@ import os
 import json
 from copy import copy, deepcopy
 
-#import sensor_msgs.msg as sensor_msgs
-#import std_msgs.msg as std_msgs
 
 class Robo24DiynavNode(Node):
-    # parameters?
-#    name = "robo24_diynav_node"
-
 
     pi = 3.14159265
 
@@ -55,11 +50,6 @@ class Robo24DiynavNode(Node):
     goto4CornerWaypoints = 0
     goto4CornerWaypoints_last = 0
 
-    nav_ctrl = {"mode":"none",  # none, 6-can, 4-corner, Quick-trip, Waypoints
-                "arena":"home", # home, dprg
-                "state": "done" # init, running, paused, done
-                }
-    nav_ctrl_last = deepcopy(nav_ctrl)
 
     XYLatched = False
     calc_waypoint_hz = 20
@@ -81,40 +71,81 @@ class Robo24DiynavNode(Node):
     ft2m:float = 0.3048 # feet per meter
 
     # 6 can waypoints - home arena
-    can6_startWaypoint = [0.0,0.0,0.0] # center 18" from bottom of arena
-    can6_goalAlignWaypoint = [5.5*ft2m,0.0,0.0] # in front of goal entrance
-    can6_goalEntryWaypoint = [6.5*ft2m,0.0,0.0] # middle of goal entrance
-    can6_goalDropWaypoint  = [8.0*ft2m,0.0,0.0] # inside goal area
-    can6_leftScanWaypoint  = [6.75/2*ft2m, 1.75*ft2m, 0.0]
-    can6_rightScanWaypoint = [6.75/2*ft2m, -1.75*ft2m, 0.0]
-    # can6_waypoints = [can6_leftScanWaypoint, can6_goalAlignWaypoint, can6_goalAlignWaypoint, can6_startWaypoint]
-    can6_waypoints = ["can6_leftScanWaypoint","can6_goalAlignWaypoint","can6_goalAlignWaypoint","can6_startWaypoint"]
+    home_can6_startWaypoint = [0.0,0.0,0.0] # center 8" from bottom of arena
+    home_can6_goalAlignWaypoint = [5.5*ft2m,0.0,0.0] # in front of goal entrance
+    home_can6_goalEntryWaypoint = [6.5*ft2m,0.0,0.0] # middle of goal entrance
+    home_can6_goalDropWaypoint  = [8.0*ft2m,0.0,0.0] # inside goal area
+    home_can6_leftScanWaypoint  = [6.75/2*ft2m, 1.75*ft2m, 0.0]
+    home_can6_rightScanWaypoint = [6.75/2*ft2m, -1.75*ft2m, 0.0]
+    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_goalAlignWaypoint","home_can6_rightScanWaypoint","home_can6_startWaypoint"]
+    
     # 4 corner waypoints - home arena
-    cor4_Waypoint0 = [0.0,0.0,0.0] # starting location (location it ends)
-    cor4_Waypoint1 = [6*ft2m,0.0,0.0] 
-    cor4_Waypoint2 = [6*ft2m,-5.5*ft2m,0.0] 
-    cor4_Waypoint3 = [0.0,-5.5*ft2m,0.0] 
-    cor4_waypoints = ["cor4_Waypoint1", "cor4_Waypoint2", "cor4_Waypoint3", "cor4_Waypoint0"]
+    home_cor4_Waypoint0 = [0.0,0.0,0.0] # starting location (location it ends)
+    home_cor4_Waypoint1 = [6*ft2m,0.0,0.0] 
+    home_cor4_Waypoint2 = [6*ft2m,-5.5*ft2m,0.0] 
+    home_cor4_Waypoint3 = [0.0,-5.5*ft2m,0.0] 
+    home_cor4_waypoints = ["home_cor4_Waypoint1", "home_cor4_Waypoint2", "home_cor4_Waypoint3", "home_cor4_Waypoint0"]
 
     # quick trip waypoints - home arena
-    qt_startWaypoint = [0.0, 0.0, 0.0]
-    qt_turnWaypoint = [8.0*ft2m, 0.0, 0.0]
-    qt_waypoints = ["qt_turnWaypoint", "qt_startWaypoint"]
+    home_qt_startWaypoint = [0.0, 0.0, 0.0]
+    home_qt_turnWaypoint = [8.0*ft2m, 0.0, 0.0]
+    home_qt_waypoints = ["home_qt_turnWaypoint", "home_qt_startWaypoint"]
 
     # Waypoints to continually travel to within arena
     # use can waypoints - home arean
-    wp_waypoints = ["can6_leftScanWaypoint","can6_goalAlignWaypoint","can6_goalAlignWaypoint","can6_startWaypoint"]
+    home_wp_waypoints = ["home_can6_leftScanWaypoint","home_can6_goalAlignWaypoint","home_can6_goalAlignWaypoint","home_can6_startWaypoint"]
     
-    # 1M x 1M square route
-    #waypoints = [[1.0, 0.0, 0.0],[1.0,1.0,pi/2],[0.0, 1.0, pi],[0.0,0.0,-pi/2]]
-    # CCW rotation 
-    #waypoints = [[0.0, 0.0, 0.0],[0.0,0.0,0.75*pi],[0.0,0.0,1.25*pi],[0.0, 0.0, 0.0]]
-    # forward straight 5 Meters 
-    #waypoints = [[5.0, 0.0, 0.0]]
-    # 6 can arena 7x7.5 at home
+    
+    # 6 can waypoints - dprg arena
+    dprg_can6_startWaypoint = [0.0,0.0,0.0] # center 8" from bottom of arena
+    dprg_can6_goalAlignWaypoint = [7.7*ft2m,   0.0,       0.0] # in front of goal entrance
+    dprg_can6_goalEntryWaypoint = [8.7*ft2m,   0.0,       0.0] # middle of goal entrance
+    dprg_can6_goalDropWaypoint  = [10.2*ft2m,  0.0,       0.0] # inside goal area
+    dprg_can6_leftScanWaypoint  = [7.0/2*ft2m, 1.75*ft2m, 0.0]
+    dprg_can6_rightScanWaypoint = [7.0/2*ft2m,-1.75*ft2m, 0.0]
+    dprg_can6_waypoints = ["dprg_can6_leftScanWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_startWaypoint"]
+    
+    # 4 corner waypoints - dprg arena
+    dprg_size = 10.0 *ft2m  # length, width of corner marked area
+    dprg_offset = 1.0 *ft2m  # x,y offset from corner markers, clearance to stay outside marked area for odom drift error
+    dprg_cor4_Waypoint0 = [0.0,0.0,0.0] # starting location offset from corner marker (location it ends at)
+    dprg_cor4_Waypoint1 = [(dprg_size+2*dprg_offset),0.0                       ,0.0] 
+    dprg_cor4_Waypoint2 = [(dprg_size+2*dprg_offset),-(dprg_size+2*dprg_offset),0.0] 
+    dprg_cor4_Waypoint3 = [0.0                      ,-(dprg_size+2*dprg_offset),0.0] 
+    dprg_cor4_waypoints = ["dprg_cor4_Waypoint1", "dprg_cor4_Waypoint2", "dprg_cor4_Waypoint3", "dprg_cor4_Waypoint0"]
+
+    # quick trip waypoints - dprg arena
+    dprg_qt_startWaypoint = [0.0, 0.0, 0.0]
+    dprg_qt_turnWaypoint = [14.5*ft2m, 0.0, 0.0]
+    dprg_qt_waypoints = ["dprg_qt_turnWaypoint", "dprg_qt_startWaypoint"]
+
+    # Waypoints to continually travel to within arena
+    # use can waypoints - dprg arean
+    dprg_wp_waypoints = ["dprg_6can_leftScanWaypoint","dprg_6can_goalAlignWaypoint","dprg_6can_goalAlignWaypoint","dprg_6can_startWaypoint"]
+
 
     # initial waypoint
     waypoint_num = 0
+
+    nav_ctrl = {
+        "mode":  "none",  # none, 6-can, 4-corner, Quick-trip, Waypoints
+        "arena": "home", # home, dprg
+        "state": "done", # init, running, paused, done
+        # use arena and mode values to access waypoints
+        "home" : {
+            "6-can"      : home_can6_waypoints,
+            "4-corner"   : home_cor4_waypoints,
+            "Quick-trip" : home_qt_waypoints,
+            "Waypoints"  : home_wp_waypoints
+            },
+        "dprg" : {
+            "6-can"      : dprg_can6_waypoints,
+            "4-corner"   : dprg_cor4_waypoints,
+            "Quick-trip" : dprg_qt_waypoints,
+            "Waypoints"  : dprg_wp_waypoints
+            }
+        }
+    nav_ctrl_last = deepcopy(nav_ctrl)
 
     # TOF 8x8x3 data of interest to pull in the last 400mm before
     # grasping can
@@ -159,7 +190,7 @@ class Robo24DiynavNode(Node):
         self.joy_subscription = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
         self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.tof8x8x3_subscription = self.create_subscription(String, 'tof8x8x3_msg', self.tof8x8x3_callback, 10)
-        self.robo24_modes_json_subscription = self.create_subscription(String, 'robo24_modes', self.robo24_modes_callback, 10)
+#        self.robo24_modes_json_subscription = self.create_subscription(String, 'robo24_modes', self.robo24_modes_callback, 10)
         self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
 
         self.robo24_modes_publisher = self.create_publisher(String, 'robo24_modes',10)
@@ -167,7 +198,6 @@ class Robo24DiynavNode(Node):
 
         # Calc new movement 10 times per second
         self.goto_timer = self.create_timer(1.0/self.calc_waypoint_hz, self.on_goto_timer)
-        #self.goto_timer = self.create_timer(1.0/self.calc_waypoint_hz, self.on_goto_timer, callback_group=cb_group)
 
         self.tf_buffer = Buffer(Duration(seconds=0,nanoseconds=0))
         self.tf_listener = TransformListener(self.tf_buffer, self)
@@ -191,55 +221,63 @@ class Robo24DiynavNode(Node):
         #This TF is published dynamic in EFK filter node or in wheel_controller
         #self.make_static_tf("odom", "base_link", [0.0,0.0,0.0])
 
-        # set fixed waypoints frames relative to map transform
-        # for n in range(len(self.can6_waypoints)) :
-        #     wp = "waypoint" + str(n)
-        #     self.tf_static_broadcaster = StaticTransformBroadcaster(self)
-        #     self.make_static_tf(self.tf_static_broadcaster,"map", wp, self.can6_waypoints[n])
-        #     #time.sleep(1.0)
+        self.tf_static_broadcaster0 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster1 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster2 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster3 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster4 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster5 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster6 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster7 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster8 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster9 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster10 = StaticTransformBroadcaster(self)
 
-        # Goal waypoint to bring CAN to after grabbing it
-        self.tf_static_broadcasterGoalDrop = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcasterGoalDrop, "map", "goalDropWaypoint", self.can6_goalDropWaypoint)
-
-        # Goal waypoint to bring CAN to after grabbing it
-        self.tf_static_broadcasterGoalEntry = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcasterGoalEntry, "map", "goalEntryWaypoint", self.can6_goalEntryWaypoint)
-
-        # Waypoint to exit goal area after dropping off CAN
-        self.tf_static_broadcasterGoalAlign = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcasterGoalAlign, "map", "goalAlignWaypoint", self.can6_goalAlignWaypoint)
-
-        self.tf_static_broadcasterQtStartWp = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcasterQtStartWp, "map", "qt_startWaypoint", self.qt_startWaypoint)
-
-        self.tf_static_broadcasterQtTurnWp = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcasterQtTurnWp, "map", "qt_turnWaypoint", self.qt_turnWaypoint)
-
-        self.tf_static_broadcaster4corWp0 = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcaster4corWp0, "map", "cor4_Waypoint0", self.cor4_Waypoint0)
-
-        self.tf_static_broadcaster4corWp1 = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcaster4corWp1, "map", "cor4_Waypoint1", self.cor4_Waypoint1)
-
-        self.tf_static_broadcaster4corWp2 = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcaster4corWp2, "map", "cor4_Waypoint2", self.cor4_Waypoint2)
-
-        self.tf_static_broadcaster4corWp3 = StaticTransformBroadcaster(self)
-        self.make_static_tf(self.tf_static_broadcaster4corWp3, "map", "cor4_Waypoint3", self.cor4_Waypoint3)
+        self.create_static_waypoints()
 
         self.navTimerStart = time.time()
 
         self.get_logger().info("Robo24 DIY Navigation Started")
     #end init
 
+    def create_static_waypoints(self) :
+
+        if self.nav_ctrl["arena"] == "home" :
+            self.make_static_tf(self.tf_static_broadcaster0, "map", "home_can6_goalDropWaypoint",  self.home_can6_goalDropWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster1, "map", "home_can6_goalEntryWaypoint", self.home_can6_goalEntryWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster2, "map", "home_can6_goalAlignWaypoint", self.home_can6_goalAlignWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster3, "map", "home_can6_leftScanWaypoint",  self.home_can6_leftScanWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster4, "map", "home_can6_rightScanWaypoint", self.home_can6_rightScanWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster5, "map", "home_qt_startWaypoint",       self.home_qt_startWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster6, "map", "home_qt_turnWaypoint",        self.home_qt_turnWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster7, "map", "home_cor4_Waypoint0",         self.home_cor4_Waypoint0)
+            self.make_static_tf(self.tf_static_broadcaster8, "map", "home_cor4_Waypoint1",         self.home_cor4_Waypoint1)
+            self.make_static_tf(self.tf_static_broadcaster9, "map", "home_cor4_Waypoint2",         self.home_cor4_Waypoint2)
+            self.make_static_tf(self.tf_static_broadcaster10, "map", "home_cor4_Waypoint3",        self.home_cor4_Waypoint3)
+
+        if self.nav_ctrl["arena"] == "dprg" :
+            self.make_static_tf(self.tf_static_broadcaster0, "map", "dprg_can6_goalDropWaypoint",  self.dprg_can6_goalDropWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster1, "map", "dprg_can6_goalEntryWaypoint", self.dprg_can6_goalEntryWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster2, "map", "dprg_can6_goalAlignWaypoint", self.dprg_can6_goalAlignWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster3, "map", "dprg_can6_leftScanWaypoint",  self.dprg_can6_leftScanWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster4, "map", "dprg_can6_rightScanWaypoint", self.dprg_can6_rightScanWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster5, "map", "dprg_qt_startWaypoint",       self.dprg_qt_startWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster6, "map", "dprg_qt_turnWaypoint",        self.dprg_qt_turnWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster7, "map", "dprg_cor4_Waypoint0",         self.dprg_cor4_Waypoint0)
+            self.make_static_tf(self.tf_static_broadcaster8, "map", "dprg_cor4_Waypoint1",         self.dprg_cor4_Waypoint1)
+            self.make_static_tf(self.tf_static_broadcaster9, "map", "dprg_cor4_Waypoint2",         self.dprg_cor4_Waypoint2)
+            self.make_static_tf(self.tf_static_broadcaster10, "map", "dprg_cor4_Waypoint3",        self.dprg_cor4_Waypoint3)
+
+
     def process_nav_cmd(self, cmd) :
         self.get_logger().info(f"process_nav_cmd {cmd=}")
         if "mode" in cmd :
             mode = cmd["mode"]
             self.nav_ctrl["mode"] = mode
-            self.get_logger().info(f"process_nav_cmd {self.nav_ctrl['mode']=}")
-
+        if "arena" in cmd :
+            arena = cmd["arena"]
+            self.nav_ctrl["arena"] = arena
+        self.create_static_waypoints()
 
     def robo24_json_callback(self, msg:String) -> None :
         self.get_logger().info(f"diynav robo24_json_callback {msg=}")
@@ -263,7 +301,7 @@ class Robo24DiynavNode(Node):
             packet = json.loads(data)
 
         except Exception as ex:
-            self.get_logger().error(f"watch serial watch_json_callback exception {ex}")
+            self.get_logger().error(f"diynav robo24_modes_callback exception {ex}")
 
         msg_str:str = None
         # send nav run state to nav publish
@@ -356,20 +394,24 @@ class Robo24DiynavNode(Node):
         #now = self.get_clock().now()
         now = rclpy.time.Time() # Gets time=0 (I think simulation time)
         
+        nav_ctrl_arena = self.nav_ctrl["arena"] # home or dprg
+        can6_waypoints = self.nav_ctrl[nav_ctrl_arena]["6-can"]
+        cor4_waypoints = self.nav_ctrl[nav_ctrl_arena]["4-corner"]
+        qt_waypoints   = self.nav_ctrl[nav_ctrl_arena]["Quick-trip"]
+        wp_waypoints   = self.nav_ctrl[nav_ctrl_arena]["Waypoints"]
+
         nav_ctrl_mode = self.nav_ctrl["mode"]
         nav_ctrl_mode_last = self.nav_ctrl_last["mode"]
 
-        # if   nav_ctrl_mode == "Waypoints" :  waypoint = "waypoint" + str(self.waypoint_num)
         if   nav_ctrl_mode == "Waypoints" :  waypoint = wp_waypoints[self.waypoint_num]
         elif nav_ctrl_mode == "6-can" :      waypoint = "can"
-        elif nav_ctrl_mode == "Quick-trip" : waypoint = self.qt_waypoints[self.waypoint_num]
-        elif nav_ctrl_mode == "4-corner" :   waypoint = self.cor4_waypoints[self.waypoint_num]
+        elif nav_ctrl_mode == "Quick-trip" : waypoint = qt_waypoints[self.waypoint_num]
+        elif nav_ctrl_mode == "4-corner" :   waypoint = cor4_waypoints[self.waypoint_num]
 
-        # disable diy slam - takes a few seconds
-        if nav_ctrl_mode!="none" and nav_ctrl_mode!=nav_ctrl_mode_last :
-            self.robo24_modes_data_publish(f"Started {nav_ctrl_mode=}")
-            if nav_ctrl_mode=="6-can" or nav_ctrl_mode=="none" : self.diy_slam_enable(True)
-            else : self.diy_slam_enable(False)
+        # enable or disable diy slam when mode changes - takes a few seconds
+        if nav_ctrl_mode!=nav_ctrl_mode_last :
+            if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.diy_slam_enable(False)
+            else : self.diy_slam_enable(True)
 
 
         # autonomous drive robot to waypoint or can
@@ -379,18 +421,17 @@ class Robo24DiynavNode(Node):
         if nav_ctrl_mode!=None :
 
             ############## GOTO WAYPOINTS STATES ############
-            # if self.gotoWaypoints==1 :
             if nav_ctrl_mode=="Waypoints" :
                 retVal = self.gotoWaypointStates(now, waypoint, msg)
                 if retVal != 0 : 
                     # start goto next Waypoint 
                     self.waypoint_num += 1
-                    if self.waypoint_num >= len(self.wp_waypoints) :
+                    # if self.waypoint_num >= len(self.home_wp_waypoints) :
+                    if self.waypoint_num >= len(wp_waypoints) :
                         self.waypoint_num = 0
                     self.get_logger().info(f'Arrived at {waypoint}, next num = {self.waypoint_num} '.encode())
                 
             ############### GOTO Quick Trip WAYPOINTS #################
-            # elif self.gotoQtWaypoints==1:
             elif nav_ctrl_mode=="Quick-trip" :
                 match self.state :
                   case 0:
@@ -419,7 +460,6 @@ class Robo24DiynavNode(Node):
                     msg.angular.z = 0.0
                 
             ############### GOTO 4 Corner WAYPOINTS #################
-            #elif self.goto4CornerWaypoints==1:
             elif nav_ctrl_mode=="4-corner" :
 
                 match self.state :
@@ -452,7 +492,6 @@ class Robo24DiynavNode(Node):
 
 
             ############### GOTO CAN STATES ###################
-            # elif self.gotoCan==1:
             elif nav_ctrl_mode=="6-can" :
 
                 # process TOF from L->R first sequential valid distances used
@@ -542,7 +581,6 @@ class Robo24DiynavNode(Node):
 
 
                 # reset can scan time out when started
-                # if self.gotoCan_last!=self.gotoCan :
                 if nav_ctrl_mode!=nav_ctrl_mode_last :
                     self.wpstate0StartTime = self.get_clock().now()
                     self.findCanStartTime = self.get_clock().now()
@@ -551,10 +589,9 @@ class Robo24DiynavNode(Node):
                 if (self.get_clock().now() - self.wpstate0StartTime) >= rclpy.time.Duration(seconds=45.0) :
                     self.findCanStartTime = self.get_clock().now()
                     # timeout finding can  goto a new waypoint
-                    l:int = len(self.can6_waypoints)
+                    l:int = len(can6_waypoints)
                     n:int = random.randint(0,l-1)
-                    # self.newWaypoint = "waypoint" + str(n)
-                    self.newWaypoint = self.can6_waypoints[n]
+                    self.newWaypoint = can6_waypoints[n]
                     self.state = 1
                     self.get_logger().info(f'Timeout finding can goto new {self.newWaypoint=}')
             
@@ -565,14 +602,12 @@ class Robo24DiynavNode(Node):
                     if retVal != 0 :
                         if retVal == 100 : 
                             # timeout scanning  goto a new waypoint
-                            l:int = len(self.can6_waypoints)
+                            l:int = len(can6_waypoints)
                             n:int = random.randint(0,l-1)
-                            # self.newWaypoint = "waypoint" + str(n)
-                            self.newWaypoint = self.can6_waypoints[n]
+                            self.newWaypoint = can6_waypoints[n]
                             self.state = 1
                             self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.newWaypoint=}]')
                         else :
-                            # self.wpstate = 0
                             self.state = 3
                             self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
 
@@ -727,10 +762,6 @@ class Robo24DiynavNode(Node):
             #msg.linear.x = 0.0
             self.cmd_vel_publisher.publish(msg)
 
-        # if     self.gotoWaypoints_last        != self.gotoWaypoints       \
-        #     or self.gotoCan_last              != self.gotoCan             \
-        #     or self.gotoQtWaypoints_last      != self.gotoQtWaypoints     \
-        #     or self.goto4CornerWaypoints_last != self.goto4CornerWaypoints:
         if nav_ctrl_mode!=nav_ctrl_mode_last :
             # stop motion when button released
             # single twist /cmd_vel published so that joy can be used
@@ -802,8 +833,6 @@ class Robo24DiynavNode(Node):
                 t1.transform.rotation.z,
                 t1.transform.rotation.w)
             robot_wp_angle = -e[2] #yaw
-
-            #robot_wp_angle-=(math.pi/2)
                     
             # XY from robot to waypoint ie distance from waypoint to source is negative
             # negate xy so distance is positive and gets smaller positive
@@ -826,7 +855,6 @@ class Robo24DiynavNode(Node):
         except (LookupException, ConnectivityException, ExtrapolationException) as ex:
             self.get_logger().info(f'Could not transform base_link to {waypoint} - will try again: {ex}')
             tf_OK = False
-            #return
                 
         # Get XY for can relative to map, compare to goal entrance location to disqualify can in goal
         if tf_OK==True and waypoint=="can" :
@@ -849,9 +877,8 @@ class Robo24DiynavNode(Node):
                             
                     # self.get_logger().info(f'{map_robot_angle = } {t2 = }'.encode())
 
-
                     # changed direction to goal!
-                    goalEntranceX = (self.can6_goalDropWaypoint[0] + self.can6_goalAlignWaypoint[0])/2.0
+                    goalEntranceX = (self.home_can6_goalDropWaypoint[0] + self.home_can6_goalAlignWaypoint[0])/2.0
                     robotCanDist = math.sqrt(t1.transform.translation.x**2 + t1.transform.translation.y**2)
 
                     robotCanX = robotCanDist * math.cos(map_robot_angle)
@@ -1065,6 +1092,7 @@ class Robo24DiynavNode(Node):
 
 
     # This should be replaced with an action command from teleop_robo24
+    # TODO: move to robo24_teleop_node - use robo24_json topic to control nav
     def joy_callback(self, msg: Joy) -> None:
         if self.XYLatched==False :
             self.gotoWaypoints        = msg.buttons[3] # 1 = Y button pushed
