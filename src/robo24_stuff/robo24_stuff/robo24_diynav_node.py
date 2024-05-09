@@ -156,7 +156,7 @@ class Robo24DiynavNode(Node):
 
 
     scale_rotation_rate = 0.15 #0.1
-    scale_forward_speed = 0.3 #0.2
+    scale_forward_speed = 0.5 #0.3 #0.2
 
     obstacleOffL = -1
     obstacleOffR = -1 
@@ -171,6 +171,8 @@ class Robo24DiynavNode(Node):
     tof8x8x3Ready = False
 
     navRunMode = "paused"
+
+    slam_enabled = True
 
     def __init__(self):
         super().__init__('robo24_diynav_node')
@@ -410,9 +412,9 @@ class Robo24DiynavNode(Node):
 
         # enable or disable diy slam when mode changes - takes a few seconds
         if nav_ctrl_mode!=nav_ctrl_mode_last :
-            if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.diy_slam_enable(False)
-            else : self.diy_slam_enable(True)
-
+            if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.slam_enabled= False
+            else : self.slam_enabled = True
+            self.diy_slam_enable(self.slam_enabled)
 
         # autonomous drive robot to waypoint or can
         # create /cmd_vel message 
@@ -448,7 +450,7 @@ class Robo24DiynavNode(Node):
                   case 1 :
                     # rotate to starting angle pose
                     dt = 1.0/self.calc_waypoint_hz # time interval sec
-                    av = 0.5 #rad/sec
+                    av = 2.0 #0.5 #rad/sec
                     dr = av*dt # rad/interval
                     self.cor4Angle += dr #new angle
                     msg.angular.z = -av / (2*math.pi) # NOTE: units are wrong!!!!
@@ -479,7 +481,7 @@ class Robo24DiynavNode(Node):
                   case 1 :
                     # rotate to starting angle pose
                     dt = 1.0/self.calc_waypoint_hz # time interval sec
-                    av = 0.5 #rad/sec
+                    av = 2.0 #0.5 #rad/sec
                     dr = av*dt # rad/interval
                     self.cor4Angle += dr #new angle
                     msg.angular.z = -av / (2*math.pi) # NOTE: units are wrong!!!!
@@ -710,7 +712,7 @@ class Robo24DiynavNode(Node):
                 # This aligns the robot to the entrance before entering
                   case 6:
                     state = self.state
-                    retVal = self.gotoWaypointStates(now, "goalAlignWaypoint", msg, 4, True)
+                    retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 4, True)
                     if retVal != 0 :
                         # self.wpstate = 0
                         self.state = 7
@@ -719,7 +721,7 @@ class Robo24DiynavNode(Node):
                 # Bring can to Goal Drop off location
                   case 7:
                     state = self.state
-                    retVal = self.gotoWaypointStates(now, "goalDropWaypoint", msg, 0, False)
+                    retVal = self.gotoWaypointStates(now, "home_can6_goalDropWaypoint", msg, 0, False)
                     if retVal != 0 :
                         # self.wpstate = 0
                         self.state = 8
@@ -749,8 +751,7 @@ class Robo24DiynavNode(Node):
                   case 10:
                     state = self.state
                     self.findCanStartTime = self.get_clock().now()
-                    retVal = self.gotoWaypointStates(now, "goalAlignWaypoint", msg, 0, False)
-                    #self.gotoWaypointStates("goalAlignWaypoint", msg, False, False)
+                    retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 0, False)
                     if retVal != 0 :
                         # self.wpstate = 0
                         self.state = 0
@@ -1038,12 +1039,17 @@ class Robo24DiynavNode(Node):
             # pause with no movement to allow diyslam to make correction
           case 3:
             state = self.wpstate
-            # wait for time
-            if (self.get_clock().now() - self.wpstate3StartTime) >= rclpy.time.Duration(seconds=3.0) :
+            if self.slam_enabled :
+                # wait for time
+                if (self.get_clock().now() - self.wpstate3StartTime) >= rclpy.time.Duration(seconds=3.0) :
+                    self.wpstate = 4
+                    retVal = 1 # finished
+                    self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slam_enabled} {waypoint} {retVal = }]')
+            else :
+                # dont wait for slam wall detection
                 self.wpstate = 4
                 retVal = 1 # finished
                 self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {retVal = }]')
-
             # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] {self.obstacleOffL = } {TF_Timeout = } {tf_OK = } d{waypoint_distance} a{theta_err} fv{msg.linear.x} av{msg.angular.z}')
     
           case _:
