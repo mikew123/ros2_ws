@@ -155,7 +155,7 @@ class Robo24DiynavNode(Node):
     tof8obstacle:list[int] = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
 
-    scale_rotation_rate = 0.15 #0.1
+    scale_rotation_rate = 0.2 #0.15 #0.1
     scale_forward_speed = 0.5 #0.3 #0.2
 
     obstacleOffL = -1
@@ -809,6 +809,9 @@ class Robo24DiynavNode(Node):
         """
         go to a waypoint with TOF can options
         """
+
+        obsEna = False # DEBUG disable
+
         retVal:int = 0 #Running
 
         waypoint_distance:float = 0.0
@@ -1034,7 +1037,7 @@ class Robo24DiynavNode(Node):
                     
                 if waypoint_distance>minD :
                     # correct for angular offset as it drives forward
-                    msg.angular.z = 8*self.scale_rotation_rate * theta_err #/self.pi
+                    msg.angular.z = 8*self.scale_rotation_rate/3 * theta_err
 
                     # avoid obstacles
                     if obsEna : self.calcObstacleAvoidance(obsOff)
