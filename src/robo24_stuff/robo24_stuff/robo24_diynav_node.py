@@ -77,7 +77,7 @@ class Robo24DiynavNode(Node):
     home_can6_goalDropWaypoint  = [8.0*ft2m,0.0,0.0] # inside goal area
     home_can6_leftScanWaypoint  = [6.75/2*ft2m, 1.75*ft2m, 0.0]
     home_can6_rightScanWaypoint = [6.75/2*ft2m, -1.75*ft2m, 0.0]
-    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_goalAlignWaypoint","home_can6_rightScanWaypoint","home_can6_startWaypoint"]
+    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_rightScanWaypoint","home_can6_rightScanWaypoint","home_can6_startWaypoint"]
     
     # 4 corner waypoints - home arena
     home_cor4_Waypoint0 = [0.0,0.0,0.0] # starting location (location it ends)
@@ -93,7 +93,7 @@ class Robo24DiynavNode(Node):
 
     # Waypoints to continually travel to within arena
     # use can waypoints - home arean
-    home_wp_waypoints = ["home_can6_leftScanWaypoint","home_can6_goalAlignWaypoint","home_can6_goalAlignWaypoint","home_can6_startWaypoint"]
+    home_wp_waypoints = ["home_can6_leftScanWaypoint","home_can6_rightScanWaypoint","home_can6_goalAlignWaypoint","home_can6_startWaypoint"]
     
     
     # 6 can waypoints - dprg arena
@@ -103,7 +103,7 @@ class Robo24DiynavNode(Node):
     dprg_can6_goalDropWaypoint  = [10.2*ft2m,  0.0,       0.0] # inside goal area
     dprg_can6_leftScanWaypoint  = [7.0/2*ft2m, 1.75*ft2m, 0.0]
     dprg_can6_rightScanWaypoint = [7.0/2*ft2m,-1.75*ft2m, 0.0]
-    dprg_can6_waypoints = ["dprg_can6_leftScanWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_startWaypoint"]
+    dprg_can6_waypoints = ["dprg_can6_leftScanWaypoint","dprg_can6_rightScanWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_startWaypoint"]
     
     # 4 corner waypoints - dprg arena
     dprg_size = 10.0 *ft2m  # length, width of corner marked area
@@ -121,7 +121,7 @@ class Robo24DiynavNode(Node):
 
     # Waypoints to continually travel to within arena
     # use can waypoints - dprg arean
-    dprg_wp_waypoints = ["dprg_6can_leftScanWaypoint","dprg_6can_goalAlignWaypoint","dprg_6can_goalAlignWaypoint","dprg_6can_startWaypoint"]
+    dprg_wp_waypoints = ["dprg_6can_leftScanWaypoint","dprg_can6_rightScanWaypoint","dprg_6can_goalAlignWaypoint","dprg_6can_startWaypoint"]
 
 
     # initial waypoint
@@ -173,6 +173,7 @@ class Robo24DiynavNode(Node):
     navRunMode = "paused"
 
     slam_enabled = True
+    slamWaitSec = 2.0
 
     def __init__(self):
         super().__init__('robo24_diynav_node')
@@ -234,6 +235,7 @@ class Robo24DiynavNode(Node):
         self.tf_static_broadcaster8 = StaticTransformBroadcaster(self)
         self.tf_static_broadcaster9 = StaticTransformBroadcaster(self)
         self.tf_static_broadcaster10 = StaticTransformBroadcaster(self)
+        self.tf_static_broadcaster11 = StaticTransformBroadcaster(self)
 
         self.create_static_waypoints()
 
@@ -245,6 +247,7 @@ class Robo24DiynavNode(Node):
     def create_static_waypoints(self) :
 
         if self.nav_ctrl["arena"] == "home" :
+            self.make_static_tf(self.tf_static_broadcaster11,"map", "home_can6_startWaypoint",     self.home_can6_startWaypoint)
             self.make_static_tf(self.tf_static_broadcaster0, "map", "home_can6_goalDropWaypoint",  self.home_can6_goalDropWaypoint)
             self.make_static_tf(self.tf_static_broadcaster1, "map", "home_can6_goalEntryWaypoint", self.home_can6_goalEntryWaypoint)
             self.make_static_tf(self.tf_static_broadcaster2, "map", "home_can6_goalAlignWaypoint", self.home_can6_goalAlignWaypoint)
@@ -255,9 +258,10 @@ class Robo24DiynavNode(Node):
             self.make_static_tf(self.tf_static_broadcaster7, "map", "home_cor4_Waypoint0",         self.home_cor4_Waypoint0)
             self.make_static_tf(self.tf_static_broadcaster8, "map", "home_cor4_Waypoint1",         self.home_cor4_Waypoint1)
             self.make_static_tf(self.tf_static_broadcaster9, "map", "home_cor4_Waypoint2",         self.home_cor4_Waypoint2)
-            self.make_static_tf(self.tf_static_broadcaster10, "map", "home_cor4_Waypoint3",        self.home_cor4_Waypoint3)
+            self.make_static_tf(self.tf_static_broadcaster10,"map", "home_cor4_Waypoint3",         self.home_cor4_Waypoint3)
 
         if self.nav_ctrl["arena"] == "dprg" :
+            self.make_static_tf(self.tf_static_broadcaster11,"map", "dprg_can6_startWaypoint",     self.dprg_can6_startWaypoint)
             self.make_static_tf(self.tf_static_broadcaster0, "map", "dprg_can6_goalDropWaypoint",  self.dprg_can6_goalDropWaypoint)
             self.make_static_tf(self.tf_static_broadcaster1, "map", "dprg_can6_goalEntryWaypoint", self.dprg_can6_goalEntryWaypoint)
             self.make_static_tf(self.tf_static_broadcaster2, "map", "dprg_can6_goalAlignWaypoint", self.dprg_can6_goalAlignWaypoint)
@@ -268,7 +272,7 @@ class Robo24DiynavNode(Node):
             self.make_static_tf(self.tf_static_broadcaster7, "map", "dprg_cor4_Waypoint0",         self.dprg_cor4_Waypoint0)
             self.make_static_tf(self.tf_static_broadcaster8, "map", "dprg_cor4_Waypoint1",         self.dprg_cor4_Waypoint1)
             self.make_static_tf(self.tf_static_broadcaster9, "map", "dprg_cor4_Waypoint2",         self.dprg_cor4_Waypoint2)
-            self.make_static_tf(self.tf_static_broadcaster10, "map", "dprg_cor4_Waypoint3",        self.dprg_cor4_Waypoint3)
+            self.make_static_tf(self.tf_static_broadcaster10,"map", "dprg_cor4_Waypoint3",         self.dprg_cor4_Waypoint3)
 
 
     def process_nav_cmd(self, cmd) :
@@ -991,7 +995,8 @@ class Robo24DiynavNode(Node):
                     else :           err=theta_err-0.2
                     msg.angular.z = self.scale_rotation_rate * err
                 else :
-                    self.wpstate = 2
+                    self.wpstate11StartTime = self.get_clock().now()
+                    self.wpstate = 11
                     self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {TF_Timeout = } {waypoint_distance = } {theta_err = } {tf_OK = }]')
                     
             else :
@@ -999,6 +1004,20 @@ class Robo24DiynavNode(Node):
                 self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}]{TF_Timeout = } {tf_OK = }')
 
             # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] d{waypoint_distance} a{theta_err} {TF_Timeout = } {tf_OK = } fv{msg.linear.x} av{msg.angular.z}')
+
+          case 11:
+            state = self.wpstate
+            if self.slam_enabled :
+                # wait for time
+                if (self.get_clock().now() - self.wpstate11StartTime) >= rclpy.time.Duration(seconds=self.slamWaitSec) :
+                    self.wpstate = 2
+                    self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slam_enabled} {waypoint} {retVal = }]')
+            else :
+                # dont wait for slam wall detection
+                self.wpstate = 2
+                self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {retVal = }]')
+            # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] {self.obstacleOffL = } {TF_Timeout = } {tf_OK = } d{waypoint_distance} a{theta_err} fv{msg.linear.x} av{msg.angular.z}')
+    
 
         # drive to waypoint/can, stop at limit of blob distance detection capability
           case 2:
@@ -1041,7 +1060,7 @@ class Robo24DiynavNode(Node):
             state = self.wpstate
             if self.slam_enabled :
                 # wait for time
-                if (self.get_clock().now() - self.wpstate3StartTime) >= rclpy.time.Duration(seconds=3.0) :
+                if (self.get_clock().now() - self.wpstate3StartTime) >= rclpy.time.Duration(seconds=self.slamWaitSec) :
                     self.wpstate = 4
                     retVal = 1 # finished
                     self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slam_enabled} {waypoint} {retVal = }]')
