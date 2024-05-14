@@ -819,7 +819,7 @@ class Robo24DiynavNode(Node):
         go to a waypoint with TOF can options
         """
 
-        #obsEna = False # DEBUG disable
+        obsEna = False # DEBUG disable
 
         retVal:int = 0 #Running
 
@@ -1125,7 +1125,7 @@ class Robo24DiynavNode(Node):
 
         # self.get_logger().info(f"TOF8x8x3 Horiz  data of interest = {self.tof8CanHor}")
         # self.get_logger().info(f"TOF8x8x3 Center data of interest = {self.tof8CanCtr}")
-        # self.get_logger().info(f"{self.tof8CanHor8x2=}")
+        self.get_logger().info(f"{self.tof8CanHor8x2=}")
 
 
     # This should be replaced with an action command from teleop_robo24
