@@ -384,8 +384,98 @@ class Robo24DiynavNode(Node):
         else :
             self.robo24_modes_data_publish("SLAM OFF")
 
+    def find_can(self) -> tuple :
+
+        if len(self.tof8CanHor8x2) != 8 : return(-1,-1,-1)
+
+        # process TOF from L->R first sequential valid distances used
+        # 3 states 0=no valid yet, 1=valid current, 2=past valid
+        hvalid:int = int(self.canMinDist*1.5*1000)
+        hstate:int = 0
+        hdist:int = 0
+        hrot:int = 0
+        l:int = 0
+        r:int = 0
+        ln:int = 0
+        rn:int = 0
+        
+        
+        # process center 8 sensors in rows 2,3 from bottom
+        hmin = 1000 # arbitrary large
+        for i in range(0,8) :
+            h2 = self.tof8CanHor8x2[i]
+            hd=0
+            hn=0
+            # process data from each row as 1 value average
+            if h2[0]>0 and h2[0]<hvalid :
+                hd+=h2[0]
+                hn+=1
+            if h2[1]>0 and h2[1]<hvalid :
+                hd+=h2[1]
+                hn+=1
+            if hn>0 :
+                hd = hd/hn
+            match hstate :
+                case 0: # find 1st valid distance (pair)
+                    if hd>0 and hd<hvalid :
+                        if hd<hmin : 
+                            hmin = hd
+                        if i<=3 : 
+                            l+=hd
+                            ln+=1
+                        else : 
+                            r+=hd
+                            rn+=1
+                    elif (ln+rn)>0 : # invalid dist after detecting valids
+                        hstate = 1
+                # end state 0
+                case 1 : # stop processsing current set of detects, resume if new min
+                    if hd>0 and hd<hvalid :
+                        if hd<hmin : # new object start
+                            hmin = hd
+                            # reset vars for new obj dist min detect
+                            hstate = 0
+                            l=0
+                            ln=0
+                            r=0
+                            rn=0
+                            if i<=3 : 
+                                l+=hd
+                                ln+=1
+                            else : 
+                                r+=hd
+                                rn+=1
+                # end state 1
+            # end states
+                                    
+        ld=0
+        rd=0
+        if ln > 0 :
+            ld += l/ln
+        if rn > 0 :
+            rd += r/rn
+        
+        hdist = int(ld + rd)
+        if ld>0 and rd>0 :
+            hdist = int(hdist/2)
+
+        hrot = -int(ld - rd)
+        
+        #self.get_logger().info(f"{hvalid = } {ld = } {ln = } {rd = } {rn = } {hdist = } {hrot = } {self.tof8CanHor8x2 = }")
+
+
+        # determine if there is a close object using 6 middle horiz TOF
+        # The outer sensors are not reliable and have a lot of false positive
+        closeCanDet = False
+        for i in range (9, 15) : pass
+        #                    if self.tof8CanHor[i-8]>0 and self.tof8CanHor[i-8]<500 :
+        #                        closeCanDet = True
+        
+        return(hdist, hrot, closeCanDet)
 
     def on_goto_timer(self) :
+
+        (hdist, hrot, closeCanDet) = self.find_can()
 
         waypoint_distance = 0
         waypoint_theta = 0
@@ -500,88 +590,7 @@ class Robo24DiynavNode(Node):
             ############### GOTO CAN STATES ###################
             elif nav_ctrl_mode=="6-can" :
 
-                # process TOF from L->R first sequential valid distances used
-                # 3 states 0=no valid yet, 1=valid current, 2=past valid
-                hvalid:int = int(self.canMinDist*1.5*1000)
-                hstate:int = 0
-                hdist:int = 0
-                hrot:int = 0
-                l:int = 0
-                r:int = 0
-                ln:int = 0
-                rn:int = 0
-                
-                
-                # process center 8 sensors in rows 2,3 from bottom
-                hmin = 1000 # arbitrary large
-                for i in range(0,8) :
-                    h2 = self.tof8CanHor8x2[i]
-                    hd=0
-                    hn=0
-                    # process data from each row as 1 value average
-                    if h2[0]>0 and h2[0]<hvalid :
-                        hd+=h2[0]
-                        hn+=1
-                    if h2[1]>0 and h2[1]<hvalid :
-                        hd+=h2[1]
-                        hn+=1
-                    if hn>0 :
-                        hd = hd/hn
-                    match hstate :
-                        case 0: # find 1st valid distance (pair)
-                            if hd>0 and hd<hvalid :
-                                if hd<hmin : 
-                                    hmin = hd
-                                if i<=3 : 
-                                    l+=hd
-                                    ln+=1
-                                else : 
-                                    r+=hd
-                                    rn+=1
-                            elif (ln+rn)>0 : # invalid dist after detecting valids
-                                hstate = 1
-                        # end state 0
-                        case 1 : # stop processsing current set of detects, resume if new min
-                            if hd>0 and hd<hvalid :
-                                if hd<hmin : # new object start
-                                    hmin = hd
-                                    # reset vars for new obj dist min detect
-                                    hstate = 0
-                                    l=0
-                                    ln=0
-                                    r=0
-                                    rn=0
-                                    if i<=3 : 
-                                        l+=hd
-                                        ln+=1
-                                    else : 
-                                        r+=hd
-                                        rn+=1
-                        # end state 1
-                    # end states
-                                            
-                ld=0
-                rd=0
-                if ln > 0 :
-                    ld += l/ln
-                if rn > 0 :
-                    rd += r/rn
-                
-                hdist = int(ld + rd)
-                if ld>0 and rd>0 :
-                    hdist = int(hdist/2)
-
-                hrot = -int(ld - rd)
-
-                # self.get_logger().info(f"{hvalid = } {ld = } {ln = } {rd = } {rn = } {hdist = } {hrot = } {self.tof8CanHor8x2 = }")
-
-
-                # determine if there is a close object using 6 middle horiz TOF
-                # The outer sensors are not reliable and have a lot of false positive
-                closeCanDet = False
-                for i in range (9, 15) : pass
-                #                    if self.tof8CanHor[i-8]>0 and self.tof8CanHor[i-8]<500 :
-                #                        closeCanDet = True
+                #(hdist, hrot, closeCanDet) = self.find_can()
 
                 ##############################################
 
@@ -810,7 +819,7 @@ class Robo24DiynavNode(Node):
         go to a waypoint with TOF can options
         """
 
-        obsEna = False # DEBUG disable
+        #obsEna = False # DEBUG disable
 
         retVal:int = 0 #Running
 
@@ -1116,7 +1125,7 @@ class Robo24DiynavNode(Node):
 
         # self.get_logger().info(f"TOF8x8x3 Horiz  data of interest = {self.tof8CanHor}")
         # self.get_logger().info(f"TOF8x8x3 Center data of interest = {self.tof8CanCtr}")
-        # self.get_logger().info(f"TOF8x8x3 Horiz data of interest = {self.tof8CanHor8x2}")
+        # self.get_logger().info(f"{self.tof8CanHor8x2=}")
 
 
     # This should be replaced with an action command from teleop_robo24
