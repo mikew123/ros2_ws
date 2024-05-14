@@ -390,7 +390,8 @@ class Robo24DiynavNode(Node):
 
         # process TOF from L->R first sequential valid distances used
         # 3 states 0=no valid yet, 1=valid current, 2=past valid
-        hvalid:int = int(self.canMinDist*1.5*1000)
+        closeCanDet = False
+        hvalid:int = 750 #int(self.canMinDist*1.5*1000)
         hstate:int = 0
         hdist:int = 0
         hrot:int = 0
@@ -401,7 +402,8 @@ class Robo24DiynavNode(Node):
         
         
         # process center 8 sensors in rows 2,3 from bottom
-        hmin = 1000 # arbitrary large
+        #hmin = 1000 # arbitrary large
+        distArray = []
         for i in range(0,8) :
             h2 = self.tof8CanHor8x2[i]
             hd=0
@@ -414,62 +416,92 @@ class Robo24DiynavNode(Node):
                 hd+=h2[1]
                 hn+=1
             if hn>0 :
-                hd = hd/hn
-            match hstate :
-                case 0: # find 1st valid distance (pair)
-                    if hd>0 and hd<hvalid :
-                        if hd<hmin : 
-                            hmin = hd
-                        if i<=3 : 
-                            l+=hd
-                            ln+=1
-                        else : 
-                            r+=hd
-                            rn+=1
-                    elif (ln+rn)>0 : # invalid dist after detecting valids
-                        hstate = 1
-                # end state 0
-                case 1 : # stop processsing current set of detects, resume if new min
-                    if hd>0 and hd<hvalid :
-                        if hd<hmin : # new object start
-                            hmin = hd
-                            # reset vars for new obj dist min detect
-                            hstate = 0
-                            l=0
-                            ln=0
-                            r=0
-                            rn=0
-                            if i<=3 : 
-                                l+=hd
-                                ln+=1
-                            else : 
-                                r+=hd
-                                rn+=1
-                # end state 1
-            # end states
+                hd = int(hd/hn)
+            else :
+                hd = None
+            distArray.append([hd])
+
+        # create distance sections of array
+        distArray[0].append(None)
+        for i in range(1,8) :
+            d0 = distArray[i-1][0]
+            d1 = distArray[i][0]
+            if d0==None or d1==None :
+                diff = None
+            else :
+                diff = int(d1 - d0)
+            distArray[i].append(diff)
+
+        sect = 0
+        distArray[0].append(sect)
+        for i in range(1,8) :
+            d0 = distArray[i-1][1]
+            d1 = distArray[i][1]
+            if d1==None : 
+                sect+=1
+            elif math.fabs(d1) > 60 : 
+                sect+=1
+            distArray[i].append(sect)
+
+        self.get_logger().info(f"{distArray=}")
+
+
+
+        #     match hstate :
+        #         case 0: # find 1st valid distance (pair)
+        #             if hd>0 and hd<hvalid :
+        #                 if hd<hmin : 
+        #                     hmin = hd
+        #                 if i<=3 : 
+        #                     l+=hd
+        #                     ln+=1
+        #                 else : 
+        #                     r+=hd
+        #                     rn+=1
+        #             elif (ln+rn)>0 : # invalid dist after detecting valids
+        #                 hstate = 1
+        #         # end state 0
+        #         case 1 : # stop processsing current set of detects, resume if new min
+        #             if hd>0 and hd<hvalid :
+        #                 if hd<hmin : # new object start
+        #                     hmin = hd
+        #                     # reset vars for new obj dist min detect
+        #                     hstate = 0
+        #                     l=0
+        #                     ln=0
+        #                     r=0
+        #                     rn=0
+        #                     if i<=3 : 
+        #                         l+=hd
+        #                         ln+=1
+        #                     else : 
+        #                         r+=hd
+        #                         rn+=1
+        #         # end state 1
+        #     # end states
                                     
-        ld=0
-        rd=0
-        if ln > 0 :
-            ld += l/ln
-        if rn > 0 :
-            rd += r/rn
+        # ld=0
+        # rd=0
+        # if ln > 0 :
+        #     ld += l/ln
+        # if rn > 0 :
+        #     rd += r/rn
         
-        hdist = int(ld + rd)
-        if ld>0 and rd>0 :
-            hdist = int(hdist/2)
+        # hdist = int(ld + rd)
+        # if ld>0 and rd>0 :
+        #     hdist = int(hdist/2)
 
-        hrot = -int(ld - rd)
+        # hrot = -int(ld - rd)
         
-        #self.get_logger().info(f"{hvalid = } {ld = } {ln = } {rd = } {rn = } {hdist = } {hrot = } {self.tof8CanHor8x2 = }")
+        # #self.get_logger().info(f"{hvalid = } {ld = } {ln = } {rd = } {rn = } {hdist = } {hrot = } {self.tof8CanHor8x2 = }")
 
 
-        # determine if there is a close object using 6 middle horiz TOF
-        # The outer sensors are not reliable and have a lot of false positive
-        closeCanDet = False
-        for i in range (9, 15) : pass
-        #                    if self.tof8CanHor[i-8]>0 and self.tof8CanHor[i-8]<500 :
-        #                        closeCanDet = True
+        # # determine if there is a close object using 6 middle horiz TOF
+        # # The outer sensors are not reliable and have a lot of false positive
+        # closeCanDet = False
+        # for i in range (9, 15) : pass
+        # #                    if self.tof8CanHor[i-8]>0 and self.tof8CanHor[i-8]<500 :
+        # #                        closeCanDet = True
         
         return(hdist, hrot, closeCanDet)
 
@@ -1125,7 +1157,7 @@ class Robo24DiynavNode(Node):
 
         # self.get_logger().info(f"TOF8x8x3 Horiz  data of interest = {self.tof8CanHor}")
         # self.get_logger().info(f"TOF8x8x3 Center data of interest = {self.tof8CanCtr}")
-        self.get_logger().info(f"{self.tof8CanHor8x2=}")
+        # self.get_logger().info(f"{self.tof8CanHor8x2=}")
 
 
     # This should be replaced with an action command from teleop_robo24
