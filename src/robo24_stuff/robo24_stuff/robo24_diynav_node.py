@@ -400,7 +400,8 @@ class Robo24DiynavNode(Node):
         ln:int = 0
         rn:int = 0
         
-        
+        canSect=None
+
         # process center 8 sensors in rows 2,3 from bottom
         #hmin = 1000 # arbitrary large
         distArray = []
@@ -451,7 +452,9 @@ class Robo24DiynavNode(Node):
         dist = 0
         distAvg = None
         distMin = 10000
+
         for i in range(0,8) :
+            # calc distance average
             da = distArray[i]
             d = da[0]
             df = da[1]
@@ -463,16 +466,19 @@ class Robo24DiynavNode(Node):
                     n+=1
             else :
                 if n>0 : 
-                    distAvg = dist/n
+                    distAvg = int(dist/n)
                 else : 
                     distAvg = None
+
             if s!=sect :
+                # reset average measurement
                 n = 0
                 dist = 0
                 if d!=None:
                     dist += d
                     n+=1
 
+            # find distance minimum
             distArray[i].append(None) #[3]
             if s!=sect :
                 distArray[i-1][3] = distAvg
@@ -480,6 +486,10 @@ class Robo24DiynavNode(Node):
                     if distAvg<distMin : 
                         distMin = distAvg
             if i==7 :
+                if n>0 : 
+                    distAvg = int(dist/n)
+                else : 
+                    distAvg = None
                 distArray[i][3] = distAvg
                 if distAvg!=None :
                     if distAvg<distMin : 
@@ -488,16 +498,59 @@ class Robo24DiynavNode(Node):
 
         # locate min averaged distance which should be the "can"
         canSect = None
+        arrayIdx = None
         for i in range(0,8) :
             da = distArray[i]
             distArray[i].append("") #[4]
             if da[3]!= None :
                 if da[3]==distMin :
-                    distArray[i].append("can")
-                    canSect = i
-        
+                    distArray[i][4] = "can"
+                    canSect = distArray[i][2]
+                    arrayIdx = i
+        if arrayIdx!=None :
+            # get can distance offset
+            hdist = distArray[arrayIdx][3]
 
-        self.get_logger().info(f"{canSect=} {distArray=}")
+            # get can rotation offset
+            l = 0
+            ln = 0
+            r = 0
+            rn = 0
+            scnt = 0
+            # process left sensors 0,1,2,3
+            for i in range(0,4) :
+                sect = distArray[i][2]
+                dist = distArray[i][0]
+                if sect!=None and dist!=None :
+                    if sect==canSect :
+                        scnt += 1
+                        l  += dist
+                        ln += 1
+            # process right sensors 4,5,6,7
+            for i in range(4,8) :
+                sect = distArray[i][2]
+                dist = distArray[i][0]
+                if sect!=None and dist!=None :
+                    if sect==canSect :
+                        scnt += 1
+                        r  += dist
+                        rn += 1
+
+            ld=0
+            rd=0
+            if ln > 0 :
+                ld += l/ln
+            if rn > 0 :
+                rd += r/rn
+            
+            hdist = int(ld + rd)
+            if ld>0 and rd>0 :
+                hdist = int(hdist/2)
+
+            hrot = -int(ld - rd)
+
+
+        self.get_logger().info(f"{canSect=} {hdist=} {hrot=} {distArray=}")
 
 
 
