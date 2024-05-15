@@ -77,7 +77,7 @@ class Robo24DiynavNode(Node):
     home_can6_goalDropWaypoint  = [8.0*ft2m,0.0,0.0] # inside goal area
     home_can6_leftScanWaypoint  = [6.75/2*ft2m, 1.75*ft2m, 0.0]
     home_can6_rightScanWaypoint = [6.75/2*ft2m, -1.75*ft2m, 0.0]
-    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_rightScanWaypoint","home_can6_rightScanWaypoint","home_can6_startWaypoint"]
+    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_rightScanWaypoint","home_can6_goalAlignWaypoint","home_can6_startWaypoint"]
     
     # 4 corner waypoints - home arena
     home_cor4_Waypoint0 = [0.0,0.0,0.0] # starting location (location it ends)
@@ -174,6 +174,9 @@ class Robo24DiynavNode(Node):
 
     slamEnabled = True
     slamWaitSec = 3.0
+
+    scanRotDir = 1 # scan rotation direction - used to alternate each scan
+    scanWaypointsIdx = 0 # scan waypoint to goto next
 
     def __init__(self):
         super().__init__('robo24_diynav_node')
@@ -695,13 +698,19 @@ class Robo24DiynavNode(Node):
                 match self.state:
                   case 0:
                     state = self.state
+                    if self.state!=self.state_last :
+                        # scan rotate different direction each time
+                        self.scanRotDir *= -1
                     retVal = self.gotoWaypointStates(now, "can", msg, 0, True)
                     if retVal != 0 :
                         if retVal == 100 : 
                             # timeout scanning  goto a new waypoint
                             l:int = len(can6_waypoints)
-                            n:int = random.randint(0,l-1)
-                            self.newWaypoint = can6_waypoints[n]
+                            #n:int = random.randint(0,l-1)
+                            #self.newWaypoint = can6_waypoints[n]
+                            self.newWaypoint = can6_waypoints[self.scanWaypointsIdx]
+                            self.scanWaypointsIdx+=1
+                            if self.scanWaypointsIdx>=l : self.scanWaypointsIdx=0
                             self.state = 1
                             self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.newWaypoint=}]')
                         else :
@@ -1055,8 +1064,9 @@ class Robo24DiynavNode(Node):
                     else :
                         # locate can by rotating body until can is detected
                         # randomize the direction to reduce accumulated offsets
-                        rand = 1 - 2*random.randint(0,1) # returns 1 or -1
-                        msg.angular.z = rand * self.scale_rotation_rate
+                        #rand = 1 - 2*random.randint(0,1) # returns 1 or -1
+                        #msg.angular.z = rand * self.scale_rotation_rate
+                        msg.angular.z = self.scanRotDir * self.scale_rotation_rate
 
                 ##### ignore close detect while scanning untill it can ignore walls
                 #elif closeCanDet==True:
@@ -1064,7 +1074,7 @@ class Robo24DiynavNode(Node):
                         
                 else :
                     # scan for a can, timeout if none found
-                    msg.angular.z = self.scale_rotation_rate
+                    msg.angular.z = self.scanRotDir * self.scale_rotation_rate
 
             if (self.get_clock().now() - self.wpstate0StartTime) >= rclpy.time.Duration(seconds=15.0) :
                 self.wpstate = 4

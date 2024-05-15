@@ -264,6 +264,7 @@ class Robo24DiySlamNode(Node):
                 wallPos = -startWpX0
                 (linOffsetBx, angleOffsetB) = self.slamOffsets(wallPointsBy, wallPointsBx, wallPos, -1)
 
+                # NOTE: angle offsets only from left and right walls
                 self.mapOdomX += (linOffsetFx+linOffsetFx)/8
                 self.mapOdomY += (linOffsetLy-linOffsetRy)/8
                 self.mapOdomT -= (angleOffsetL+angleOffsetR)/8
@@ -298,7 +299,7 @@ class Robo24DiySlamNode(Node):
             ptsX[] is locations along the wall
             ptsY[] is the distance to the wall
             for Front and back ptsY is the distance data
-            For front and back ptsX is the distance data
+            For front and back ptsX is the location data
             wallPos is the X or Y position of the wall from the origin 0,0
             Returns (linOffset, angleOffset)
         """
