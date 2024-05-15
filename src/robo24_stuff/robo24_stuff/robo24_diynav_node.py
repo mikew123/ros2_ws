@@ -421,7 +421,7 @@ class Robo24DiynavNode(Node):
                 hd = None
             distArray.append([hd])
 
-        # create distance sections of array
+        # calc distance diff between sensors
         distArray[0].append(None)
         for i in range(1,8) :
             d0 = distArray[i-1][0]
@@ -432,6 +432,7 @@ class Robo24DiynavNode(Node):
                 diff = int(d1 - d0)
             distArray[i].append(diff)
 
+        # create distance sections of array
         sect = 0
         distArray[0].append(sect)
         for i in range(1,8) :
@@ -443,7 +444,60 @@ class Robo24DiynavNode(Node):
                 sect+=1
             distArray[i].append(sect)
 
-        self.get_logger().info(f"{distArray=}")
+        # find the "can" section 
+        # This is normally the section with the smallest distance
+        sect = 0
+        n = 0
+        dist = 0
+        distAvg = None
+        distMin = 10000
+        for i in range(0,8) :
+            da = distArray[i]
+            d = da[0]
+            df = da[1]
+            s = da[2]
+            # process 1 section at a time
+            if s==sect :
+                if d!=None :
+                    dist += d
+                    n+=1
+            else :
+                if n>0 : 
+                    distAvg = dist/n
+                else : 
+                    distAvg = None
+            if s!=sect :
+                n = 0
+                dist = 0
+                if d!=None:
+                    dist += d
+                    n+=1
+
+            distArray[i].append(None) #[3]
+            if s!=sect :
+                distArray[i-1][3] = distAvg
+                if distAvg!=None :
+                    if distAvg<distMin : 
+                        distMin = distAvg
+            if i==7 :
+                distArray[i][3] = distAvg
+                if distAvg!=None :
+                    if distAvg<distMin : 
+                        distMin = distAvg
+            sect = s
+
+        # locate min averaged distance which should be the "can"
+        canSect = None
+        for i in range(0,8) :
+            da = distArray[i]
+            distArray[i].append("") #[4]
+            if da[3]!= None :
+                if da[3]==distMin :
+                    distArray[i].append("can")
+                    canSect = i
+        
+
+        self.get_logger().info(f"{canSect=} {distArray=}")
 
 
 
