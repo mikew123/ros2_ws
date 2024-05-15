@@ -173,7 +173,7 @@ class Robo24DiynavNode(Node):
     navRunMode = "paused"
 
     slamEnabled = True
-    slamWaitSec = 2.0
+    slamWaitSec = 3.0
 
     def __init__(self):
         super().__init__('robo24_diynav_node')
