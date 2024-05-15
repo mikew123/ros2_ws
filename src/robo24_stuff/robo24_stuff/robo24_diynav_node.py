@@ -172,7 +172,7 @@ class Robo24DiynavNode(Node):
 
     navRunMode = "paused"
 
-    slam_enabled = True
+    slamEnabled = True
     slamWaitSec = 2.0
 
     def __init__(self):
@@ -385,6 +385,11 @@ class Robo24DiynavNode(Node):
             self.robo24_modes_data_publish("SLAM OFF")
 
     def find_can(self) -> tuple :
+        """
+            Locate a can using the TOF 8x8x3 array
+            Use the 2nd and 3rd from bottom rows of 8 TOF sensors
+            return(hdist, hrot, closeCanDet)
+        """
 
         if len(self.tof8CanHor8x2) != 8 : return(-1,-1,-1)
 
@@ -550,66 +555,8 @@ class Robo24DiynavNode(Node):
             hrot = -int(ld - rd)
 
 
-        self.get_logger().info(f"{canSect=} {hdist=} {hrot=} {distArray=}")
+        #self.get_logger().info(f"{canSect=} {hdist=} {hrot=} {distArray=}")
 
-
-
-        #     match hstate :
-        #         case 0: # find 1st valid distance (pair)
-        #             if hd>0 and hd<hvalid :
-        #                 if hd<hmin : 
-        #                     hmin = hd
-        #                 if i<=3 : 
-        #                     l+=hd
-        #                     ln+=1
-        #                 else : 
-        #                     r+=hd
-        #                     rn+=1
-        #             elif (ln+rn)>0 : # invalid dist after detecting valids
-        #                 hstate = 1
-        #         # end state 0
-        #         case 1 : # stop processsing current set of detects, resume if new min
-        #             if hd>0 and hd<hvalid :
-        #                 if hd<hmin : # new object start
-        #                     hmin = hd
-        #                     # reset vars for new obj dist min detect
-        #                     hstate = 0
-        #                     l=0
-        #                     ln=0
-        #                     r=0
-        #                     rn=0
-        #                     if i<=3 : 
-        #                         l+=hd
-        #                         ln+=1
-        #                     else : 
-        #                         r+=hd
-        #                         rn+=1
-        #         # end state 1
-        #     # end states
-                                    
-        # ld=0
-        # rd=0
-        # if ln > 0 :
-        #     ld += l/ln
-        # if rn > 0 :
-        #     rd += r/rn
-        
-        # hdist = int(ld + rd)
-        # if ld>0 and rd>0 :
-        #     hdist = int(hdist/2)
-
-        # hrot = -int(ld - rd)
-        
-        # #self.get_logger().info(f"{hvalid = } {ld = } {ln = } {rd = } {rn = } {hdist = } {hrot = } {self.tof8CanHor8x2 = }")
-
-
-        # # determine if there is a close object using 6 middle horiz TOF
-        # # The outer sensors are not reliable and have a lot of false positive
-        # closeCanDet = False
-        # for i in range (9, 15) : pass
-        # #                    if self.tof8CanHor[i-8]>0 and self.tof8CanHor[i-8]<500 :
-        # #                        closeCanDet = True
-        
         return(hdist, hrot, closeCanDet)
 
     def on_goto_timer(self) :
@@ -645,9 +592,9 @@ class Robo24DiynavNode(Node):
 
         # enable or disable diy slam when mode changes - takes a few seconds
         if nav_ctrl_mode!=nav_ctrl_mode_last :
-            if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.slam_enabled= False
-            else : self.slam_enabled = True
-            self.diy_slam_enable(self.slam_enabled)
+            if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.slamEnabled= False
+            else : self.slamEnabled = True
+            self.diy_slam_enable(self.slamEnabled)
 
         # autonomous drive robot to waypoint or can
         # create /cmd_vel message 
@@ -728,10 +675,6 @@ class Robo24DiynavNode(Node):
 
             ############### GOTO CAN STATES ###################
             elif nav_ctrl_mode=="6-can" :
-
-                #(hdist, hrot, closeCanDet) = self.find_can()
-
-                ##############################################
 
 
                 # reset can scan time out when started
@@ -958,7 +901,7 @@ class Robo24DiynavNode(Node):
         go to a waypoint with TOF can options
         """
 
-        obsEna = False # DEBUG disable
+        #obsEna = False # DEBUG disable
 
         retVal:int = 0 #Running
 
@@ -1158,11 +1101,11 @@ class Robo24DiynavNode(Node):
 
           case 11:
             state = self.wpstate
-            if self.slam_enabled :
+            if self.slamEnabled :
                 # wait for time
                 if (self.get_clock().now() - self.wpstate11StartTime) >= rclpy.time.Duration(seconds=self.slamWaitSec) :
                     self.wpstate = 2
-                    self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slam_enabled} {waypoint} {retVal = }]')
+                    self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slamEnabled} {waypoint} {retVal = }]')
             else :
                 # dont wait for slam wall detection
                 self.wpstate = 2
@@ -1209,12 +1152,12 @@ class Robo24DiynavNode(Node):
             # pause with no movement to allow diyslam to make correction
           case 3:
             state = self.wpstate
-            if self.slam_enabled :
+            if self.slamEnabled :
                 # wait for time
                 if (self.get_clock().now() - self.wpstate3StartTime) >= rclpy.time.Duration(seconds=self.slamWaitSec) :
                     self.wpstate = 4
                     retVal = 1 # finished
-                    self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slam_enabled} {waypoint} {retVal = }]')
+                    self.get_logger().info(f'WP[{state}->{self.wpstate}, {self.slamEnabled} {waypoint} {retVal = }]')
             else :
                 # dont wait for slam wall detection
                 self.wpstate = 4
