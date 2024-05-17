@@ -157,7 +157,7 @@ class Robo24DiynavNode(Node):
     canMaxDist = 3.0 # meters when searching for the can
     canMinDist = 0.450 # meters stop when driving towards can
 
-    scaleRotationRate = 0.2 #0.15 #0.1
+    scaleRotationRate = 0.15 #0.15 #0.1
     scaleForwardSpeed = 0.5 #0.3 #0.2
 
     obstacleOffL = -1
