@@ -62,6 +62,8 @@ class Robo24DiynavNode(Node):
 
     tf_nanosec_last = 0
     tf_timeout_ns = 1000000000
+    
+    TF_Timeout_last = True
 
     wptf_nanosec_last = 0
 
@@ -155,8 +157,8 @@ class Robo24DiynavNode(Node):
     tof8obstacle:list[int] = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
 
-    scale_rotation_rate = 0.2 #0.15 #0.1
-    scale_forward_speed = 0.5 #0.3 #0.2
+    scale_rotation_rate = 0.1 #0.2 #0.15 #0.1
+    scale_forward_speed = 0.3 #0.5 #0.3 #0.2
 
     obstacleOffL = -1
     obstacleOffR = -1 
@@ -910,7 +912,7 @@ class Robo24DiynavNode(Node):
         go to a waypoint with TOF can options
         """
 
-        #obsEna = False # DEBUG disable
+        obsEna = False # DEBUG disable
 
         retVal:int = 0 #Running
 
@@ -952,7 +954,7 @@ class Robo24DiynavNode(Node):
                 tf_Tdiff = True
             else : 
                 tf_Tdiff = False
-                self.get_logger().info(f'{tf_Tdiff=} {tf_nanosec=} {self.wptf_nanosec_last=}')
+                #self.get_logger().info(f'{tf_Tdiff=} {tf_nanosec=} {self.wptf_nanosec_last=}')
 
             tf_OK = tf_Tdiff
 
@@ -1027,11 +1029,11 @@ class Robo24DiynavNode(Node):
             # timeout to restart can search
             timeSinceLastOK = self.get_clock().now() - self.tf_OK_time_last
             if timeSinceLastOK.nanoseconds > self.tf_timeout_ns :
-                if TF_Timeout == False :
+                if self.TF_Timeout_last == False :
                     self.get_logger().info(f"WP>>>>>>>>>>  TF Timeout  <<<<<<<<<<<")
                 TF_Timeout = True
 
-
+        
         # Process state transition to 0 with state transition flag 4 or 5
         if self.wpstate == 4 :
             self.wpstate = 0
@@ -1088,7 +1090,7 @@ class Robo24DiynavNode(Node):
             state = self.wpstate
             if TF_Timeout==True : 
                 self.wpstate = 5
-                self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {TF_Timeout = }]{tf_OK = }')
+                self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] {TF_Timeout = }{tf_OK = }')
             elif tf_OK == True: 
                 # point to waypoint/can
                 minD = 0.05
@@ -1104,8 +1106,9 @@ class Robo24DiynavNode(Node):
                     self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {TF_Timeout = } {waypoint_distance = } {theta_err = } {tf_OK = }]')
                     
             else :
+                pass
                 #self.wpstate = 5
-                self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}]{TF_Timeout = } {tf_OK = }')
+                #self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}]{TF_Timeout = } {tf_OK = }')
 
             # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] d{waypoint_distance} a{theta_err} {TF_Timeout = } {tf_OK = } fv{msg.linear.x} av{msg.angular.z}')
 
@@ -1159,7 +1162,9 @@ class Robo24DiynavNode(Node):
                     self.wpstate = 3
                     self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] {waypoint_distance=}')
 
-            # pause with no movement to allow diyslam to make correction
+            #self.get_logger().info(f"WP[{state}, {waypoint}] {waypoint_distance=} {theta_err=}")
+
+            # pause with no movement to allow diyslam to make correctiontheta_err
           case 3:
             state = self.wpstate
             if self.slamEnabled :
@@ -1179,7 +1184,10 @@ class Robo24DiynavNode(Node):
             self.wpstate = 4
             retVal = 10 # undefined state
             self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {retVal = }]')
-        
+            
+
+        self.TF_Timeout_last - TF_Timeout
+
         return retVal
 
     #END def gotoWayPoints()

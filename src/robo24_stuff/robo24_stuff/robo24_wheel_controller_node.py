@@ -31,7 +31,8 @@ class Robo24WheelControllerNode(Node):
 
     # values sent to wheel Pico over serial interface
     odometryRateHz = 30; # Rate that the wheel and odom encoders send data on the serial port
-    fwdPullOffset = 1.0025 # cal 5M forward compensate for pull offset
+    # fwdPullOffset = 1.0025 # cal 5M forward compensate for pull offset
+    fwdPullOffset = 1.0020 # cal Quick Trip with laser
     revPullOffset = 1.0300  # reverse compesate for pull offset
     wheelVelocityAccLimit = 1.5 # acceleration max in meters per sec per sec
     
@@ -47,7 +48,8 @@ class Robo24WheelControllerNode(Node):
     wheelEncoderCounts = 48*20.408666666
     #wheelDistance = 0.31675 # cal CCW
     #wheelDistance = 0.3172 # cal slam acc angular error running waypoints
-    wheelDistance = 0.3152 # cal slam angular error with plot juggler
+    #wheelDistance = 0.3152 # cal slam angular error with plot juggler
+    wheelDistance = 0.3175 # cal quicktrip with laser
 
 #    odomDiameter = 0.048
 #    odomDiameter = 0.048 * 4.950/4.970 # adjust for 5M-5cm travel error of 2cm
