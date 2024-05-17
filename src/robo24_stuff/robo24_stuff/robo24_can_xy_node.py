@@ -27,7 +27,7 @@ class Robo24CanXYNode(Node):
     blobYHeight = int(120/2) #mm blob XY marker of can from ground (can=120mm high)
     cam2blobY = camHeight - blobYHeight #mm camera heigth above blob XY marker
 
-    heightTol = 50 # Tolerance for height tolerance in percent
+    heightTol = 70 #50 # Tolerance for height tolerance in percent
 
     # TOF array
     tofXY = np.zeros([8,24], dtype=int)
@@ -98,7 +98,7 @@ class Robo24CanXYNode(Node):
                 (self.medianFilterDataY, Y_mFiltered) = medianFilter(self.medianFilterDataY, Y_m)
                 (self.medianFilterDataT, thetaX_r_mFiltered) = medianFilter(self.medianFilterDataT, thetaX_r)
                 
-                #self.get_logger().info(f"{X_mFiltered = }".encode())
+                #self.get_logger().info(f"{X_mFiltered=} {Y_mFiltered=} {thetaX_r_mFiltered=}")
                                        
                 # make sure X filtered is not zero for division
                 if X_mFiltered > 0.0 :
@@ -107,10 +107,13 @@ class Robo24CanXYNode(Node):
                     blobAMax = 50/(X_mFiltered*X_mFiltered) * 1.25
                     blobAMin = 50/(X_mFiltered*X_mFiltered) * 0.75
                     # use blob height to qualify blob based on distance
-                    # NOTE: 72 is the height 
-                    blobHMax = (1+(self.heightTol/100))*(72/X_mFiltered)
-                    blobHMin = (1-(self.heightTol/100))*(72/X_mFiltered)
-                    #if (blobA<=blobAMax and blobA>blobAMin) :
+                    # # NOTE: 72 is the height 
+                    # blobHMax = (1+(self.heightTol/100))*(72/X_mFiltered)
+                    # blobHMin = (1-(self.heightTol/100))*(72/X_mFiltered)
+                    # NOTE: 95 is the height 
+                    blobHMax = (1+(self.heightTol/100))*(95/X_mFiltered)
+                    blobHMin = (1-(self.heightTol/100))*(95/X_mFiltered)
+                #if (blobA<=blobAMax and blobA>blobAMin) :
                     if (blobH<=blobHMax and blobH>=blobHMin) :
                         # TODO: Why do I need to negate Y?
                         self.broadcast_tf("base_link","can",(X_mFiltered, -Y_mFiltered, thetaX_r_mFiltered))
@@ -119,8 +122,9 @@ class Robo24CanXYNode(Node):
                         emsg = String()
                         emsg.data = strMsg
                         self.blobxydebug_msg_publisher.publish(emsg)
+                        #self.get_logger().info(strMsg)
                     else: 
-                        #self.get_logger().info(f"BLOB ERROR {blobHMin  = } < {blobH = }  > {blobHMax = }".encode())
+                        self.get_logger().info(f"BLOB ERROR {blobHMin=} < {blobH=}  > {blobHMax=} {X_mFiltered=}")
                         pass
         else :
             self.get_logger().info("camera blob out of range")
