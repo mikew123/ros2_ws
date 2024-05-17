@@ -67,9 +67,6 @@ class Robo24DiynavNode(Node):
 
     wptf_nanosec_last = 0
 
-    canMaxDist = 3.0 # meters when searching for the can
-    canMinDist = 0.425 # meters stop when driving towards can
-
     ft2m:float = 0.3048 # feet per meter
 
     # 6 can waypoints - home arena
@@ -157,8 +154,11 @@ class Robo24DiynavNode(Node):
     tof8obstacle:list[int] = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
 
-    scale_rotation_rate = 0.1 #0.2 #0.15 #0.1
-    scale_forward_speed = 0.3 #0.5 #0.3 #0.2
+    canMaxDist = 3.0 # meters when searching for the can
+    canMinDist = 0.450 # meters stop when driving towards can
+
+    scaleRotationRate = 0.2 #0.15 #0.1
+    scaleForwardSpeed = 0.5 #0.3 #0.2
 
     obstacleOffL = -1
     obstacleOffR = -1 
@@ -912,7 +912,7 @@ class Robo24DiynavNode(Node):
         go to a waypoint with TOF can options
         """
 
-        obsEna = False # DEBUG disable
+        #obsEna = False # DEBUG disable
 
         retVal:int = 0 #Running
 
@@ -1067,8 +1067,8 @@ class Robo24DiynavNode(Node):
                         # locate can by rotating body until can is detected
                         # randomize the direction to reduce accumulated offsets
                         #rand = 1 - 2*random.randint(0,1) # returns 1 or -1
-                        #msg.angular.z = rand * self.scale_rotation_rate
-                        msg.angular.z = self.scanRotDir * self.scale_rotation_rate
+                        #msg.angular.z = rand * self.scaleRotationRate
+                        msg.angular.z = self.scanRotDir * self.scaleRotationRate
 
                 ##### ignore close detect while scanning untill it can ignore walls
                 #elif closeCanDet==True:
@@ -1076,7 +1076,7 @@ class Robo24DiynavNode(Node):
                         
                 else :
                     # scan for a can, timeout if none found
-                    msg.angular.z = self.scanRotDir * self.scale_rotation_rate
+                    msg.angular.z = self.scanRotDir * self.scaleRotationRate
 
             if (self.get_clock().now() - self.wpstate0StartTime) >= rclpy.time.Duration(seconds=15.0) :
                 self.wpstate = 4
@@ -1099,7 +1099,7 @@ class Robo24DiynavNode(Node):
                     # limit low end of theta err                
                     if theta_err>0 : err=theta_err+0.2
                     else :           err=theta_err-0.2
-                    msg.angular.z = self.scale_rotation_rate * err
+                    msg.angular.z = self.scaleRotationRate * err
                 else :
                     self.wpstate11StartTime = self.get_clock().now()
                     self.wpstate = 11
@@ -1141,7 +1141,7 @@ class Robo24DiynavNode(Node):
                     
                 if waypoint_distance>minD :
                     # correct for angular offset as it drives forward
-                    msg.angular.z = 8*self.scale_rotation_rate/3 * theta_err
+                    msg.angular.z = 8*self.scaleRotationRate/3 * theta_err
 
                     # avoid obstacles
                     if obsEna : self.calcObstacleAvoidance(obsOff)
@@ -1150,9 +1150,9 @@ class Robo24DiynavNode(Node):
                     msg.angular.z += self.obstacleOffR - self.obstacleOffL
 
                     #start full max speed then slow down, HW deceleration is 1M/sec
-                    #if waypoint_distance > (0.66 * self.scale_forward_speed) : 
-                    if (self.obstacleOffR + self.obstacleOffL) == 0 : fwdSpeed = self.scale_forward_speed
-                    else : fwdSpeed = 0.5 * self.scale_forward_speed
+                    #if waypoint_distance > (0.66 * self.scaleForwardSpeed) : 
+                    if (self.obstacleOffR + self.obstacleOffL) == 0 : fwdSpeed = self.scaleForwardSpeed
+                    else : fwdSpeed = 0.5 * self.scaleForwardSpeed
                     if waypoint_distance > 1.0 : 
                         msg.linear.x = fwdSpeed
                     else : 
