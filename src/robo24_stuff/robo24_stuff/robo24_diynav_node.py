@@ -703,7 +703,7 @@ class Robo24DiynavNode(Node):
                 if closeCanDet==True and (state==0 or state==1) :
                     state = self.state
                     self.state = 3
-                    self.get_logger().info(f"[{state}->{self.wpstate}] {closeCanDet=} {hdist=}")        
+                    self.get_logger().info(f"[{state}->{self.state}] {closeCanDet=} {hdist=}")        
 
 
                 match self.state:
