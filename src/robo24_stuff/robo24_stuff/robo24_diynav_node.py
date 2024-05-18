@@ -158,7 +158,7 @@ class Robo24DiynavNode(Node):
     canMinDist = 0.450 # meters stop when driving towards can
 
     scaleRotationRate = 0.15 #0.15 #0.1
-    scaleForwardSpeed = 0.5 #0.3 #0.2
+    scaleForwardSpeed = 0.6 #0.3 #0.2
 
     obstacleOffL = -1
     obstacleOffR = -1 
@@ -703,7 +703,8 @@ class Robo24DiynavNode(Node):
                     if self.state!=self.state_last :
                         # scan rotate different direction each time
                         self.scanRotDir *= -1
-                    retVal = self.gotoWaypointStates(now, "can", msg, 0, True)
+                    # scan for can and go to it, ignore center sensors when closing in on can
+                    retVal = self.gotoWaypointStates(now, "can", msg, 2, True)
                     if retVal != 0 :
                         if retVal == 100 : 
                             # timeout scanning  goto a new waypoint
@@ -816,6 +817,7 @@ class Robo24DiynavNode(Node):
                 
                 # Bring can to Goal Entrance Waypoint before entering
                 # This aligns the robot to the entrance before entering
+                # block out center TOF obstical sensors which see the grabbed can
                   case 6:
                     state = self.state
                     retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 4, True)
@@ -1112,6 +1114,7 @@ class Robo24DiynavNode(Node):
 
             # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] d{waypoint_distance} a{theta_err} {TF_Timeout = } {tf_OK = } fv{msg.linear.x} av{msg.angular.z}')
 
+          # extra wait to perform SLAM 
           case 11:
             state = self.wpstate
             if self.slamEnabled :
