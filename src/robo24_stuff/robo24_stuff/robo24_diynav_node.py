@@ -559,8 +559,10 @@ class Robo24DiynavNode(Node):
 
             hrot = -int(ld - rd)
 
-
-        #self.get_logger().info(f"{canSect=} {hdist=} {hrot=} {distArray=}")
+        if hdist!=None :
+            if (hdist>0 and hdist<(1000*self.canMinDist)) : closeCanDet = True
+            
+        #self.get_logger().info(f"{closeCanDet=} {canSect=} {hdist=} {hrot=} {distArray=}")
 
         return(hdist, hrot, closeCanDet)
 
@@ -696,7 +698,14 @@ class Robo24DiynavNode(Node):
                     self.newWaypoint = can6_waypoints[n]
                     self.state = 1
                     self.get_logger().info(f'Timeout finding can goto new {self.newWaypoint=}')
-            
+
+                # Force go to can using TOF when can is detected using TOF sensors
+                if closeCanDet==True and (state==0 or state==1) :
+                    state = self.state
+                    self.state = 3
+                    self.get_logger().info(f"WP[{state}->{self.wpstate}] {closeCanDet=} {hdist=}")        
+
+   
                 match self.state:
                   case 0:
                     state = self.state
@@ -914,7 +923,8 @@ class Robo24DiynavNode(Node):
         go to a waypoint with TOF can options
         """
 
-        #obsEna = False # DEBUG disable
+        # DEBUG: disable obstical detection
+        #obsEna = False 
 
         retVal:int = 0 #Running
 
@@ -1034,7 +1044,6 @@ class Robo24DiynavNode(Node):
                 if self.TF_Timeout_last == False :
                     self.get_logger().info(f"WP>>>>>>>>>>  TF Timeout  <<<<<<<<<<<")
                 TF_Timeout = True
-
         
         # Process state transition to 0 with state transition flag 4 or 5
         if self.wpstate == 4 :

@@ -124,7 +124,7 @@ class Robo24CanXYNode(Node):
                         self.blobxydebug_msg_publisher.publish(emsg)
                         #self.get_logger().info(strMsg)
                     else: 
-                        self.get_logger().info(f"BLOB ERROR {blobHMin=} < {blobH=}  > {blobHMax=} {X_mFiltered=}")
+                        #self.get_logger().info(f"BLOB ERROR {blobHMin=} < {blobH=}  > {blobHMax=} {X_mFiltered=}")
                         pass
         else :
             self.get_logger().info("camera blob out of range")
