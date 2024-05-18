@@ -699,13 +699,13 @@ class Robo24DiynavNode(Node):
                     self.state = 1
                     self.get_logger().info(f'Timeout finding can goto new {self.newWaypoint=}')
 
-                # Force go to can using TOF when can is detected using TOF sensors
+                # Skip goto can using blob based TF when can is detected using TOF sensors
                 if closeCanDet==True and (state==0 or state==1) :
                     state = self.state
                     self.state = 3
-                    self.get_logger().info(f"WP[{state}->{self.wpstate}] {closeCanDet=} {hdist=}")        
+                    self.get_logger().info(f"[{state}->{self.wpstate}] {closeCanDet=} {hdist=}")        
 
-   
+
                 match self.state:
                   case 0:
                     state = self.state
