@@ -700,11 +700,10 @@ class Robo24DiynavNode(Node):
                     self.get_logger().info(f'Timeout finding can goto new {self.newWaypoint=}')
 
                 # Skip goto can using blob based TF when can is detected using TOF sensors
-                if closeCanDet==True and (state==0 or state==1) :
-                    state = self.state
+                if closeCanDet==True and (self.state==0 or self.state==1) :
                     self.state = 3
+                    self.wpstate = 0
                     self.get_logger().info(f"[{state}->{self.state}] {closeCanDet=} {hdist=}")        
-
 
                 match self.state:
                   case 0:
@@ -796,9 +795,9 @@ class Robo24DiynavNode(Node):
                                 msg.angular.z = +0.01
 
                             if hdist > 200 :
-                                msg.linear.x = 0.1
+                                msg.linear.x = 0.2 #0.1
                             elif hdist > 130 :
-                                msg.linear.x = 0.05
+                                msg.linear.x = 0.1 #0.05
                             else : # ???? blocked logic ???
                                 self.state = 4
                                 # stop all movement
@@ -831,7 +830,6 @@ class Robo24DiynavNode(Node):
                     state = self.state
                     retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 4, True)
                     if retVal != 0 :
-                        # self.wpstate = 0
                         self.state = 7
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
 
@@ -840,7 +838,6 @@ class Robo24DiynavNode(Node):
                     state = self.state
                     retVal = self.gotoWaypointStates(now, "home_can6_goalDropWaypoint", msg, 0, False)
                     if retVal != 0 :
-                        # self.wpstate = 0
                         self.state = 8
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
 
@@ -866,11 +863,11 @@ class Robo24DiynavNode(Node):
 
                  # Complete exiting Goal area, then start search for another CAN
                   case 10:
+                    if state != self.state : self.wpstate = 0
                     state = self.state
                     self.findCanStartTime = self.get_clock().now()
                     retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 0, False)
                     if retVal != 0 :
-                        # self.wpstate = 0
                         self.state = 0
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
 
@@ -916,11 +913,11 @@ class Robo24DiynavNode(Node):
 
 
     # go to a waypoint with TOF can options
-    # retrns 0:Running 1:Completed 10:Undefined state 100:Timeout scanning for cans
-    def gotoWaypointStates(self, now:time, waypoint:str, msg:Twist, obsOff:int = 0, obsEna:bool=False,
-                          canMode:bool=False, closeCanDet:bool=False) -> int:
+    
+    def gotoWaypointStates(self, now:time, waypoint:str, msg:Twist, obsOff:int = 0, obsEna:bool=False) -> int:
         """
         go to a waypoint with TOF can options
+        returns 0:Running, 1:Completed, 10:Undefined state, 100:Timeout scanning for cans
         """
 
         # DEBUG: disable obstical detection
@@ -1058,8 +1055,6 @@ class Robo24DiynavNode(Node):
 
           case 0:
             state = self.wpstate
-            # TODO: need to figure out how to detect a close can w/o TF
-            # and go to it
 
             if waypoint!="can":
                 # Not in can mode so wait for TF detection
@@ -1081,10 +1076,6 @@ class Robo24DiynavNode(Node):
                         #msg.angular.z = rand * self.scaleRotationRate
                         msg.angular.z = self.scanRotDir * self.scaleRotationRate
 
-                ##### ignore close detect while scanning untill it can ignore walls
-                #elif closeCanDet==True:
-                #        self.wpstate = 3
-                        
                 else :
                     # scan for a can, timeout if none found
                     msg.angular.z = self.scanRotDir * self.scaleRotationRate
@@ -1094,7 +1085,7 @@ class Robo24DiynavNode(Node):
                 retVal = 100 # timeout looking for can
                 self.get_logger().info(f'Scan timeout WP[{state}->{self.wpstate}, {waypoint} {retVal = }]')
 
-            # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] d{waypoint_distance} {tf_OK = } {closeCanDet = } fv{msg.linear.x} av{msg.angular.z}')
+            # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] d{waypoint_distance} {tf_OK = } fv{msg.linear.x} av{msg.angular.z}')
 
         # rotate to point toward waypoint/can
           case 1:
@@ -1149,7 +1140,6 @@ class Robo24DiynavNode(Node):
                 minD = 0.05 # distance to stop before waypoint
                 #obsOff = 0 # obstacle avoidance sensor center offset about 8 deg each
                 if waypoint=="can": minD = self.canMinDist
-                #if canMode==True : obsOff = self.obstacleZoff
                     
                 if waypoint_distance>minD :
                     # correct for angular offset as it drives forward
