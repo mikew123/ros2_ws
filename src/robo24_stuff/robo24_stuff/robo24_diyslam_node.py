@@ -38,7 +38,8 @@ class Robo24DiySlamNode(Node):
     fov8x8:float = 45.0
     mntAngle:float = 45.0
 
-    # map->odom TF accumulated corrections
+    # map->odom TF filter accumulated corrections
+    slamTc:float = 1.0/3 # filter time constant
     mapOdomX:float = 0.0
     mapOdomY:float = 0.0
     mapOdomT:float = 0.0
@@ -265,9 +266,9 @@ class Robo24DiySlamNode(Node):
                 (linOffsetBx, angleOffsetB) = self.slamOffsets(wallPointsBy, wallPointsBx, wallPos, -1)
 
                 # NOTE: angle offsets only from left and right walls
-                self.mapOdomX += (linOffsetFx+linOffsetFx)/8
-                self.mapOdomY += (linOffsetLy-linOffsetRy)/8
-                self.mapOdomT -= (angleOffsetL+angleOffsetR)/8
+                self.mapOdomX += (linOffsetFx+linOffsetFx)*self.slamTc
+                self.mapOdomY += (linOffsetLy-linOffsetRy)*self.slamTc
+                self.mapOdomT -= (angleOffsetL+angleOffsetR)*self.slamTc
             
             # self.get_logger().info(f"{self.mapOdomPcd = }\n")
             # self.get_logger().info(f"LEFT: {can6Y = } {wallPointsLx = } {wallPointsLy = } {polyCoeffL = } {angleOffsetL = } {self.mapOdomT = } {linOffsetLy = } {self.mapOdomY = } \n")
