@@ -205,7 +205,8 @@ class Robo24DiySlamNode(Node):
         wallPointsBx:list[float] = [] 
         wallPointsBy:list[float] = [] 
  
-        if (math.fabs(vX)<0.001 and math.fabs(aZ)<0.001) :
+#        if (math.fabs(vX)<0.001 and math.fabs(aZ)<0.001) :
+        if (math.fabs(vX)<0.05 and math.fabs(aZ)<0.005) :
             robotNotMoving = True
 
         if robotNotMoving : 
