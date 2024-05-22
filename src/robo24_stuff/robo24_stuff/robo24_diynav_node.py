@@ -606,6 +606,7 @@ class Robo24DiynavNode(Node):
             if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.slamEnabled= False
             else : self.slamEnabled = True
             self.diy_slam_enable(self.slamEnabled)
+            self.wpstate0StartTime = self.get_clock().now()
 
         # autonomous drive robot to waypoint or can
         # create /cmd_vel message 
