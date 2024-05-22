@@ -29,7 +29,7 @@ class Robo24DiySlamNode(Node):
     Rviz2 can display the map and point cloud
     """
     
-    # 24 data points for line of sensors
+    # 24 data points for line of sensors in mm
     tof8Wall:list[int] = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
     pcd = PointCloud2()
@@ -408,7 +408,10 @@ class Robo24DiySlamNode(Node):
         # row 0 is top, row 7 is bottom
         sensorRow:int = 4
         for i in range(0,24):
-            self.tof8Wall[i] = int(tofStrArray[i+(sensorRow*24)+1]) #[i,sensorRow]
+            #self.tof8Wall[i] = int(tofStrArray[i+(sensorRow*24)+1]) #[i,sensorRow]
+            dist = int(tofStrArray[i+(sensorRow*24)+1]) #[i,sensorRow]
+            if dist>=0 : self.tof8Wall[i] = dist
+            else       : self.tof8Wall[i] = 0
 
         # Remove the curve by scaling each sensor with a inverted sin() curve over FOV
         fovPt = self.fov8x8/8 # FOV for each sensor point
@@ -431,27 +434,38 @@ class Robo24DiySlamNode(Node):
         fovPt = self.fov8x8/8 # FOV for each sensor point
         fovPtRad = fovPt*(math.pi/180) #scaled to Radians
 
-        # calc for each sensor set of 8
+        # min distance to save TOF data point for SLAM
+        self.slamMinDist = 350
+
+        # calc curve correction for each sensor set of 8
         # Left sensor 0 to 7
         for n in range(0,8) :
             theta = (n-4+0.5)*fovPtRad  - mntAngleRad# scaled to radians
+            dist = self.tof8Wall[n]
             Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n])
             Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n])
-            xyW.append((Wx,Wy))
+            if dist > self.slamMinDist : xyW.append((Wx,Wy))
+            else          : xyW.append((0,0))
         # Center sensor 8 to 15
         for n in range(8,16) :
             theta = (n-12+0.5)*fovPtRad# scaled to radians
+            dist = self.tof8Wall[n]
             Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n-8])
             Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n-8])
-            xyW.append((Wx,Wy))
+            # discard sensor point if too close 
+            if dist > self.slamMinDist : xyW.append((Wx,Wy))
+            else          : xyW.append((0,0))
         # Right sensor 16 to 23
         for n in range(16,24) :
             theta = (n-20+0.5)*fovPtRad  + mntAngleRad# scaled to radians
+            dist = self.tof8Wall[n]
             Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n-16])
             Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n-16])
-            xyW.append((Wx,Wy))
+            # discard sensor point if too close 
+            if dist > self.slamMinDist : xyW.append((Wx,Wy))
+            else          : xyW.append((0,0))
 
-        # self.get_logger().info(f"\n{self.tof8Wall = }\n{xyW = }\n")
+        #self.get_logger().info(f"\n{self.tof8Wall = }\n{xyW = }\n")
 
         # Create point cloud from TOF8 data
         # get map->base_link transform to translate XY coordinates of the wall to align with map
