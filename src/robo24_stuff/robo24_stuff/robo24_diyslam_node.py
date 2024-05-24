@@ -264,10 +264,12 @@ class Robo24DiySlamNode(Node):
                 (linOffsetFx, angleOffsetF) = self.slamOffsets(wallPointsFy, wallPointsFx, wallPos, -1)
 
                 wallPos = -startWpX0
+                #(linOffsetBx, angleOffsetB) = self.slamOffsets(wallPointsBy, wallPointsBx, wallPos, -1)
                 (linOffsetBx, angleOffsetB) = self.slamOffsets(wallPointsBy, wallPointsBx, wallPos, -1)
 
                 # NOTE: angle offsets only from left and right walls
-                self.mapOdomX += (linOffsetFx+linOffsetFx)*self.slamTc
+                #self.mapOdomX += (linOffsetFx+linOffsetFx)*self.slamTc
+                self.mapOdomX += (linOffsetFx+linOffsetBx)*self.slamTc
                 self.mapOdomY += (linOffsetLy-linOffsetRy)*self.slamTc
                 self.mapOdomT -= (angleOffsetL+angleOffsetR)*self.slamTc
             
@@ -435,7 +437,7 @@ class Robo24DiySlamNode(Node):
         fovPtRad = fovPt*(math.pi/180) #scaled to Radians
 
         # min distance to save TOF data point for SLAM
-        self.slamMinDist = 350
+        self.slamMinDist = 400
 
         # calc curve correction for each sensor set of 8
         # Left sensor 0 to 7

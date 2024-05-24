@@ -70,14 +70,15 @@ class Robo24DiynavNode(Node):
     ft2m:float = 0.3048 # feet per meter
 
     # 6 can waypoints - home arena
+    home_can6_CenterY = 6.75/2
     home_can6_startWaypoint = [0.0,0.0,0.0] # center 8" from bottom of arena
-    home_can6_goalAlignWaypoint = [5.5*ft2m,0.0,0.0] # in front of goal entrance
-    home_can6_CenterFWaypoint    = [(3.5+1)*ft2m,0.0,0.0] # center front of arena
-    home_can6_CenterBWaypoint    = [(3.5-1)*ft2m,0.0,0.0] # center back of arena
-    home_can6_goalEntryWaypoint = [6.5*ft2m,0.0,0.0] # middle of goal entrance
+    home_can6_goalAlignWaypoint = [5.75*ft2m,0.0,0.0] # in front of goal entrance 1 ft into arena
+    home_can6_CenterFWaypoint    = [(home_can6_CenterY+1)*ft2m,0.0,0.0] # center front of arena
+    home_can6_CenterBWaypoint    = [(home_can6_CenterY-1)*ft2m,0.0,0.0] # center back of arena
+    home_can6_goalEntryWaypoint = [6.75*ft2m,0.0,0.0] # middle of goal entrance
     home_can6_goalDropWaypoint  = [8.0*ft2m,0.0,0.0] # inside goal area
-    home_can6_leftScanWaypoint  = [6.75/2*ft2m, 1.75*ft2m, 0.0]
-    home_can6_rightScanWaypoint = [6.75/2*ft2m, -1.75*ft2m, 0.0]
+    home_can6_leftScanWaypoint  = [home_can6_CenterY*ft2m, 1.75*ft2m, 0.0]
+    home_can6_rightScanWaypoint = [home_can6_CenterY*ft2m, -1.75*ft2m, 0.0]
 #    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_rightScanWaypoint","home_can6_goalAlignWaypoint","home_can6_startWaypoint"]
     home_can6_waypoints = ["home_can6_CenterFWaypoint","home_can6_CenterBWaypoint"]
     
@@ -178,7 +179,7 @@ class Robo24DiynavNode(Node):
     navRunMode = "paused"
 
     slamEnabled = True
-    slamWaitSec = 1.5 #3.0
+    slamWaitSec = 2.0 #3.0
 
     scanRotDir = 1 # scan rotation direction - used to alternate each scan
     scanWaypointsIdx = 0 # scan waypoint to goto next
@@ -192,16 +193,13 @@ class Robo24DiynavNode(Node):
         self.get_logger().info(f"{param_6can_arena=}")
 
         self.tf_OK_time_last = self.get_clock().now()
-        #self.tf_OK_time_last = rclpy.time.Time()
 
         self.wpstate3StartTime = self.get_clock().now()
-        # self.wpstate0StartTime = self.get_clock().now()
         self.findCanStartTime = self.get_clock().now()
 
         self.joy_subscription = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
         self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.tof8x8x3_subscription = self.create_subscription(String, 'tof8x8x3_msg', self.tof8x8x3_callback, 10)
-#        self.robo24_modes_json_subscription = self.create_subscription(String, 'robo24_modes', self.robo24_modes_callback, 10)
         self.robo24_json_subscription = self.create_subscription(String, 'robo24_json', self.robo24_json_callback, 10)
 
         self.robo24_modes_publisher = self.create_publisher(String, 'robo24_modes',10)
@@ -573,6 +571,12 @@ class Robo24DiynavNode(Node):
 
         return(hdist, hrot, closeCanDet)
 
+    def new_scan_waypoint(self) -> None :
+        l:int = len(self.can6_waypoints)
+        self.newWaypoint = self.can6_waypoints[self.scanWaypointsIdx]
+        self.scanWaypointsIdx+=1
+        if self.scanWaypointsIdx>=l : self.scanWaypointsIdx=0
+
     def on_goto_timer(self) :
 
         (hdist, hrot, closeCanDet) = self.find_can()
@@ -591,7 +595,7 @@ class Robo24DiynavNode(Node):
         now = rclpy.time.Time() # Gets time=0 (I think simulation time)
         
         nav_ctrl_arena = self.nav_ctrl["arena"] # home or dprg
-        can6_waypoints = self.nav_ctrl[nav_ctrl_arena]["6-can"]
+        self.can6_waypoints = self.nav_ctrl[nav_ctrl_arena]["6-can"]
         cor4_waypoints = self.nav_ctrl[nav_ctrl_arena]["4-corner"]
         qt_waypoints   = self.nav_ctrl[nav_ctrl_arena]["Quick-trip"]
         wp_waypoints   = self.nav_ctrl[nav_ctrl_arena]["Waypoints"]
@@ -609,7 +613,6 @@ class Robo24DiynavNode(Node):
             if nav_ctrl_mode=="4-corner" or nav_ctrl_mode=="Quick-trip" : self.slamEnabled= False
             else : self.slamEnabled = True
             self.diy_slam_enable(self.slamEnabled)
-            # self.wpstate0StartTime = self.get_clock().now()
 
         # autonomous drive robot to waypoint or can
         # create /cmd_vel message 
@@ -694,26 +697,28 @@ class Robo24DiynavNode(Node):
 
                 # reset can scan time out when started
                 if nav_ctrl_mode!=nav_ctrl_mode_last :
-                    # self.wpstate0StartTime = self.get_clock().now()
+                    self.wpScanStartTime = self.get_clock().now()
                     self.findCanStartTime = self.get_clock().now()
                     self.scanWaypointsIdx = 0
-                    self.newWaypoint = can6_waypoints[self.scanWaypointsIdx]
-                    
+                    self.new_scan_waypoint()
+
+
                 ########## CAN STATES ##########
-                # if (self.get_clock().now() - self.wpstate0StartTime) >= rclpy.time.Duration(seconds=45.0) :
                 self.findCanTimeout = 45.0
                 if (self.get_clock().now() - self.findCanStartTime) >= rclpy.time.Duration(seconds=self.findCanTimeout) :
                     self.findCanStartTime = self.get_clock().now()
-                    # timeout finding can  goto a new waypoint
-                    # l:int = len(can6_waypoints)
-                    # n:int = random.randint(0,l-1)
-                    # self.newWaypoint = can6_waypoints[n]
-                    l:int = len(can6_waypoints)
-                    self.newWaypoint = can6_waypoints[self.scanWaypointsIdx]
-                    self.scanWaypointsIdx+=1
-                    if self.scanWaypointsIdx>=l : self.scanWaypointsIdx=0
+                    self.new_scan_waypoint()
                     self.state = 1
                     self.get_logger().info(f'Timeout finding can goto new {self.newWaypoint=}')
+
+                # Timeout scanning for a can
+                self.wpScanTimeout = 10.0
+                if ((self.get_clock().now() - self.wpScanStartTime >= rclpy.time.Duration(seconds=self.wpScanTimeout))
+                    and (self.state==0)) :
+                    self.wpScanStartTime = self.get_clock().now()
+                    self.new_scan_waypoint()
+                    self.state = 1
+                    self.get_logger().info(f'Timeout scanning for can goto new {self.newWaypoint=}')
 
                 # Skip goto can using blob based TF when can is detected using TOF sensors
                 if closeCanDet==True and (self.state==0 or self.state==1) :
@@ -729,22 +734,20 @@ class Robo24DiynavNode(Node):
                     if self.state!=self.state_last :
                         # scan rotate different direction each time
                         self.scanRotDir *= -1
-
-                    # scan for can and go to it, ignore center sensors when closing in on can
+                        # start can scan timeout
+                        self.wpScanStartTime = self.get_clock().now()
+                        self.get_logger().info(f"State 0 started {self.wpScanStartTime=}")
+                        
+                    # scan for can and go to it, ignore center +-2 sensors when closing in on can
                     retVal = self.gotoWaypointStates(now, "can", msg, 2, True)
                     if retVal != 0 :
                         if retVal == 100 : 
-                            # timeout scanning  goto a new waypoint
-                            # l:int = len(can6_waypoints)
-                            # self.newWaypoint = can6_waypoints[self.scanWaypointsIdx]
-                            # self.scanWaypointsIdx+=1
-                            # if self.scanWaypointsIdx>=l : self.scanWaypointsIdx=0
                             self.state = 1
                             #self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.newWaypoint=}]')
-                            self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+                            self.get_logger().info(f'WP Timeout {retVal=} [{state}->{self.state}, {waypoint}]')
                         else :
                             self.state = 3
-                            self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+                            self.get_logger().info(f'WP {retVal=} [{state}->{self.state}, {waypoint}]')
 
                 # Go to new scan waypoint after timeout
                   case 1: 
@@ -752,8 +755,9 @@ class Robo24DiynavNode(Node):
                     retVal = self.gotoWaypointStates(now, self.newWaypoint, msg, 0, True)
                     if retVal != 0 :
                         self.state = 0
-                        # self.findCanStartTime = self.get_clock().now()
-                        self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+                        # start can scan timeout
+                        self.wpScanStartTime = self.get_clock().now()
+                        self.get_logger().info(f'[{state}->{self.state}, {waypoint}] {self.wpScanStartTime=}')
 
                 # removed state 2
                 
@@ -885,7 +889,6 @@ class Robo24DiynavNode(Node):
                   case 10:
                     if state != self.state : self.wpstate = 0
                     state = self.state
-#                    retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 0, False)
                     retVal = self.gotoWaypointStates(now, self.newWaypoint, msg, 0, False)
                     if retVal != 0 :
                         self.state = 0
@@ -1067,7 +1070,6 @@ class Robo24DiynavNode(Node):
         # Process state transition to 0 with state transition flag 4 or 5
         if self.wpstate == 4 :
             self.wpstate = 0
-            # self.wpstate0StartTime = self.get_clock().now()
 
         if self.wpstate == 5 :
             self.wpstate = 0
@@ -1098,11 +1100,6 @@ class Robo24DiynavNode(Node):
                     # scan for a can
                     msg.angular.z = self.scanRotDir * self.scaleRotationRate
 
-            # Timeout scanning for can
-            # if (self.get_clock().now() - self.wpstate0StartTime) >= rclpy.time.Duration(seconds=15.0) :
-            #     self.wpstate = 4
-            #     retVal = 100 # timeout looking for can
-            #     self.get_logger().info(f'Scan timeout WP[{state}->{self.wpstate}, {waypoint} {retVal = }]')
 
             # self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] d{waypoint_distance} {tf_OK = } fv{msg.linear.x} av{msg.angular.z}')
 
@@ -1122,6 +1119,8 @@ class Robo24DiynavNode(Node):
                     else :           err=theta_err-0.2
                     msg.angular.z = self.scaleRotationRate * err
                 else :
+                    # reset WP scan timeout when can or waypoint is located and pointed toward
+                    self.wpScanStartTime = self.get_clock().now()
                     self.wpstate11StartTime = self.get_clock().now()
                     self.wpstate = 11
                     self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint} {TF_Timeout = } {waypoint_distance = } {theta_err = } {tf_OK = }]')
