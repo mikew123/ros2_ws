@@ -102,11 +102,11 @@ class Robo24DiynavNode(Node):
     # 6 can waypoints - dprg arena
     dprg_can6_CenterX = 9.5/2
     dprg_can6_startWaypoint = [0.0,0.0,0.0] # center 8" from bottom of arena
-    dprg_can6_goalAlignWaypoint = [9.5*ft2m,   0.0,       0.0] # in front of goal entrance
-    dprg_can6_CenterFWaypoint   = [(dprg_can6_CenterX+1)*ft2m, 1.75*ft2m, 0.0]
-    dprg_can6_CenterBWaypoint   = [(dprg_can6_CenterX-1)*ft2m,-1.75*ft2m, 0.0]
-    dprg_can6_goalEntryWaypoint = [8.5*ft2m,   0.0,       0.0] # middle of goal entrance
-    dprg_can6_goalDropWaypoint  = [9.5*ft2m,  0.0,       0.0] # inside goal area
+    dprg_can6_goalAlignWaypoint = [7.5*ft2m,   0.0,       0.0] # in front of goal entrance
+    dprg_can6_CenterFWaypoint   = [(dprg_can6_CenterX+1)*ft2m, 0.0, 0.0]
+    dprg_can6_CenterBWaypoint   = [(dprg_can6_CenterX-1)*ft2m, 0.0, 0.0]
+    dprg_can6_goalEntryWaypoint = [9.0*ft2m,   0.0,       0.0] # middle of goal entrance
+    dprg_can6_goalDropWaypoint  = [10.0*ft2m,  0.0,       0.0] # inside goal area
     dprg_can6_leftScanWaypoint  = [9.5/2*ft2m, 1.75*ft2m, 0.0]
     dprg_can6_rightScanWaypoint = [9.5/2*ft2m,-1.75*ft2m, 0.0]
     #dprg_can6_waypoints = ["dprg_can6_leftScanWaypoint","dprg_can6_rightScanWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_startWaypoint"]
@@ -136,7 +136,7 @@ class Robo24DiynavNode(Node):
 
     nav_ctrl = {
         "mode":  "none",  # none, 6-can, 4-corner, Quick-trip, Waypoints
-        "arena": "home", # home, dprg
+        "arena": "dprg", # home, dprg
         "state": "done", # init, running, paused, done
         # use arena and mode values to access waypoints
         "home" : {
@@ -192,7 +192,7 @@ class Robo24DiynavNode(Node):
         super().__init__('robo24_diynav_node')
 
 
-        self.declare_parameter('6can_arena', "home")
+        self.declare_parameter('6can_arena', "dprg")
         param_6can_arena = self.get_parameter('6can_arena').value
         self.get_logger().info(f"{param_6can_arena=}")
 
@@ -276,6 +276,8 @@ class Robo24DiynavNode(Node):
 
         if self.nav_ctrl["arena"] == "dprg" :
             self.make_static_tf(self.tf_static_broadcaster11,"map", "dprg_can6_startWaypoint",     self.dprg_can6_startWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster12,"map", "dprg_can6_CenterFWaypoint",   self.dprg_can6_CenterFWaypoint)
+            self.make_static_tf(self.tf_static_broadcaster13,"map", "dprg_can6_CenterBWaypoint",   self.dprg_can6_CenterBWaypoint)
             self.make_static_tf(self.tf_static_broadcaster0, "map", "dprg_can6_goalDropWaypoint",  self.dprg_can6_goalDropWaypoint)
             self.make_static_tf(self.tf_static_broadcaster1, "map", "dprg_can6_goalEntryWaypoint", self.dprg_can6_goalEntryWaypoint)
             self.make_static_tf(self.tf_static_broadcaster2, "map", "dprg_can6_goalAlignWaypoint", self.dprg_can6_goalAlignWaypoint)
@@ -802,13 +804,14 @@ class Robo24DiynavNode(Node):
                 # continue to can using TOF 8x8x3 Center sensors to go to within a few mm
                   case 4:
                     state = self.state
+                    self.canDistGrab = 140
                     if hdist==0 :
                         # TOF sensors have no data
                         self.state = 0
                     else :
                         if hdist>600 : 
                             self.state = 0 # too far, start searching again
-                        elif hdist<=130 : 
+                        elif hdist <= self.canDistGrab : 
                             self.state = 5 # Can is close enough to grab
                             # reset find can timeout when grabbed
                             self.findCanStartTime = self.get_clock().now()
@@ -823,9 +826,9 @@ class Robo24DiynavNode(Node):
                             elif hrot < 0 :
                                 msg.angular.z = +0.01
 
-                            if hdist > 200 :
+                            if hdist > self.canDistGrab+150 :
                                 msg.linear.x = 0.2 #0.1
-                            elif hdist > 130 :
+                            elif hdist > self.canDistGrab :
                                 msg.linear.x = 0.1 #0.05
                             else : # ???? blocked logic ???
                                 self.state = 4
@@ -856,7 +859,10 @@ class Robo24DiynavNode(Node):
                 # block out center TOF obstical sensors which see the grabbed can
                   case 6:
                     state = self.state
-                    retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 4, True)
+                    if self.nav_ctrl["arena"] == "home" :
+                        retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 3, True)
+                    else :
+                        retVal = self.gotoWaypointStates(now, "dprg_can6_goalAlignWaypoint", msg, 3, True)
                     if retVal != 0 :
                         self.state = 7
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
@@ -864,7 +870,11 @@ class Robo24DiynavNode(Node):
                 # Bring can to Goal Drop off location
                   case 7:
                     state = self.state
-                    retVal = self.gotoWaypointStates(now, "home_can6_goalDropWaypoint", msg, 0, False)
+                    if self.nav_ctrl["arena"] == "home" :
+                        retVal = self.gotoWaypointStates(now, "home_can6_goalDropWaypoint", msg, 0, False)
+                    else :
+                        retVal = self.gotoWaypointStates(now, "dprg_can6_goalDropWaypoint", msg, 0, False)
+
                     if retVal != 0 :
                         self.state = 8
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
@@ -1026,7 +1036,10 @@ class Robo24DiynavNode(Node):
                     # self.get_logger().info(f'{map_robot_angle = } {t2 = }'.encode())
 
                     # changed direction to goal!
-                    goalEntranceX = (self.home_can6_goalDropWaypoint[0] + self.home_can6_goalAlignWaypoint[0])/2.0
+                    if self.nav_ctrl["arena"] == "home" :
+                        goalEntranceX = (self.home_can6_goalDropWaypoint[0] + self.home_can6_goalAlignWaypoint[0])/2.0
+                    else :
+                        goalEntranceX = (self.dprg_can6_goalDropWaypoint[0] + self.dprg_can6_goalAlignWaypoint[0])/2.0
                     robotCanDist = math.sqrt(t1.transform.translation.x**2 + t1.transform.translation.y**2)
 
                     robotCanX = robotCanDist * math.cos(map_robot_angle)
