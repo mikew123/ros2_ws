@@ -100,14 +100,18 @@ class Robo24DiynavNode(Node):
     
     
     # 6 can waypoints - dprg arena
+    dprg_can6_CenterX = 9.5/2
     dprg_can6_startWaypoint = [0.0,0.0,0.0] # center 8" from bottom of arena
-    dprg_can6_goalAlignWaypoint = [7.7*ft2m,   0.0,       0.0] # in front of goal entrance
-    dprg_can6_goalEntryWaypoint = [8.7*ft2m,   0.0,       0.0] # middle of goal entrance
-    dprg_can6_goalDropWaypoint  = [10.2*ft2m,  0.0,       0.0] # inside goal area
-    dprg_can6_leftScanWaypoint  = [7.0/2*ft2m, 1.75*ft2m, 0.0]
-    dprg_can6_rightScanWaypoint = [7.0/2*ft2m,-1.75*ft2m, 0.0]
-    dprg_can6_waypoints = ["dprg_can6_leftScanWaypoint","dprg_can6_rightScanWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_startWaypoint"]
-    
+    dprg_can6_goalAlignWaypoint = [9.5*ft2m,   0.0,       0.0] # in front of goal entrance
+    dprg_can6_CenterFWaypoint   = [(dprg_can6_CenterX+1)*ft2m, 1.75*ft2m, 0.0]
+    dprg_can6_CenterBWaypoint   = [(dprg_can6_CenterX-1)*ft2m,-1.75*ft2m, 0.0]
+    dprg_can6_goalEntryWaypoint = [8.5*ft2m,   0.0,       0.0] # middle of goal entrance
+    dprg_can6_goalDropWaypoint  = [9.5*ft2m,  0.0,       0.0] # inside goal area
+    dprg_can6_leftScanWaypoint  = [9.5/2*ft2m, 1.75*ft2m, 0.0]
+    dprg_can6_rightScanWaypoint = [9.5/2*ft2m,-1.75*ft2m, 0.0]
+    #dprg_can6_waypoints = ["dprg_can6_leftScanWaypoint","dprg_can6_rightScanWaypoint","dprg_can6_goalAlignWaypoint","dprg_can6_startWaypoint"]
+    dprg_can6_waypoints = ["dprg_can6_CenterFWaypoint", "dprg_can6_CenterBWaypoint"]
+
     # 4 corner waypoints - dprg arena
     dprg_size = 10.0 *ft2m  # length, width of corner marked area
     dprg_offset = 1.0 *ft2m  # x,y offset from corner markers, clearance to stay outside marked area for odom drift error

@@ -96,7 +96,7 @@ class Robo24DiySlamNode(Node):
     }
 
 
-    nav_arena:str = "home"
+    nav_arena:str = "dprg"
 
     diyslamEnabled = True
 
@@ -138,11 +138,29 @@ class Robo24DiySlamNode(Node):
 
         self.get_logger().info("Robo24 DIY Slam Started")
 
+    def process_nav_cmd(self, cmd) :
+        self.get_logger().info(f"process_nav_cmd {cmd=}")
+        if "arena" in cmd :
+            arena = cmd["arena"]
+            self.nav_arena = arena
+            self.get_logger().info(f"{self.nav_arena=} {cmd=}")
+
     def robo24_json_callback(self, msg) :
         cmd = json.loads(msg.data)
         self.get_logger().info(f"process_nav_cmd {cmd=}")
-        if "arena" in cmd :
-            self.nav_arena = cmd["arena"]
+        try :
+            packet = json.loads(msg.data)
+        except Exception as ex:
+            self.get_logger().error(f"diyslam robo24_json_callback exception {ex}")
+            return
+
+        # if "arena" in packet :
+        #     self.nav_arena = packet["arena"]
+        #     self.get_logger().info(f"{self.nav_arena=} {msg=}")
+        if "nav_cmd" in packet :
+            nav_cmd = packet["nav_cmd"]
+            self.process_nav_cmd(nav_cmd)
+            self.get_logger().info(f"{self.nav_arena=} {msg=}")
 
 
     # robo24_modes topic to control diyslamEnabled
