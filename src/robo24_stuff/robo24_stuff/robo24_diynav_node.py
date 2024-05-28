@@ -707,6 +707,7 @@ class Robo24DiynavNode(Node):
                     self.findCanStartTime = self.get_clock().now()
                     self.scanWaypointsIdx = 0
                     self.new_scan_waypoint()
+                    self.canCount = 0
 
 
                 ########## CAN STATES ##########
@@ -860,9 +861,9 @@ class Robo24DiynavNode(Node):
                   case 6:
                     state = self.state
                     if self.nav_ctrl["arena"] == "home" :
-                        retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 3, True)
+                        retVal = self.gotoWaypointStates(now, "home_can6_goalAlignWaypoint", msg, 4, True)
                     else :
-                        retVal = self.gotoWaypointStates(now, "dprg_can6_goalAlignWaypoint", msg, 3, True)
+                        retVal = self.gotoWaypointStates(now, "dprg_can6_goalAlignWaypoint", msg, 4, True)
                     if retVal != 0 :
                         self.state = 7
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
@@ -884,7 +885,8 @@ class Robo24DiynavNode(Node):
                     state = self.state
                     resp = self.clawCmd(0, 1000)
                     self.state = 9
-                    self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+                    self.canCount += 1
+                    self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.canCount=}]')
 
                 # Backup 10cm from can dropped off in the Goal area
                   case 9:
@@ -894,10 +896,14 @@ class Robo24DiynavNode(Node):
 
                     if (time.time() - self.navTimerStart) <  1.0 :
                         msg.linear.x = -0.1 # reverse at 10 cm/sec for 1 sec
+                    # elif self.canCount >= 6 :
+                    #     msg.linear.x = 0.0 # stop
+                    #     self.state = 11
+                    #     self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.canCount=}]')
                     else :
                         msg.linear.x = 0.0 # stop
                         self.state = 10
-                        self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+                        self.get_logger().info(f'[{state}->{self.state}, {waypoint} {self.canCount=}]')
 
                  # Complete exiting Goal area, then start search for another CAN
                   case 10:
@@ -909,6 +915,28 @@ class Robo24DiynavNode(Node):
                         # reset find can timeout when starting new can find
                         self.findCanStartTime = self.get_clock().now()
                         self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+
+                  # go to start waypoint to finish 6-can, timed until getting there
+                  case 11 :
+                    if state != self.state : 
+                        self.wpstate = 0
+                    state = self.state
+                    if self.nav_ctrl["arena"] == "home" :
+                        retVal = self.gotoWaypointStates(now, "home_can6_startWaypoint", msg, 0, False)
+                    else :
+                        retVal = self.gotoWaypointStates(now, "dprg_can6_startWaypoint", msg, 0, False)
+                    if retVal != 0 :
+                        self.state = 12
+                        self.get_logger().info(f'[{state}->{self.state}, {waypoint}]')
+                    
+                  # wait until restarted
+                  case 12 :
+                    if state != self.state :
+                        self.get_logger().info(f">>>>>>>>>>>>>> FINISHED 6-CAN <<<<<<<<<<<<")
+                    state = self.state
+                    # keep timeout timers reset
+                    self.findCanStartTime = self.get_clock().now()
+                    self.wpScanStartTime = self.get_clock().now()
 
             ######## END STATES ############
 
