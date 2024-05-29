@@ -50,7 +50,7 @@ class Robo24WheelControllerNode(Node):
     #wheelDistance = 0.3172 # cal slam acc angular error running waypoints
     #wheelDistance = 0.3152 # cal slam angular error with plot juggler
 #    wheelDistance = 0.3175 # cal quicktrip with laser
-    wheelDistance = 0.3190 # cal quicktrip using dprg distances
+    wheelDistance = 0.3180 # cal quicktrip using dprg distances
 
 #    odomDiameter = 0.048
 #    odomDiameter = 0.048 * 4.950/4.970 # adjust for 5M-5cm travel error of 2cm
