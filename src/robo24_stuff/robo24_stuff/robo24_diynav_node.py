@@ -69,7 +69,7 @@ class Robo24DiynavNode(Node):
 
     ft2m:float = 0.3048 # feet per meter
 
-    # 6 can waypoints - home arena
+    # 6 can waypoints - home arena 7.5x7.0 9"start offset
     home_can6_CenterY = 6.75/2
     home_can6_startWaypoint = [0.0,0.0,0.0] # center 8" from bottom of arena
     home_can6_goalAlignWaypoint = [5.75*ft2m,0.0,0.0] # in front of goal entrance 1 ft into arena
@@ -82,11 +82,11 @@ class Robo24DiynavNode(Node):
 #    home_can6_waypoints = ["home_can6_leftScanWaypoint","home_can6_rightScanWaypoint","home_can6_goalAlignWaypoint","home_can6_startWaypoint"]
     home_can6_waypoints = ["home_can6_CenterFWaypoint","home_can6_CenterBWaypoint"]
     
-    # 4 corner waypoints - home arena
+    # 4 corner waypoints - home arena 7.5x7.0 path 1ft from inside walls
     home_cor4_Waypoint0 = [0.0,0.0,0.0] # starting location (location it ends)
-    home_cor4_Waypoint1 = [6*ft2m,0.0,0.0] 
-    home_cor4_Waypoint2 = [6*ft2m,-5.5*ft2m,0.0] 
-    home_cor4_Waypoint3 = [0.0,-5.5*ft2m,0.0] 
+    home_cor4_Waypoint1 = [5.5*ft2m,0.0,0.0] 
+    home_cor4_Waypoint2 = [5.5*ft2m,-5.0*ft2m,0.0] 
+    home_cor4_Waypoint3 = [0.0,-5.0*ft2m,0.0] 
     home_cor4_waypoints = ["home_cor4_Waypoint1", "home_cor4_Waypoint2", "home_cor4_Waypoint3", "home_cor4_Waypoint0"]
 
     # quick trip waypoints - home arena
@@ -1151,15 +1151,17 @@ class Robo24DiynavNode(Node):
         # rotate to point toward waypoint/can
           case 1:
             state = self.wpstate
+            
             if TF_Timeout==True : 
                 self.wpstate = 5
                 self.get_logger().info(f'WP[{state}->{self.wpstate}, {waypoint}] {TF_Timeout = }{tf_OK = }')
             elif tf_OK == True: 
                 # point to waypoint/can
                 minD = 0.05
-                if waypoint=="can" : minD = self.canMinDist
-                if waypoint_distance>minD and abs(theta_err) > 0.05 :
-                    # limit low end of theta err                
+                # if waypoint=="can" : minD = self.canMinDist
+                # if waypoint_distance>minD and abs(theta_err) > 0.05 :
+                if abs(theta_err) > 0.05 :
+                    # limit low end of velocity for theta err                
                     if theta_err>0 : err=theta_err+0.2
                     else :           err=theta_err-0.2
                     msg.angular.z = self.scaleRotationRate * err
@@ -1208,19 +1210,24 @@ class Robo24DiynavNode(Node):
                     msg.angular.z = 8*self.scaleRotationRate/3 * theta_err
 
                     # avoid obstacles
-                    if obsEna : self.calcObstacleAvoidance(obsOff)
-                    else : self.obstacleOffR = self.obstacleOffL = 0.0
+                    if obsEna : 
+                        self.calcObstacleAvoidance(obsOff)
+                    else : 
+                        self.obstacleOffR = self.obstacleOffL = 0.0
 
                     msg.angular.z += self.obstacleOffR - self.obstacleOffL
 
                     #start full max speed then slow down, HW deceleration is 1M/sec
-                    #if waypoint_distance > (0.66 * self.scaleForwardSpeed) : 
-                    if (self.obstacleOffR + self.obstacleOffL) == 0 : fwdSpeed = self.scaleForwardSpeed
-                    else : fwdSpeed = 0.5 * self.scaleForwardSpeed
+                    if (self.obstacleOffR + self.obstacleOffL) == 0 : 
+                        fwdSpeed = self.scaleForwardSpeed
+                    else : 
+                        fwdSpeed = 0.5 * self.scaleForwardSpeed
+
                     if waypoint_distance > 1.0 : 
                         msg.linear.x = fwdSpeed
                     else : 
                         msg.linear.x = (waypoint_distance+0.2) * fwdSpeed
+
                 else :
                     self.wpstate3StartTime = self.get_clock().now()
                     self.wpstate = 3
@@ -1228,7 +1235,7 @@ class Robo24DiynavNode(Node):
 
             #self.get_logger().info(f"WP[{state}, {waypoint}] {waypoint_distance=} {theta_err=}")
 
-            # pause with no movement to allow diyslam to make correctiontheta_err
+            # pause with no movement to allow diyslam to make mapping odom correction
           case 3:
             state = self.wpstate
             if self.slamEnabled :
