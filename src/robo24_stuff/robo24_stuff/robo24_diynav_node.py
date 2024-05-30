@@ -299,6 +299,15 @@ class Robo24DiynavNode(Node):
         if "arena" in cmd :
             arena = cmd["arena"]
             self.nav_ctrl["arena"] = arena
+        if "state" in cmd :
+            state = cmd["state"]
+            if state=="toggle" :
+                if self.nav_ctrl["mode"] != "pause" :
+                    self.toggled_mode = self.nav_ctrl["mode"]
+                    self.nav_ctrl["mode"] = "pause"
+                else :
+                    self.nav_ctrl["mode"] = self.toggled_mode
+                    
         self.create_static_waypoints()
 
     def robo24_json_callback(self, msg:String) -> None :
