@@ -113,8 +113,8 @@ class Robo24DiynavNode(Node):
     dprg_can6_waypoints = ["dprg_can6_CenterFWaypoint", "dprg_can6_CenterBWaypoint"]
 
     # 4 corner waypoints - dprg arena
-    dprg_size = 10.0 *ft2m  # length, width of corner marked area
-    dprg_offset = 1.0 *ft2m  # x,y offset from corner markers, clearance to stay outside marked area for odom drift error
+    dprg_size = 12.0 *ft2m  # length, width of corner marked area
+    dprg_offset = 1.5 *ft2m  # x,y offset from corner markers, clearance to stay outside marked area for odom drift error
     dprg_cor4_Waypoint0 = [0.0,0.0,0.0] # starting location offset from corner marker (location it ends at)
     dprg_cor4_Waypoint1 = [(dprg_size+2*dprg_offset),0.0                       ,0.0] 
     dprg_cor4_Waypoint2 = [(dprg_size+2*dprg_offset),-(dprg_size+2*dprg_offset),0.0] 
