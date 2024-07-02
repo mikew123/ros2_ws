@@ -30,8 +30,7 @@ class Robo24DiySlamNode(Node):
     """
     
     # 24 data points for line of sensors in mm
-    tof8Wall:list[int] = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-
+    tof8Wall:list[list[int]] = [[]]
     pcd = PointCloud2()
 
     # Field of view for TOF 8x8 sensor
@@ -423,15 +422,12 @@ class Robo24DiySlamNode(Node):
             self.get_logger().error(f"TOF8x8x3 parse message error: {msg.data}")
             return
 
-        ############## WALL MAPPING ##################
-        # select sensors on the lower center row for wall mapping
-        # row 0 is top, row 7 is bottom
-        sensorRow:int = 4
-        for i in range(0,24):
-            #self.tof8Wall[i] = int(tofStrArray[i+(sensorRow*24)+1]) #[i,sensorRow]
-            dist = int(tofStrArray[i+(sensorRow*24)+1]) #[i,sensorRow]
-            if dist>=0 : self.tof8Wall[i] = dist
-            else       : self.tof8Wall[i] = 0
+        # copy 1D sensor list into a 2D array
+        for row in range(0,7) : # Rows
+            for i in range(0,24): # Collumns
+                dist = int(tofStrArray[i+(row*24)+1]) #[i,sensorRow]
+                if dist>=0 : self.tof8Wall[row][i] = dist
+                else       : self.tof8Wall[row][i] = 0
 
         # Remove the curve by scaling each sensor with a inverted sin() curve over FOV
         fovPt = self.fov8x8/8 # FOV for each sensor point
@@ -461,26 +457,26 @@ class Robo24DiySlamNode(Node):
         # Left sensor 0 to 7
         for n in range(0,8) :
             theta = (n-4+0.5)*fovPtRad  - mntAngleRad# scaled to radians
-            dist = self.tof8Wall[n]
-            Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n])
-            Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n])
+            dist = self.tof8Wall[4][n]
+            Wx =  int(dist*math.cos(theta)*tofCurveCor[n])
+            Wy = -int(dist*math.sin(theta)*tofCurveCor[n])
             if dist > self.slamMinDist : xyW.append((Wx,Wy))
             else          : xyW.append((0,0))
         # Center sensor 8 to 15
         for n in range(8,16) :
             theta = (n-12+0.5)*fovPtRad# scaled to radians
-            dist = self.tof8Wall[n]
-            Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n-8])
-            Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n-8])
+            dist = self.tof8Wall[4][n]
+            Wx =  int(dist*math.cos(theta)*tofCurveCor[n-8])
+            Wy = -int(self.dist*math.sin(theta)*tofCurveCor[n-8])
             # discard sensor point if too close 
             if dist > self.slamMinDist : xyW.append((Wx,Wy))
             else          : xyW.append((0,0))
         # Right sensor 16 to 23
         for n in range(16,24) :
             theta = (n-20+0.5)*fovPtRad  + mntAngleRad# scaled to radians
-            dist = self.tof8Wall[n]
-            Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n-16])
-            Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n-16])
+            dist = self.tof8Wall[4][n]
+            Wx =  int(dist*math.cos(theta)*tofCurveCor[n-16])
+            Wy = -int(dist*math.sin(theta)*tofCurveCor[n-16])
             # discard sensor point if too close 
             if dist > self.slamMinDist : xyW.append((Wx,Wy))
             else          : xyW.append((0,0))
