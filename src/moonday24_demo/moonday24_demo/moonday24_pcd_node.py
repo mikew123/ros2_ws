@@ -19,10 +19,6 @@ class MoonDay24PcdNode(Node):
     mntAngle:float = 45.0
 
     
-    # 24 data points for line of sensors in mm
-    tof8Wall:list[int] = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-
-
     def __init__(self):
         super().__init__('moonday24_pcd_node')
 
@@ -54,14 +50,15 @@ class MoonDay24PcdNode(Node):
             self.get_logger().error(f"TOF8x8x3 parse message error: {msg.data}")
             return
 
-        ############## WALL MAPPING ##################
-        # select sensors on the lower center row for wall mapping
         # row 0 is top, row 7 is bottom
-        sensorRow:int = 4
-        for i in range(0,24):
-            dist = int(tofStrArray[i+(sensorRow*24)+1]) #[i,sensorRow]
-            if dist>=0 : self.tof8Wall[i] = dist
-            else       : self.tof8Wall[i] = 0
+        tof8Wall:list[list[float,float]] = []
+        for row in range(0,7) : # sensor row
+            tof8Row:list[float] = []
+            for i in range(0,23) :
+                dist = int(tofStrArray[i+(row*24)+1])
+                if dist>=0 : tof8Row.append(dist)
+                else       : tof8Row.append(0)
+            tof8Wall.append(tof8Row)
 
         # Remove the curve by scaling each sensor with a inverted sin() curve over FOV
         fovPt = self.fov8x8/8 # FOV for each sensor point
@@ -75,69 +72,54 @@ class MoonDay24PcdNode(Node):
 
         #self.get_logger().info(f"{tofCurveCor = }")
 
-        # calc xy coordinates relative to robot center with 0 deg pointing staight ahead
+        # calc xyz coordinates relative to robot center with 0 deg pointing staight ahead
         # each sensor distance data point has an effective FOV of 60/8 = 7.5 deg
-        # there are 24 data points n = 0, 1 to 23
-        # theta = (60/8)*1/2 + (n-12)*(60/8) -> 0=-86.25 23=+86.25, 11=-3.75, 12=+3.75
-        xyW:list = []
+        # there are 8 rows 0 to 7 of 24 data points 0 to 23
+        # theta XY is the horizontal angle of the sensors sweeping left to right
+        # theta XY = -(45/8)*1/2 + (n-11)*(45/8) -> 0=-64.7 23=-86.25, 11=-2.8, 12=+2.8
+        # theta Z is the vertical angle sweeping up to down,
+        # theta Z = (45/8)*1/2 + (3-row)*(45/8) -> 0=+19.7, 7=-19.7
+        sensorZ = 0.910 # meters above floor when robot is on the demo table, about 1 meter
+        xyz:list[np.float32, np.float32, np.float32] = []
         mntAngleRad = self.mntAngle*(math.pi/180) #scaled to Radians
         fovPt = self.fov8x8/8 # FOV for each sensor point
         fovPtRad = fovPt*(math.pi/180) #scaled to Radians
 
         # calc curve correction for each sensor set of 8
         # Left sensor 0 to 7
-        for n in range(0,8) :
-            theta = (n-4+0.5)*fovPtRad  - mntAngleRad# scaled to radians
-            dist = self.tof8Wall[n]
-            Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n])
-            Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n])
-            xyW.append((Wx,Wy))
-        # Center sensor 8 to 15
-        for n in range(8,16) :
-            theta = (n-12+0.5)*fovPtRad# scaled to radians
-            dist = self.tof8Wall[n]
-            Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n-8])
-            Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n-8])
-            xyW.append((Wx,Wy))
-        # Right sensor 16 to 23
-        for n in range(16,24) :
-            theta = (n-20+0.5)*fovPtRad  + mntAngleRad# scaled to radians
-            dist = self.tof8Wall[n]
-            Wx =  int(self.tof8Wall[n]*math.cos(theta)*tofCurveCor[n-16])
-            Wy = -int(self.tof8Wall[n]*math.sin(theta)*tofCurveCor[n-16])
-            xyW.append((Wx,Wy))
+        for row in range(0,7) : #Sensor rows
+            thetaZ = fovPtRad * (3.5 - row)
+            for n in range(0,8) :
+                theta = (n-4+0.5)*fovPtRad  - mntAngleRad# scaled to radians
+                dist = tof8Wall[row][n]
+                Wx =  dist*math.cos(theta)*tofCurveCor[n]/1000
+                Wy = -dist*math.sin(theta)*tofCurveCor[n]/1000
+                if dist > 0 : Wz =  sensorZ + math.sin(thetaZ)
+                else : Wz = sensorZ
+                xyz.append([Wx,Wy,Wz])
+            # Center sensor 8 to 15
+            for n in range(8,16) :
+                theta = (n-12+0.5)*fovPtRad# scaled to radians
+                dist = tof8Wall[row][n]
+                Wx =  dist*math.cos(theta)*tofCurveCor[n-8]/1000
+                Wy = -dist*math.sin(theta)*tofCurveCor[n-8]/1000
+                if dist > 0 : Wz =  sensorZ + math.sin(thetaZ)
+                else : Wz = sensorZ
+                xyz.append([Wx,Wy,Wz])
+            # Right sensor 16 to 23
+            for n in range(16,23) :
+                theta = (n-20+0.5)*fovPtRad  + mntAngleRad# scaled to radians
+                dist = tof8Wall[row][n]
+                Wx =  dist*math.cos(theta)*tofCurveCor[n-16]/1000
+                Wy = -dist*math.sin(theta)*tofCurveCor[n-16]/1000
+                if dist > 0 : Wz =  sensorZ + math.sin(thetaZ)
+                else : Wz = sensorZ
+                xyz.append([Wx,Wy,Wz])
 
-        self.get_logger().info(f"\n{self.tof8Wall = }\n{xyW = }\n")
+        #self.get_logger().info(f"\n{tof8Wall = }\n{xyz = }\n")
 
-        # TODO: I should not need to rotate anything for moon day demo
-        x0:float = 0
-        y0:float = 0
-        th0:float = 0 # yaw theta
-        
-        c0:float = math.cos(th0)
-        s0:float = math.sin(th0)
 
-        # Create point cloud from TOF8 data
-        #Create list of XYZ tupples converting int mm to float meters
-        xy_:list[np.float32, np.float32, np.float32] = []
-        xy0:list[np.float32, np.float32, np.float32] = []
-        for n in range(0,24) :
-            # rotate XY with map->base_link angle
-            x0y0 = xyW[n] # (x,y)
-            zz0 = np.float32(0.130) # height of sensor
-
-            
-            xx_ = np.float32(( (x0y0[0]*c0 + x0y0[1]*s0)/1000) )
-            yy_ = np.float32((-(x0y0[0]*s0 - x0y0[1]*c0)/1000) )
-
-            # debug
-            xy_.append((xx_,yy_,zz0))
-
-            xx0 = xx_ + x0 # - 0.08 # 8mm offset
-            yy0 = yy_ + y0
-            xy0.append((xx0,yy0,zz0))
-
-        pcd = self.point_cloud(xy0, 'map')
+        pcd = self.point_cloud(xyz, 'map')
         self.pcd_publisher.publish(pcd)
 
 
@@ -161,7 +143,7 @@ class MoonDay24PcdNode(Node):
             name=n, offset=i*itemsize, datatype=ros_dtype, count=1)
             for i, n in enumerate('xyz')]
 
-        self.get_logger().info(f"{itemsize = } {fields = } {points = } {data = }")
+        #self.get_logger().info(f"{itemsize = } {fields = } {points = } {data = }")
 
         # The PointCloud2 message also has a header which specifies which 
         # coordinate frame it is represented in. 
